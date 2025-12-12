@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplilearn Evolve | Final Prototype</title>
+    
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --primary: #1264a3;          
+            --primary-grad: linear-gradient(135deg, #1264a3 0%, #0b3d66 100%);
+            --accent: #f97316;
+            
+            /* Glass Variables */
+            --bg-body: #f8fafc; /* Clean, professional base */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            --glass-blur: blur(12px);
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --radius-md: 16px;
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --font-main: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-main); background: var(--bg-body); color: var(--text-main); margin: 0; line-height: 1.5; overflow-x: hidden; min-height: 100vh; }
+
+        /* UTILS */
+        .hidden { display: none !important; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .flex { display: flex; align-items: center; }
+        .flex-between { justify-content: space-between; }
+        .flex-col { flex-direction: column; }
+        .flex-start { align-items: flex-start; }
+        .flex-center { justify-content: center; align-items: center; }
+        .gap-2 { gap: 8px; }
+        .grid { display: grid; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mt-40 { margin-top: 40px; }
+        .w-full { width: 100%; }
+        .text-sm { font-size: 13px; }
+        .font-bold { font-weight: 700; }
+
+        /* GLASS UTILITY */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-md);
+        }
+
+        /* --- PASTEL GLASS BUTTONS (LMS SPECIFIC) --- */
+        .btn-glass-3d {
+            position: relative;
+            /* White borders for icy glass look */
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+            
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            
+            border-radius: 12px;
+            font-family: 'Satoshi', sans-serif;
+            font-weight: 800; /* Bold Satoshi */
+            font-size: 14px;
+            letter-spacing: 0;
+            padding: 10px 24px;
+            
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            box-shadow: 
+                0 4px 10px rgba(0, 0, 0, 0.05), /* Soft shadow */
+                inset 0 1px 0 rgba(255,255,255, 0.8); /* Inner top highlight */
+                
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            text-transform: capitalize; /* Titlecase */
+        }
+
+        .btn-glass-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.08), 
+                inset 0 1px 0 rgba(255,255,255, 0.9);
+            filter: brightness(1.02);
+        }
+
+        .btn-glass-3d:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom-width: 1px;
+        }
+
+        /* PASTEL VARIANTS */
+        .btn-glass-3d.primary {
+            /* Pastel Blue */
+            background: linear-gradient(135deg, rgba(219, 234, 254, 0.85), rgba(191, 219, 254, 0.9));
+            color: #1e40af; /* Dark Blue Text */
+        }
+        
+        .btn-glass-3d.secondary {
+            /* Pastel Lavender/Gray */
+            background: linear-gradient(135deg, rgba(241, 245, 249, 0.85), rgba(226, 232, 240, 0.9));
+            color: #475569; /* Slate Text */
+        }
+
+        .btn-glass-3d.accent {
+            /* Pastel Peach */
+            background: linear-gradient(135deg, rgba(255, 237, 213, 0.85), rgba(254, 215, 170, 0.9));
+            color: #9a3412; /* Dark Orange Text */
+        }
+
+        .btn-glass-3d.danger {
+            /* Pastel Rose */
+            background: linear-gradient(135deg, rgba(255, 228, 230, 0.85), rgba(254, 205, 211, 0.9));
+            color: #9f1239; /* Dark Red Text */
+        }
+        
+        /* NEW SYNCED VARIANTS FOR NUDGES */
+        .btn-glass-3d.royal {
+            /* Purple/Lavender for Pro Nudges */
+            background: linear-gradient(135deg, rgba(233, 213, 255, 0.85), rgba(216, 180, 254, 0.9));
+            color: #6b21a8; 
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        
+        .btn-glass-3d.gold {
+            /* Gold/Yellow for Lite Nudges */
+            background: linear-gradient(135deg, rgba(254, 249, 195, 0.85), rgba(253, 224, 71, 0.9));
+            color: #854d0e;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        
+        .btn-glass-3d.teal {
+            /* Teal for Bonus Nudges */
+            background: linear-gradient(135deg, rgba(204, 251, 241, 0.85), rgba(153, 246, 228, 0.9));
+            color: #0f766e;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+
+        /* STANDARD BUTTONS */
+        .btn { cursor: pointer; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; transition: all 0.3s ease; border: none; font-family: var(--font-main); white-space: nowrap; display: inline-flex; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+        
+        .btn-primary { 
+            background: var(--primary-grad); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(18, 100, 163, 0.3);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(18, 100, 163, 0.4);
+        }
+
+        .btn-outline { 
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #cbd5e1;
+            color: var(--text-main);
+        }
+        .btn-outline:hover { 
+            background: white;
+            border-color: var(--text-main);
+            transform: translateY(-2px);
+            box-shadow: var(--glass-shadow);
+        } 
+
+        .btn-text { background: transparent; color: var(--primary); padding: 5px; cursor: pointer; font-weight: 600; font-size: 14px; border: none;}
+        .btn-text:hover { text-decoration: underline; }
+
+        /* HERO BUTTONS */
+        .btn-outline-white { 
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white; 
+        }
+        .btn-outline-white:hover { 
+            background: white;
+            color: var(--text-main);
+            border-color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0, 0.2);
+        }
+
+        .btn-multiline { flex-direction: column; line-height: 1.1; padding: 12px 28px; min-height: 56px; }
+        .btn-subtext { font-size: 11px; font-weight: 400; opacity: 0.9; margin-top: 2px; letter-spacing: 0.3px; }
+
+        /* NAV */
+        nav { 
+            height: 80px; 
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+        }
+        nav .container { height: 100%; }
+        .brand { font-size: 24px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 8px; cursor: pointer; letter-spacing: -0.5px; }
+        .brand span { color: var(--primary); }
+        
+        .hamburger { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--text-main); z-index: 1002; }
+        .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: white; z-index: 1001; padding: 100px 24px 24px; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; gap: 20px; }
+        .mobile-menu.open { transform: translateX(0); }
+        @media (max-width: 768px) { #nav-desktop-actions { display: none; } .hamburger { display: block; } }
+
+        /* HERO - STATIC & PROFESSIONAL */
+        .hero { 
+            /* Static, deep professional gradient */
+            background: radial-gradient(circle at 50% 0%, #1e40af 0%, #0f172a 100%);
+            color: white; 
+            padding: 100px 0 120px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        /* Static Grid Overlay for Trust/Tech feel */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .hero h1 { font-size: 48px; font-weight: 900; margin-bottom: 24px; line-height: 1.1; letter-spacing: -1px; position: relative; z-index: 1; }
+        @media (min-width: 768px) { .hero h1 { font-size: 60px; } }
+        .hero p { font-size: 20px; color: #cbd5e1; margin-bottom: 40px; max-width: 600px; position: relative; z-index: 1; line-height: 1.6; }
+        .hero .container { position: relative; z-index: 2; }
+
+        /* HOMEPAGE LAYOUT */
+        .cat-layout { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 40px; }
+        @media (min-width: 900px) { .cat-layout { grid-template-columns: 260px 1fr; } }
+        .sidebar { display: flex; overflow-x: auto; gap: 12px; padding: 10px 0; }
+        @media (min-width: 900px) { .sidebar { flex-direction: column; overflow: visible; padding: 0; } }
+        
+        .cat-item { 
+            padding: 16px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; color: var(--text-main); white-space: nowrap; transition: all 0.2s ease; font-size: 15px; 
+            background: white; border: 1px solid transparent;
+        }
+        .cat-item:hover { background: #f1f5f9; transform: translateX(4px); }
+        .cat-item.active { 
+            background: #eff6ff; color: var(--primary); font-weight: 700; border: 1px solid #bfdbfe;
+        }
+
+        /* COURSE CARDS */
+        .course-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media (min-width: 600px) { .course-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .course-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+        .course-card { 
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-radius: var(--radius-md);
+            overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative; height: 100%; 
+        }
+        .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: #cbd5e1; }
+        
+        .card-thumb { height: 180px; position: relative; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; letter-spacing: 1px; }
+        .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+        .card-badge { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: white; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); }
+        .badge-free { background-color: rgba(22, 163, 74, 0.9); }
+        /* Premium Pro Badge - GOLD */
+        .badge-pro { 
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); 
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        
+        .card-actions { margin-top: auto; padding-top: 24px; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 12px; }
+
+        /* DETAIL PAGE */
+        .detail-layout { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        @media (min-width: 900px) { .detail-layout { grid-template-columns: 2fr 1fr; } }
+        
+        .player-wrapper { height: 250px; background: #000; border-radius: 16px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
+        @media (min-width: 600px) { .player-wrapper { height: 450px; } }
+        
+        .player-wrapper.unlocked { background: url('https://via.placeholder.com/800x450/111/fff?text=▶+Video+Playing') center/cover; }
+        .player-wrapper.unlocked .lock-content { display: none; }
+        
+        .lock-content { 
+            padding: 40px; 
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px; text-align: center; color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            width: 90%; max-width: 450px;
+        }
+
+        /* LMS GRID */
+        .lms-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px; }
+        @media (min-width: 600px) { .lms-grid { grid-template-columns: repeat(2, 1fr); } }
+        
+        /* BRAND-ALIGNED GLASS NUDGES */
+        .status-alert { 
+            padding: 24px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 16px; 
+            font-size: 14px; 
+            text-align: center; 
+            
+            /* High Transparency Glass */
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        @media (min-width: 600px) { .status-alert { flex-direction: row; justify-content: space-between; text-align: left; align-items: center; } }
+        
+        .status-alert.pro { 
+            /* Premium Brand Blue Tint */
+            background: linear-gradient(135deg, rgba(235, 245, 255, 0.6) 0%, rgba(219, 234, 254, 0.6) 100%);
+            color: #1e3a8a; 
+            border-color: rgba(191, 219, 254, 0.8);
+        }
+        
+        .status-alert.expired { 
+            /* Soft Red Alert */
+            background: linear-gradient(135deg, rgba(254, 242, 242, 0.7) 0%, rgba(255, 228, 230, 0.7) 100%); 
+            color: #991b1b; 
+            border-color: rgba(254, 202, 202, 0.8);
+        }
+        
+        .status-alert.bonus { 
+            /* Brand Teal/Mint */
+            background: linear-gradient(135deg, rgba(236, 253, 245, 0.7) 0%, rgba(209, 250, 229, 0.7) 100%);
+            color: #065f46; 
+            border-color: rgba(167, 243, 208, 0.8);
+        }
+        
+        .status-alert.lite { 
+            /* Brand Orange Tint */
+            background: linear-gradient(135deg, rgba(255, 251, 235, 0.7) 0%, rgba(254, 243, 199, 0.7) 100%);
+            color: #92400e; 
+            border-color: rgba(253, 230, 138, 0.8);
+        }
+        
+        .status-alert.ultimate {
+             /* Platinum/Silver */
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.8) 100%);
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .card-lock-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; padding: 20px; }
+
+        /* === PLAYER STYLES === */
+        .player-layout { display: flex; min-height: 600px; height: calc(100vh - 180px); background: white; border: 1px solid #e2e8f0; border-top: none; box-shadow: var(--shadow-lg); border-radius: 0 0 var(--radius-md) var(--radius-md); overflow: hidden; }
+        
+        .player-header { height: 70px; background: white; border: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+        .player-title { font-weight: 900; font-size: 18px; color: var(--text-main); }
+        .player-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        
+        .player-sidebar { width: 80px; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; padding-top: 24px; background: #f8fafc; }
+        .p-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: var(--text-muted); cursor: pointer; margin-bottom: 16px; transition: all 0.2s ease; text-align: center; line-height: 1.1; }
+        .p-icon:hover { background: #e2e8f0; color: var(--primary); }
+        .p-icon.active { color: white; background: var(--primary); border-radius: 12px; width: 64px; height: 64px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(18, 100, 163, 0.3); }
+        .p-icon i { font-size: 22px; margin-bottom: 4px; font-style: normal; display: block; }
+
+        .player-track { width: 260px; border-right: 1px solid #e2e8f0; background: #f8fafc; padding: 24px; display: none; }
+        @media (min-width: 1024px) { .player-track { display: block; } }
+        .track-item { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; border-left: 4px solid var(--primary); margin-bottom: 12px; }
+        
+        .player-stage { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; position: relative; }
+        .video-ui { width: 100%; height: 100%; background: url('https://via.placeholder.com/1280x720/0f172a/ffffff?text=AI+Agents+Demo') center/contain no-repeat; position: relative; }
+        .vid-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 16px 24px; display: flex; align-items: center; gap: 20px; color: white; }
+
+        .player-playlist { width: 340px; border-left: 1px solid #e2e8f0; background: white; display: flex; flex-direction: column; }
+        .pl-header { padding: 20px; border-bottom: 1px solid #e2e8f0; font-weight: 700; font-size: 15px; }
+        .pl-item { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: all 0.2s; display: flex; gap: 12px; }
+        .pl-item:hover { background: #f8fafc; }
+        .pl-item.active { background: #eff6ff; border-left: 4px solid var(--primary); }
+        .pl-item.locked { opacity: 0.7; background: #f8fafc; }
+        .pl-check { color: #22c55e; font-size: 14px; font-weight: 900; }
+        .pl-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .pl-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .nudge-box { margin: 20px; padding: 20px; border-radius: 12px; font-size: 13px; text-align: center; border: 1px solid transparent; }
+        .nudge-box.work { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+        .nudge-box.trial { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+
+        /* CERTIFICATE STYLES */
+        .cert-layout { display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap; align-items: center; }
+        .cert-preview { flex: 2; min-width: 300px; }
+        .cert-actions { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 24px; }
+        
+        .cert-mockup { width: 100%; background: #fff; border: 12px solid #1e293b; padding: 50px 30px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.1); font-family: 'Satoshi', serif; color: #334155; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 450px; }
+        .cert-corner { position: absolute; width: 90px; height: 90px; background: #f59e0b; z-index: 1; }
+        .cert-corner.top-left { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .cert-corner.bottom-right { bottom: 0; right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); background: #1e293b; }
+        
+        .cert-logo { font-family: 'Satoshi', sans-serif; font-weight: 900; color: #1e293b; margin-bottom: 24px; font-size: 22px; }
+        .cert-logo span { color: #2563eb; }
+        .cert-headline { font-size: 32px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; color: #0f172a; font-family: serif; }
+        .cert-subhead { font-size: 15px; color: #64748b; margin-bottom: 36px; }
+        .cert-name { font-size: 38px; font-weight: 900; color: #2563eb; margin: 12px auto; border-bottom: 3px solid #e2e8f0; display: inline-block; padding-bottom: 12px; min-width: 350px; font-family: 'Satoshi', sans-serif; }
+        .cert-course-name { font-size: 20px; font-weight: bold; margin-top: 24px; color: #334155; }
+        .cert-text { font-size: 14px; color: #64748b; margin-bottom: 48px; max-width: 450px; margin-left: auto; margin-right: auto; line-height: 1.6; margin-top: 12px; }
+        .cert-badge { position: absolute; bottom: 36px; right: 36px; width: 80px; height: 80px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #f59e0b; font-size: 28px; border: 4px solid #f59e0b; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .cert-date { position: absolute; bottom: 36px; left: 48px; font-size: 14px; font-weight: bold; font-family: 'Satoshi', sans-serif; text-align: left; }
+
+        .cert-action-box { background: white; border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; }
+        .social-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; cursor: pointer; transition: all 0.2s ease; }
+        .social-btn:hover { transform: translateY(-2px); }
+        .social-li { background: #0a66c2; width: auto; border-radius: 8px; padding: 0 20px; font-weight: bold; font-size: 14px; flex: 1; }
+        .social-fb { background: #1877f2; }
+        .social-tw { background: #1da1f2; }
+        .social-dl { background: #475569; }
+        .cert-nudge { background: #fff7ed; border: 1px solid #fed7aa; padding: 24px; border-radius: 12px; text-align: center; margin-top: 30px; }
+
+        /* PRICING GRID */
+        .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 50px; }
+        @media (min-width: 600px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 1024px) { .pricing-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .plan-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px 28px; position: relative; display: flex; flex-direction: column; height: 100%; transition: 0.2s; }
+        .plan-card:hover { border-color: #93c5fd; box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); transform: translateY(-4px); }
+        .plan-card.highlight { border: 2px solid var(--primary); transform: scale(1.05); z-index: 2; box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); }
+        .best-value { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 16px; border-radius: 24px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3); }
+
+        .plan-title { font-size: 24px; font-weight: 900; margin-bottom: 10px; color: var(--text-main); }
+        .plan-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; min-height: 22px; }
+        .plan-price { font-size: 42px; font-weight: 900; color: var(--text-main); margin-bottom: 6px; line-height: 1; }
+        .plan-period { font-size: 14px; color: var(--text-muted); font-weight: 600; margin-bottom: 32px; }
+        .team-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; margin-bottom: 24px; font-size: 12px; line-height: 1.5; color: #1e40af; }
+        .lead-hook { background: #fff7ed; border: 1px solid #fed7aa; border-left: 4px solid #f97316; border-radius: 6px; padding: 14px; margin-bottom: 28px; font-size: 13px; color: #9a3412; cursor: pointer; transition: 0.2s; }
+        .lead-hook:hover { background: #ffedd5; transform: scale(1.02); }
+        .lead-hook b { display: block; color: #ea580c; font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
+        .feature-list { list-style: none; padding: 0; margin: 0 0 36px 0; flex: 1; }
+        .feature-list li { padding: 8px 0; font-size: 14px; display: flex; gap: 12px; color: #334155; line-height: 1.5; }
+        .feature-list li::before { content: "✓"; color: var(--primary); font-weight: 900; flex-shrink: 0; font-size: 16px; }
+        .trial-note { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px; font-weight: 500; }
+
+        /* TOGGLE SWITCH */
+        .billing-toggle-container { display: inline-flex; align-items: center; gap: 16px; background: white; border: 1px solid #e2e8f0; padding: 10px 20px 10px 28px; border-radius: 50px; margin-top: 24px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .toggle-label { font-size: 15px; font-weight: 700; color: var(--text-main); }
+        .switch { position: relative; display: inline-block; width: 56px; height: 30px; margin: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .discount-badge { background: #dcfce7; color: #166534; font-size: 11px; font-weight: 900; padding: 6px 10px; border-radius: 8px; letter-spacing: 0.5px; }
+
+        /* FRS ARTICLE LAYOUT */
+        .article-layout { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+        @media (min-width: 900px) { .article-layout { grid-template-columns: 2fr 1fr; } }
+        .article-main { background: white; padding: 50px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .article-sidebar { position: sticky; top: 120px; height: fit-content; }
+        .article-header h1 { font-size: 38px; font-weight: 900; margin-bottom: 16px; line-height: 1.2; }
+        .article-meta { font-size: 13px; color: #64748b; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 24px; display: flex; gap: 16px; font-weight: 500; }
+        .article-body p { margin-bottom: 24px; color: #334155; line-height: 1.8; font-size: 16px; }
+        .course-list-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 24px; border-radius: 16px; margin-bottom: 24px; }
+        .course-list-item h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+
+        /* NUDGES */
+        .frs-banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .frs-inline { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 16px; padding: 32px; text-align: center; margin: 50px 0; }
+        .frs-widget { background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .frs-widget h3 { font-size: 18px; font-weight: 900; margin-bottom: 12px; }
+        .sticky-nudge { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 24px; z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); animation: slideUp 0.5s ease; }
+        .sticky-nudge span { font-weight: 800; font-size: 15px; color: var(--text-main); }
+
+        /* MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { background: white; width: 100%; max-width: 440px; padding: 48px; border-radius: 20px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .input-ctrl { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 24px; font-size: 16px; }
+
+        /* SIM PANEL */
+        .sim-panel { position: fixed; bottom: 80px; right: 10px; width: 340px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; font-size: 12px; z-index: 9999; opacity: 0.95; max-height: 600px; overflow-y: auto; display: none; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); }
+        .sim-panel.visible { display: block; }
+        .sim-btn { display: block; width: 100%; background: #334155; border: 1px solid #475569; color: #e2e8f0; padding: 10px 14px; margin-bottom: 6px; cursor: pointer; text-align: left; border-radius: 8px; transition: 0.2s; font-weight: 500; }
+        .sim-btn:hover { background: #475569; border-color: var(--primary); color: white; }
+        .sim-toggle { position: fixed; bottom: 80px; right: 10px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; z-index: 10000; font-weight: bold; border: 2px solid #475569; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        .toast { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 50px; z-index: 10000; opacity: 0; transition: 0.3s; pointer-events: none; white-space: nowrap; font-size: 14px; font-weight: 500; }
+        .toast.show { opacity: 1; bottom: 80px; }
+        
+        .new-badge { background: #f97316; color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; margin-left: 5px; vertical-align: middle; text-transform: uppercase; }
+        .course-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 10px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <nav class="flex">
+        <div class="container flex flex-between w-full">
+            <div class="brand" onclick="router('home')">Simplilearn</div>
+            <div id="nav-desktop-actions" class="flex" style="gap:20px"></div>
+            <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <div id="nav-mobile-actions" class="flex flex-col w-full" style="gap:15px; margin-top:20px;"></div>
+    </div>
+
+    <div id="toast" class="toast">Action Successful</div>
+
+    <main id="view-home" class="screen">
+        <section class="hero">
+            <div class="container">
+                <h1>Unlock the world's most<br>comprehensive learning library.</h1>
+                <p>200+ Courses. AI Mentors. Practice Labs.</p>
+                <div class="flex" style="gap: 12px; flex-wrap: wrap; align-items: stretch;">
+                    <button class="btn btn-glass-3d primary btn-multiline" onclick="openAuthModal('trial')">
+                        <span class="flex" style="gap:8px; align-items:center;">
+                            Start Free Trial 
+                            <span class="badge-pro" style="padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">PRO</span>
+                        </span>
+                        <span class="btn-subtext">No credit card required</span>
+                    </button>
+                    <button class="btn btn-outline-white btn-multiline" onclick="router('pricing')">View Plans</button>
+                </div>
+            </div>
+        </section>
+        
+        <div class="container mb-20">
+             <div class="cat-layout">
+                <aside class="sidebar">
+                    <div class="cat-item active" onclick="filterCourses('genai', this)">Generative AI</div>
+                    <div class="cat-item" onclick="filterCourses('datascience', this)">Data Science</div>
+                    <div class="cat-item" onclick="filterCourses('project', this)">Project Mgmt</div>
+                    <div class="cat-item" onclick="filterCourses('cyber', this)">Cyber Security</div>
+                    <div class="cat-item" onclick="filterCourses('digital', this)">Digital Marketing</div>
+                    <div class="cat-item" onclick="filterCourses('cloud', this)">Cloud Computing</div>
+                </aside>
+                <div>
+                    <h2 style="margin-bottom:20px;" id="grid-title">Generative AI Courses</h2>
+                    <div class="course-grid" id="course-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-resource" class="screen hidden" style="background:#f8fafc;">
+        <div class="article-layout">
+            <div class="article-main">
+                <div class="frs-banner">
+                    <div style="font-size:13px; color:#1e40af;">🎓 <strong>Pro Tip:</strong> Unlock 200+ Courses with Simplilearn Evolve.</div>
+                    <button class="btn btn-text" style="padding:0; font-size:13px;" onclick="openAuthModal('lite')">Start Free</button>
+                </div>
+
+                <div class="article-header">
+                    <h1>10 Best AI Courses Online for Free</h1>
+                    <div class="article-meta">
+                        <span>By Simplilearn Editorial Team</span> • <span>Updated Dec 2025</span>
+                    </div>
+                </div>
+                
+                <div class="article-body">
+                    <p>Artificial Intelligence (AI) is transforming industries globally. Whether you're a beginner or an experienced professional, learning AI is crucial for career growth. Here are the top free AI courses you can take online.</p>
+                    
+                    <div class="course-list-item">
+                        <h3>1. Introduction to Artificial Intelligence</h3>
+                        <p>Learn the basics of AI, machine learning, and deep learning. This course covers neural networks and practical applications.</p>
+                    </div>
+
+                    <div class="frs-inline">
+                        <h2>🚀 Why stop at one course?</h2>
+                        <p style="margin-bottom:20px;">Unlock the entire library of 200+ AI & Tech courses with <strong>Simplilearn Evolve</strong>.</p>
+                        <button class="btn btn-primary" onclick="openAuthModal('lite')">Start Learning for Free</button>
+                    </div>
+
+                    <div class="course-list-item">
+                        <h3>2. Machine Learning with Python</h3>
+                        <p>Dive into ML algorithms using Python. Perfect for data science enthusiasts looking to build predictive models.</p>
+                    </div>
+                    <div class="course-list-item">
+                        <h3>3. Generative AI for Beginners</h3>
+                        <p>Understand how GenAI models like GPT-4 work. Learn prompt engineering and content creation techniques.</p>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="article-sidebar">
+                <div class="frs-widget">
+                    <div style="font-size:40px; margin-bottom:10px;">⚡</div>
+                    <h3>Upgrade your skills</h3>
+                    <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Get unlimited access to AI, Cloud, and Data Science courses.</p>
+                    <button class="btn btn-outline" style="width:100%;" onclick="openAuthModal('trial')">Start Pro Trial</button>
+                </div>
+            </aside>
+        </div>
+
+        <div class="sticky-nudge" id="frs-sticky">
+            <span>🚀 Start your 15-Day Free Pro Trial today!</span>
+            <button class="btn btn-primary" style="padding:8px 16px;" onclick="openAuthModal('trial')">Start Trial</button>
+        </div>
+    </main>
+
+    <main id="view-course" class="screen hidden">
+        <div class="container mt-20">
+            <button class="btn btn-text mb-20" onclick="router('home')">← Back</button>
+            <div class="detail-layout">
+                <div>
+                    <div class="flex" style="align-items:center;">
+                         <h1 id="course-title" style="display:inline;">Course Title</h1>
+                         <span id="course-type-badge" class="course-badge"></span>
+                    </div>
+                    <div class="text-sm text-muted mb-20">4.8 Stars • 12k Learners</div>
+                    
+                    <div id="video-player" class="player-wrapper">
+                        <div class="lock-content">
+                            <div style="font-size:40px; margin-bottom:10px;">🔒</div>
+                            <h2 style="font-size:24px; margin-bottom:5px;">Locked</h2>
+                            <p style="margin-bottom:20px; font-size:14px;">Join Evolve to Watch</p>
+                            <div id="player-lock-actions" class="flex" style="gap:10px; justify-content:center; flex-wrap:wrap;"></div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="mt-20">Syllabus</h3>
+                    <div class="flex flex-between" style="padding:15px 0; border-bottom:1px solid #eee;">
+                        <span>01. Introduction</span> <span class="text-muted">15:00</span>
+                    </div>
+                </div>
+                
+                <aside id="course-sidebar">
+                    </aside>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-pricing" class="screen hidden">
+        <div class="container mt-20">
+            <div class="text-center">
+                <h1 style="font-size:32px; font-weight:900;">Choose your plan</h1>
+                
+                <div class="billing-toggle-container">
+                    <span class="toggle-label">Monthly</span>
+                    <label class="switch">
+                        <input type="checkbox" id="billingCheck" onchange="toggleBilling()">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Annual</span>
+                    <span class="discount-badge">SAVE 20%</span>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+                
+                <div class="plan-card">
+                    <div class="plan-title">Lite</div>
+                    <div class="plan-desc">Basic skills & workshops.</div>
+                    <div class="plan-price" data-m="0" data-a="0">$0</div>
+                    <div class="plan-period">per user / forever</div>
+                    <div class="lead-hook" onclick="openAuthModal('bonus')"><b>BONUS FEATURE</b> Unlock 2 Adv. Workshops w/ Work Email</div>
+                    <ul class="feature-list"><li>Basic OSL Courses</li><li>2 Basic Workshops / month</li><li>Completion Certificates</li></ul>
+                    <button class="btn btn-outline" style="width:100%; margin-top:auto;" onclick="openAuthModal('lite')">Start Lite</button>
+                </div>
+                
+                <div class="plan-card highlight">
+                    <div class="best-value">BEST VALUE</div>
+                    <div class="plan-title">Pro</div>
+                    <div class="plan-desc">Advanced learning & AI.</div>
+                    <div class="plan-price" data-m="29" data-a="279">$29</div>
+                    <div class="plan-period">per user / month</div>
+                    <ul class="feature-list"><li>Everything in Lite</li><li>Advanced OSL Courses - All Categories</li><li>AI-Powered Learning Buddy</li><li>2 Advanced Workshops / month</li></ul>
+                    <button class="btn btn-primary" style="width:100%; margin-top:auto;" onclick="openAuthModal('trial')">Start Trial</button>
+                    <button class="btn btn-text w-full mt-20" style="font-size:11px; color:#64748b;" onclick="directBuy('pro')">Buy Now (Skip Trial)</button>
+                    <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-title">Ultimate</div>
+                    <div class="plan-desc">Live classes & mastery.</div>
+                    <div class="plan-price" data-m="45" data-a="450">$45</div>
+                    <div class="plan-period">per user / month</div>
+                    <ul class="feature-list"><li>Everything in Pro</li><li>Advanced LVC Courses - All Categories</li><li>Practice Labs</li><li>4 Advanced Workshops / month</li></ul>
+                    <button class="btn btn-outline" style="width:100%; margin-top:auto;" onclick="directBuy('ultimate')">Get Ultimate</button>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-title">Enterprise</div>
+                    <div class="plan-desc">Organization control.</div>
+                    <div class="plan-price" style="font-size:2.5rem;">Custom</div>
+                    <div class="plan-period">per user / annual</div>
+                    <ul class="feature-list" style="margin-top:20px;"><li>Everything in Ultimate</li><li>SSO & Integrations</li><li>Custom Learning Paths</li><li>Dedicated CSM</li></ul>
+                    <button class="btn btn-outline" style="width:100%; margin-top:auto;" onclick="openAuthModal('team')">Contact Sales</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <main id="view-lms" class="screen hidden">
+        <div class="container mt-20">
+            <div class="lms-header">
+                <div>
+                    <h2 id="lms-welcome" style="font-size:24px; font-weight:900;">My Dashboard</h2>
+                    <p id="lms-role" style="color:#64748b; font-size:14px;">Loading...</p>
+                </div>
+                <div id="lms-actions"></div>
+            </div>
+
+            <div id="lms-banner" class="hidden"></div>
+
+            <div style="margin-top:30px;">
+                <h3 style="font-weight:800;">My Learning</h3>
+                <div class="lms-grid">
+                    <div class="course-card">
+                        <div class="card-thumb" style="background:#2563eb;">GEN AI</div>
+                        <div class="card-body">
+                            <h4 style="font-size:16px; margin-bottom:5px; font-weight:800;">Generative AI for Beginners</h4>
+                            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">Basic • 45m Left</div>
+                            <button class="btn-glass-3d secondary" onclick="router('player'); renderPlayerNudge();">▶ Resume</button>
+                        </div>
+                    </div>
+                    <div class="course-card" id="card-adv">
+                        <div id="lock-overlay-card-adv" class="card-lock-overlay hidden">
+                            <div style="font-size:24px; margin-bottom:5px;">🔒</div>
+                            <b style="font-size:14px; margin-bottom:5px;">Pro Feature</b>
+                            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">Upgrade to unlock this course.</div>
+                            <button class="btn-glass-3d royal" onclick="activateTrialDirectly()">Start Free Trial</button>
+                        </div>
+                        <div class="card-thumb" style="background:#4f46e5;">AI AGENTS</div>
+                        <div class="card-body">
+                            <h4 style="font-size:16px; margin-bottom:5px; font-weight:800;">AI Agents (Advanced)</h4>
+                            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">Advanced • 2h Left</div>
+                            <button class="btn-glass-3d secondary" onclick="router('course', 'advanced')">▶ Resume</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lms-section mt-40">
+                <h3 class="font-bold mb-20" style="font-size:18px;">Recommended for You</h3>
+                <div class="lms-grid">
+                    <div class="course-card" id="rec-pro">
+                        <div id="rec-pro-lock" class="card-lock-overlay hidden">
+                            <div style="font-size:24px; margin-bottom:5px;">🔒</div>
+                            <b style="font-size:14px; margin-bottom:5px;">Pro Feature</b>
+                            <button class="btn-glass-3d royal" onclick="activateTrialDirectly()">Start Free Trial</button>
+                        </div>
+                        <div class="card-thumb" style="background:#0891b2;">ADV DATA</div>
+                        <div class="card-body" style="padding:15px;">
+                            <h4 style="font-size:14px; font-weight:800;">Advanced Data Visualization</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">Intermediate • 5h</div>
+                            <button class="btn-glass-3d accent" style="width:100%;" onclick="alert('Starting Course...')">Start Learning</button>
+                        </div>
+                    </div>
+                    <div class="course-card" id="rec-ult">
+                        <div id="rec-ult-lock" class="card-lock-overlay hidden">
+                            <div style="font-size:24px; margin-bottom:5px;">💎</div>
+                            <b style="font-size:14px; margin-bottom:5px;">Ultimate Only</b>
+                            <button class="btn-glass-3d secondary" onclick="directBuy('ultimate')">Upgrade to Ultimate</button>
+                        </div>
+                        <div class="card-thumb" style="background:#be185d;">AI CAPSTONE</div>
+                        <div class="card-body" style="padding:15px;">
+                            <h4 style="font-size:14px; font-weight:800;">AI Capstone Project</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">Advanced • 20h</div>
+                            <button class="btn-glass-3d accent" style="width:100%;" onclick="alert('Starting Project...')">Start Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lms-section mt-40">
+                <h3 class="font-bold mb-20" style="font-size:18px;">Live Workshops</h3>
+                <div class="lms-grid">
+                    <div class="course-card">
+                        <div class="card-thumb" style="background:#059669; height:100px; font-size:14px;">RESUME</div>
+                        <div class="card-body" style="padding:15px;">
+                            <h4 style="font-size:14px; font-weight:800;">Resume Masterclass</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">Dec 20 • 2:00 PM</div>
+                            <button class="btn-glass-3d secondary" style="width:100%;">Register Free</button>
+                        </div>
+                    </div>
+                    <div class="course-card" id="workshop-adv">
+                        <div id="ws-lock-overlay" class="card-lock-overlay hidden"></div>
+                        <div class="card-thumb" style="background:#7c3aed; height:100px; font-size:14px;">SYSTEM DESIGN</div>
+                        <div class="card-body" style="padding:15px;">
+                            <h4 style="font-size:14px; font-weight:800;">Advanced System Design</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">Dec 22 • 5:00 PM</div>
+                            <button class="btn-glass-3d secondary" style="width:100%;">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="view-player" class="screen hidden">
+        <div class="container mt-20">
+            <div class="player-header">
+                <div class="flex" style="gap:15px;">
+                    <button class="btn btn-text" style="font-size:18px; padding:0;" onclick="router('lms')">←</button>
+                    <div>
+                        <div class="player-title">Generative AI for Beginners</div>
+                        <div class="player-subtitle">Self learning watched : 30%</div>
+                    </div>
+                </div>
+                <div class="flex" style="gap:10px; font-size:12px; color:#64748b;">
+                    <span>📝 Notes</span>
+                </div>
+            </div>
+
+            <div class="player-layout">
+                <div class="player-sidebar">
+                    <div class="p-icon active" id="p-icon-track" onclick="switchPlayerTab('track')"><i>📚</i>Track</div>
+                    <div class="p-icon" id="p-icon-cert" onclick="switchPlayerTab('cert')"><i>🎓</i>Cert</div>
+                    <div class="p-icon hidden" id="p-icon-project"><i>🚀</i>Project</div>
+                    
+                    <div class="p-icon" id="p-icon-upgrade" onclick="activateTrialDirectly()" style="margin-top:auto; color:#f97316;">
+                        <i>⚡</i><span id="p-icon-upgrade-text">Start Pro Trial</span>
+                    </div>
+                </div>
+
+                <div id="player-tab-video" class="player-content-wrapper" style="display:flex; width:100%;">
+                    <div class="player-track">
+                        <div style="font-weight:bold; margin-bottom:15px; font-size:14px;">Learning Track</div>
+                        <div class="track-item">
+                            <div style="font-size:13px; font-weight:700;">Self Learning</div>
+                            <div style="font-size:11px; color:#64748b;">30% Completed</div>
+                        </div>
+                    </div>
+
+                    <div class="player-stage">
+                        <div class="video-ui">
+                            <div class="vid-controls">
+                                <span>▶</span> <span>02:54 / 19:09</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="player-playlist">
+                        <div class="pl-header">Self learning videos</div>
+                        <div class="pl-item">
+                            <div class="pl-check">✓</div>
+                            <div>
+                                <div class="pl-title">Lesson 0: Introduction</div>
+                                <div class="pl-meta">2 mins</div>
+                            </div>
+                        </div>
+                        <div class="pl-item active">
+                            <div class="pl-check">▶</div>
+                            <div>
+                                <div class="pl-title">Lesson 1: Intro to AI</div>
+                                <div class="pl-meta">20 mins</div>
+                            </div>
+                        </div>
+                        <div class="pl-item">
+                            <div class="pl-check">○</div>
+                            <div>
+                                <div class="pl-title">Lesson 2: What are AI Agents</div>
+                                <div class="pl-meta">15 mins</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:auto; border-top:1px solid #eee;">
+                            <div class="pl-header" style="color:#64748b;">Related Workshops</div>
+                            <div id="workshop-nudge-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="player-tab-cert" class="player-content-wrapper hidden" style="padding:40px; width:100%; overflow-y:auto;">
+                    <div class="text-center">
+                        <div style="font-size:14px; color:#64748b; margin-bottom:5px;">Congrats, you have unlocked your certificate for</div>
+                        <div style="font-weight:900; font-size:24px; color:var(--text-main);">AI Agents for Beginners</div>
+                    </div>
+
+                    <div class="cert-layout">
+                        <div class="cert-preview">
+                            <div class="cert-mockup">
+                                <div class="cert-corner top-left"></div>
+                                <div class="cert-corner bottom-right"></div>
+                                
+                                <div class="cert-logo">Simplilearn <span>SkillUp</span></div>
+                                <div class="cert-headline">Certificate of Completion</div>
+                                <div class="cert-subhead">This certificate is proudly presented to</div>
+                                
+                                <div class="cert-name">Your Name Goes Here</div>
+                                
+                                <div class="cert-text">
+                                    For successfully completing the course<br>
+                                    <strong class="cert-course-name">Generative AI for Beginners</strong><br>
+                                    Demonstrating mastery in fundamental AI concepts.
+                                </div>
+                                
+                                <div class="cert-date">Date: 04 Dec 2025</div>
+                                <div class="cert-badge">🏅</div>
+                             </div>
+                        </div>
+                        <div class="cert-actions">
+                            <div>
+                                <label style="font-size:13px; font-weight:700; display:block; margin-bottom:8px;">Enter Your Desired Name On Certificate</label>
+                                <input type="text" class="input-ctrl" placeholder="John Doe">
+                                <div style="font-size:11px; color:#64748b;">Note: Input your name carefully. It would not be editable further.</div>
+                            </div>
+                            
+                            <div style="background:#fff7ed; border:1px solid #ffedd5; padding:20px; border-radius:12px; text-align:center;">
+                                <h4 style="margin:0 0 10px 0; font-size:14px;">Share your Achievement!</h4>
+                                <p style="font-size:11px; color:#64748b; margin-bottom:15px;">Get new opportunities by sharing the certificate on LinkedIn and other platforms</p>
+                                
+                                <div class="social-btn social-li" style="width:100%; margin-bottom:10px; height:40px;">
+                                    Share on LinkedIn
+                                </div>
+                                <div class="flex" style="gap:10px; justify-content:center;">
+                                    <div class="social-btn social-fb">f</div>
+                                    <div class="social-btn social-tw">t</div>
+                                    <div class="social-btn social-dl">↓</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cert-nudge">
+                        <h3 style="margin:0 0 10px 0; font-size:18px; font-weight:900; color:#9a3412;">Want more certifications?</h3>
+                        <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Unlock Advanced Professional Certificates and Projects with Pro.</p>
+                        <button class="btn btn-primary" onclick="activateTrialDirectly()">Start Pro Trial</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title" style="font-weight:900; margin-bottom:10px;">Create Account</h2>
+            <div id="modal-body"></div>
+            
+            <input type="email" id="emailInput" class="input-ctrl" placeholder="name@company.com">
+            <button class="btn btn-primary" style="width:100%" onclick="submitAuth()">Continue</button>
+            <button class="btn btn-text" onclick="document.getElementById('authModal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+
+    <button class="sim-toggle" onclick="document.getElementById('sim-panel').classList.toggle('visible')">⚙️ Flows</button>
+    <div class="sim-panel" id="sim-panel">
+        <div style="font-weight:bold; margin-bottom:10px; display:flex; justify-content:space-between;">
+            SCENARIO RUNNER <span style="cursor:pointer;" onclick="document.getElementById('sim-panel').classList.remove('visible')">x</span>
+        </div>
+        
+        <button class="sim-btn" onclick="resetToFlow(1)">1. Home -> Paid</button>
+        <button class="sim-btn" onclick="resetToFlow(2)">2. Course -> Lite -> Trial -> Paid</button>
+        <button class="sim-btn" onclick="resetToFlow(3)">3. Learning -> Trial -> Paid</button>
+        <button class="sim-btn" onclick="resetToFlow(4)">4. Home -> Pro (No Trial)</button>
+        <button class="sim-btn" onclick="resetToFlow(5)">5. Home -> Ultimate (No Trial)</button>
+        <button class="sim-btn" onclick="resetToFlow(6)">6. Home -> Pro -> Ultimate</button>
+        <button class="sim-btn" onclick="resetToFlow(7)">7. Course -> Lite(P) -> Lite(W)</button>
+        <button class="sim-btn" onclick="resetToFlow(8)">8. Full Cycle: Lite -> Trial -> Expire -> Work</button>
+        <button class="sim-btn" onclick="resetToFlow(9)">9. Home -> Trial -> Paid</button>
+        <button class="sim-btn" onclick="resetToFlow(10)">10. Lite(P) -> Lite(W) -> Pro</button>
+        <button class="sim-btn" onclick="resetToFlow(11)">11. Learning -> Trial(W) -> Paid</button>
+        <button class="sim-btn" onclick="resetToFlow(12)">12. Learning -> Trial(P) -> Trial(W)</button>
+        <button class="sim-btn" onclick="resetToFlow(13)" style="border:1px solid #f97316;">13. Free Article -> Evolve</button>
+
+        <div style="border-top:1px solid #334155; margin:10px 0; padding-top:10px; font-weight:bold; color:#94a3b8; font-size:10px;">⚡ TRIGGER ACTIONS</div>
+        <button class="sim-btn" onclick="setState('lite', 'personal', 'expired')">Simulate: Expire Trial</button>
+        <button class="sim-btn" onclick="router('player'); renderPlayerNudge();">View Player (Lite)</button>
+        <button class="sim-btn" onclick="setState('lite', 'work', 'paid'); router('player');">View Player (Work Lite)</button>
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Updated with type (free/pro), rating, duration
+        const courseData = {
+            'genai': [
+                { title: 'GenAI for Beginners', learners: '45k', color: '#2563eb', type: 'free', rating: 4.8, duration: '2h 15m' },
+                { title: 'Prompt Engineering 101', learners: '12k', color: '#1e40af', type: 'free', rating: 4.6, duration: '1h 45m' },
+                { title: 'Advanced LLM Architectures', learners: '8k', color: '#1d4ed8', type: 'pro', rating: 4.9, duration: '24h 30m' }
+            ],
+            'datascience': [
+                { title: 'Python for Data Science', learners: '32k', color: '#059669', type: 'free', rating: 4.7, duration: '2h 00m' },
+                { title: 'R Programming Basic', learners: '15k', color: '#047857', type: 'free', rating: 4.5, duration: '1h 30m' },
+                { title: 'Advanced Data Viz w/ Tableau', learners: '22k', color: '#065f46', type: 'pro', rating: 4.9, duration: '18h 15m' }
+            ],
+            'project': [
+                { title: 'PMP Basics', learners: '50k', color: '#d97706', type: 'free', rating: 4.8, duration: '2h 30m' },
+                { title: 'Agile Scrum Master Class', learners: '30k', color: '#b45309', type: 'pro', rating: 4.9, duration: '35h 00m' },
+                { title: 'Intro to Kanban', learners: '10k', color: '#92400e', type: 'free', rating: 4.4, duration: '1h 15m' }
+            ],
+            'cyber': [
+                { title: 'Ethical Hacking 101', learners: '28k', color: '#dc2626', type: 'free', rating: 4.7, duration: '3h 00m' },
+                { title: 'Adv Network Security', learners: '19k', color: '#b91c1c', type: 'pro', rating: 4.9, duration: '28h 00m' },
+                { title: 'Cyber Threats 2025', learners: '5k', color: '#991b1b', type: 'free', rating: 4.5, duration: '1h 45m' }
+            ],
+            'digital': [
+                { title: 'SEO Fundamentals', learners: '40k', color: '#7c3aed', type: 'free', rating: 4.6, duration: '2h 10m' },
+                { title: 'Adv Content Marketing', learners: '25k', color: '#6d28d9', type: 'pro', rating: 4.8, duration: '15h 00m' }
+            ],
+            'cloud': [
+                { title: 'AWS Essentials', learners: '60k', color: '#ea580c', type: 'free', rating: 4.8, duration: '3h 00m' },
+                { title: 'Azure Architect Pro', learners: '45k', color: '#c2410c', type: 'pro', rating: 4.9, duration: '40h 00m' }
+            ]
+        };
+
+        // --- GLOBAL STATE ---
+        let appState = { plan: 'visitor', emailType: 'personal', status: 'visitor' };
+
+        // --- SCENARIO RUNNER ---
+        function resetToFlow(id) {
+            appState = { plan: 'visitor', emailType: 'personal', status: 'visitor' };
+            router('home');
+            let msg = `Flow ${id} Started.`;
+            if (id === 1) msg += " Click 'View Plans' -> 'Start Trial' -> Upgrade.";
+            if (id === 2) { router('course', 'basic'); msg += " Click 'Join Lite'."; }
+            if (id === 3) { router('course', 'basic'); msg += " Click 'Start Learning' on Course Card."; }
+            if (id === 4) msg += " Click Explore -> Pricing -> 'Buy Now (Skip Trial)'.";
+            if (id === 5) msg += " Click Explore -> Pricing -> 'Get Ultimate'.";
+            if (id === 6) { setState('pro', 'personal', 'paid'); msg += " User is Pro. Go to Dashboard -> Click 'Upgrade' banner."; }
+            if (id === 7) { setState('lite', 'personal', 'paid'); msg += " User is Lite. Scroll to Workshops -> Click 'Unlock with Work Email'."; }
+            if (id === 8) { router('course', 'basic'); msg += " Start Lite -> Upgrade -> Trigger Expire -> Add Work Email."; }
+            if (id === 9) { openAuthModal('trial'); msg += " Auth Modal Open -> Start Trial -> Then Click 'Activate'."; }
+            if (id === 10) { setState('lite', 'work', 'paid'); msg += " User is Work Lite. Go to Pricing -> Buy Pro."; }
+            if (id === 11) { router('course', 'basic'); msg += " Click Pro Trial -> Use Work Email."; }
+            if (id === 12) { setState('pro', 'personal', 'trial'); msg += " User is Personal Trial. Go to Dashboard -> Click 'Extend Trial'."; }
+            if (id === 13) { router('resource'); msg += " Article Loaded. Click 'Start Learning for Free' CTA."; }
+            showToast(msg);
+        }
+
+        // --- RENDER ENGINE ---
+        function render() {
+            // Nav
+            const navD = document.getElementById('nav-desktop-actions');
+            const navM = document.getElementById('nav-mobile-actions');
+            const brandEl = document.querySelector('.brand');
+            let html = '';
+            
+            // CUSTOM NAV FOR FREE RESOURCE PAGE (Flow 13)
+            if (document.getElementById('view-resource').classList.contains('hidden') === false) {
+                brandEl.innerHTML = 'Simplilearn'; // Remove "Evolve"
+                html = `<button class="btn btn-text" onclick="router('home')" style="font-size:14px; font-weight:bold; color:var(--text-main);">Explore Evolve <span class="new-badge" style="background:#f97316; color:white; padding:2px 6px; border-radius:4px; font-size:10px; margin-left:5px;">NEW</span></button>`;
+            } 
+            else {
+                brandEl.innerHTML = 'Simplilearn <span>Evolve</span>'; // Default
+                if (appState.plan === 'visitor') {
+                    // UPDATED NAV CTA ALIGNMENT
+                    html = `<div class="flex" style="gap:15px; align-items:flex-start;">
+                                <button class="btn btn-text" style="height:44px;" onclick="router('pricing')">Log In</button>
+                                <div class="flex-col">
+                                    <button class="btn btn-primary btn-multiline" onclick="openAuthModal('trial')">
+                                        <span>Start Trial (Pro)</span>
+                                        <span class="btn-subtext">No credit card required</span>
+                                    </button>
+                                </div>
+                            </div>`;
+                } else {
+                    html = `<div style="display:flex; align-items:center; gap:10px;">
+                                <div style="width:30px; height:30px; background:var(--primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">JM</div>
+                                <button class="btn btn-text" onclick="router('lms')">Dashboard</button>
+                            </div>`;
+                }
+            }
+            navD.innerHTML = html;
+            navM.innerHTML = html;
+
+            // LMS Logic
+            if(!document.getElementById('view-lms').classList.contains('hidden')) renderLMS();
+            // Course Logic
+            renderCourseDetail();
+        }
+
+        function router(view, context) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-'+view).classList.remove('hidden');
+            window.scrollTo(0,0);
+            document.getElementById('mobile-menu').classList.remove('open');
+            if(view === 'course') {
+                currentContext = context || 'basic';
+                renderCourseDetail();
+            }
+            if(view === 'player') {
+                switchPlayerTab('track'); // Default to track
+                renderPlayerNudge();
+                renderPlayerSidebar(); 
+            }
+            render();
+        }
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+
+        // --- FILTERING ---
+        function filterCourses(cat, el) {
+            document.querySelectorAll('.cat-item').forEach(e => e.classList.remove('active'));
+            if(el) el.classList.add('active');
+            
+            const courses = courseData[cat];
+            const container = document.getElementById('course-container');
+            document.getElementById('grid-title').innerText = cat === 'genai' ? "Generative AI Courses" : (el ? el.innerText + " Courses" : "Courses");
+            
+            container.innerHTML = courses.map(c => {
+                const isPro = c.type === 'pro';
+                
+                // Card Badge Logic
+                const badgeHtml = isPro 
+                    ? `<div class="card-badge badge-pro">PRO</div>`
+                    : `<div class="card-badge badge-free">FREE</div>`;
+                
+                // CTA Logic with View Details (ADJACENT LAYOUT, SWAPPED ORDER)
+                const ctaHtml = isPro
+                    ? `<div class="flex gap-2 w-full">
+                            <button class="btn btn-outline flex-1" onclick="router('course', 'advanced')">View Details</button>
+                            <button class="btn btn-primary btn-multiline flex-1" onclick="openAuthModal('trial')">
+                                <span>Start Trial</span>
+                                <span class="btn-subtext">No credit card required</span>
+                            </button>
+                       </div>`
+                    : `<div class="flex gap-2 w-full">
+                            <button class="btn btn-outline flex-1" onclick="router('course', 'basic')">View Details</button>
+                            <button class="btn btn-primary flex-1" onclick="openAuthModal('lite')">Start Learning</button>
+                       </div>`;
+
+                return `
+                <div class="course-card">
+                    <div class="card-thumb" style="background: linear-gradient(135deg, ${c.color}, #000);">
+                        ${badgeHtml}
+                    </div>
+                    <div class="card-body">
+                        <h3 style="font-size:16px; font-weight:800; margin-bottom:5px;">${c.title}</h3>
+                        <div class="flex flex-between w-full mb-20" style="font-size:12px; color:#64748b;">
+                            <span>⭐ ${c.rating}</span>
+                            <span>👤 ${c.learners}</span>
+                            <span>⏱ ${c.duration}</span>
+                        </div>
+                        <div class="card-actions">
+                            ${ctaHtml}
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // --- COURSE LOGIC ---
+        let currentContext = 'basic'; 
+        function renderCourseDetail() {
+            const title = document.getElementById('course-title');
+            const badge = document.getElementById('course-type-badge');
+            const sidebar = document.getElementById('course-sidebar');
+            const playerActions = document.getElementById('player-lock-actions');
+            
+            // Determine Pro/Free
+            const isPro = currentContext === 'advanced';
+
+            // Reset base styles
+            badge.className = 'course-badge';
+            badge.style = '';
+
+            if(isPro) {
+                title.innerText = "AI Agents (Advanced)";
+                badge.innerText = "PRO";
+                badge.classList.add('badge-pro'); // Use premium gold badge
+                
+                // Main CTA (Lock Screen)
+                if (playerActions) {
+                      playerActions.innerHTML = `
+                          <div class="flex-col">
+                             <button class="btn btn-primary btn-multiline" onclick="openAuthModal('trial')">
+                                <span>Start Trial (Pro)</span>
+                                <span class="btn-subtext">No credit card required</span>
+                             </button>
+                          </div>
+                      `;
+                }
+
+                // Sidebar
+                sidebar.innerHTML = `
+                    <div style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+                        <h3>Unlock with Pro</h3>
+                         <ul style="margin:20px 0; padding-left:20px; font-size:14px; color:#334155; line-height:1.6;">
+                            <li>Access to 200+ advanced courses</li>
+                            <li>AI Learning Buddy</li>
+                            <li>Practice Labs</li>
+                            <li>Completion Cert</li>
+                        </ul>
+                        <button class="btn btn-primary btn-multiline" style="width:100%" onclick="openAuthModal('trial')">
+                            <span>Start Trial (Pro)</span>
+                            <span class="btn-subtext">No credit card required</span>
+                        </button>
+                    </div>
+                `;
+
+            } else {
+                title.innerText = "Generative AI for Beginners";
+                badge.innerText = "FREE";
+                badge.style.background = "#dcfce7";
+                badge.style.color = "#15803d";
+                
+                // Main CTA (Lock Screen - actually just start)
+                if (playerActions) {
+                    // For prototype simplification, free courses are unlocked immediately but show the 'start' button context here if locked
+                    playerActions.innerHTML = `<button class="btn btn-primary" onclick="openAuthModal('lite')">Start Learning for Free</button>`;
+                }
+
+                // Sidebar (Promote Pro even on Free Course)
+                sidebar.innerHTML = `
+                    <div style="background:white; padding:20px; border-radius:12px; border:1px solid #e2e8f0;">
+                        <h3>Upgrade your Skills</h3>
+                        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Get more than just the basics.</p>
+                        <ul style="margin:20px 0; padding-left:20px; font-size:14px; color:#334155; line-height:1.6;">
+                            <li>Access to 200+ advanced courses</li>
+                            <li>AI Learning Buddy</li>
+                            <li>Practice Labs</li>
+                        </ul>
+                        <button class="btn btn-primary btn-multiline" style="width:100%" onclick="openAuthModal('trial')">
+                            <span>Start Trial (Pro)</span>
+                            <span class="btn-subtext">No credit card required</span>
+                        </button>
+                    </div>
+                `;
+            }
+            renderCourseLock();
+        }
+
+        function renderCourseLock() {
+            const player = document.getElementById('video-player');
+            if (!player) return;
+
+            let isLocked = true;
+            if (appState.plan === 'pro' || appState.plan === 'ultimate') isLocked = (appState.status === 'expired');
+            else if (appState.plan === 'lite') isLocked = (currentContext === 'advanced');
+            else isLocked = true; 
+
+            if(isLocked) {
+                player.classList.remove('unlocked');
+                // Content is injected by renderCourseDetail now for specifics
+                document.querySelector('.lock-content').style.display = 'block';
+            } else {
+                player.classList.add('unlocked');
+                player.innerHTML = "";
+            }
+        }
+
+        // --- PRICING LOGIC ---
+        function toggleBilling() {
+            const isAnnual = document.getElementById('billingCheck').checked;
+            document.querySelectorAll('.plan-price').forEach(el => {
+                const m = el.dataset.m; const a = el.dataset.a;
+                if(m && a) el.innerHTML = isAnnual ? `<span style="text-decoration:line-through; font-size:1.5rem; color:#94a3b8; margin-right:8px;">$${m*12}</span> $${a}` : `$${m}`;
+            });
+        }
+
+        // --- AUTH ---
+        let pendingAction = '';
+        function openAuthModal(act) {
+            pendingAction = act;
+            document.getElementById('authModal').style.display = 'flex';
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = ''; // Reset
+
+            // 1. LITE / START LEARNING FLOW (With Upsell)
+            if (act === 'lite') {
+                modalTitle.innerText = "Create Free Account";
+                modalBody.innerHTML = `
+                    <div style="text-align:left; background:#f8fafc; padding:15px; border-radius:8px; margin-bottom:20px; font-size:13px; color:#334155;">
+                        <div style="margin-bottom:8px;"><strong>Includes:</strong></div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                            <span>✓ Basic Courses</span>
+                            <span>✓ Community Access</span>
+                        </div>
+                        <div style="margin-top:15px; padding-top:12px; border-top:1px dashed #cbd5e1; color:#1264a3; font-weight:bold; cursor:pointer; font-size:12px;" onclick="openAuthModal('trial')">
+                           ✨ Want 200+ Courses & AI? Start Pro Trial instead →
+                        </div>
+                    </div>
+                    <p style="color:#64748b; margin-bottom:15px; font-size:14px;">Enter email to create account.</p>
+                `;
+            } 
+            // 2. TRIAL FLOW (With Benefits & Pricing)
+            else if (act === 'trial') {
+                modalTitle.innerText = "Start 15-Day Free Trial";
+                modalBody.innerHTML = `
+                    <div style="text-align:left; background:#fff7ed; border:1px solid #fed7aa; padding:15px; border-radius:8px; margin-bottom:20px; font-size:13px;">
+                        <div style="font-weight:bold; margin-bottom:8px; color:#9a3412;">⚡ Pro Benefits (Free for 15 Days):</div>
+                        <div style="display:grid; gap:6px;">
+                            <span>✓ 200+ Advanced Courses</span>
+                            <span>✓ AI Learning Buddy</span>
+                            <span>✓ Professional Certificates</span>
+                        </div>
+                        <div style="margin-top:12px; font-weight:bold; color:#0f172a; font-size:12px; border-top:1px solid #fed7aa; padding-top:8px;">
+                            Then $29/mo • Cancel anytime • No credit card required
+                        </div>
+                    </div>
+                    <p style="color:#64748b; margin-bottom:15px; font-size:14px;">Enter email to activate trial.</p>
+                `;
+            }
+            // 3. WORK WORKSHOP FLOW
+            else if (act === 'work_workshop') {
+                modalTitle.innerText = "Unlock Advanced Workshop";
+                modalBody.innerHTML = `<p style="color:#64748b; margin-bottom:20px; font-size:14px; line-height:1.5;">These workshops are designed for working professionals only. Please verify your status with a work email.</p>`;
+            } 
+            // 4. WORK EXTEND FLOW
+            else if (act === 'work_extend') {
+                modalTitle.innerText = "Extend Your Trial";
+                modalBody.innerHTML = `<p style="color:#64748b; margin-bottom:20px; font-size:14px; line-height:1.5;">We know professionals need weekends to learn. Extend your trial by verifying your work email.</p>`;
+            }
+            // 5. GIFT COURSE FLOW
+            else if (act === 'gift') {
+                modalTitle.innerText = "Gift a Free Course";
+                modalBody.innerHTML = `<p style="color:#64748b; margin-bottom:20px; font-size:14px; line-height:1.5;">Share the joy of learning! Send a free course pass to a colleague.<br><strong>Note:</strong> Email domain must match yours.</p>`;
+            }
+            // 6. GENERIC WORK EMAIL FLOW
+            else if (act.includes('work') || act.includes('team')) {
+                modalTitle.innerText = "Work Email Required";
+                modalBody.innerHTML = `<p style="color:#64748b; margin-bottom:20px; font-size:14px;">Enter work email to continue.</p>`;
+            }
+            // Fallback
+            else {
+                modalTitle.innerText = "Create Account";
+                modalBody.innerHTML = `<p style="color:#64748b; margin-bottom:20px; font-size:14px;">Enter email to continue.</p>`;
+            }
+        }
+
+        function submitAuth() {
+            const email = document.getElementById('emailInput').value;
+            const isWork = !['gmail','yahoo'].some(d => email.includes(d));
+            document.getElementById('authModal').style.display = 'none';
+
+            if(pendingAction === 'team') {
+                if(!isWork) { alert("Work email needed."); return; }
+                setState('lite', 'work', 'paid');
+            } else if (pendingAction === 'lite') {
+                setState('lite', isWork ? 'work' : 'personal', 'paid');
+            } else if (pendingAction === 'trial') {
+                setState('pro', isWork ? 'work' : 'personal', 'trial');
+            } else if (pendingAction === 'gift') {
+                // Gift Logic
+                showToast(`🎁 Gift sent to ${email}! (9/10 invites left)`);
+                return; // Stay on page
+            } else if (pendingAction === 'bonus' || pendingAction === 'work_upgrade' || pendingAction === 'work_workshop' || pendingAction === 'work_extend') {
+                // Unified logic for all work email upgrades
+                if(isWork) { 
+                    showToast("Work Email Added!");
+                    if (appState.status === 'trial') setState('pro', 'work', 'trial'); 
+                    else setState('lite', 'work', 'paid');
+                    
+                    // If triggered from Player, reload player state
+                    if(!document.getElementById('view-player').classList.contains('hidden')) {
+                         renderPlayerNudge();
+                         renderPlayerSidebar();
+                         router('player'); 
+                         return;
+                    }
+                } else showToast("Personal email detected.");
+            }
+            
+            // FORCE REDIRECT TO DASHBOARD + FEEDBACK
+            showToast("Redirecting to Dashboard...");
+            setTimeout(() => {
+                router('lms');
+            }, 800);
+        }
+
+        function directBuy(plan) {
+            if(confirm("Simulating Payment...")) {
+                setState(plan, 'personal', 'paid');
+                router('lms');
+            }
+        }
+
+        function activateTrialDirectly() {
+            setState('pro', appState.emailType, 'trial');
+            showToast("Pro Trial Activated!");
+            // CHANGED: Also update sidebar when upgrading directly from player
+            renderPlayerNudge();
+            renderPlayerSidebar();
+        }
+
+        function inviteTeam() {
+            showToast("Team Invite Link Generated!");
+        }
+
+        function setState(plan, email, status) {
+            appState = { plan: plan, emailType: email, status: status };
+            // showToast(`State: ${plan.toUpperCase()} | ${status.toUpperCase()}`);
+            render();
+        }
+
+        // --- PLAYER LOGIC ---
+        function switchPlayerTab(tab) {
+            document.getElementById('player-tab-video').classList.add('hidden');
+            document.getElementById('player-tab-cert').classList.add('hidden');
+            document.getElementById('p-icon-track').classList.remove('active');
+            document.getElementById('p-icon-cert').classList.remove('active');
+
+            if(tab === 'track') {
+                document.getElementById('player-tab-video').classList.remove('hidden');
+                document.getElementById('p-icon-track').classList.add('active');
+            } else {
+                document.getElementById('player-tab-cert').classList.remove('hidden');
+                document.getElementById('p-icon-cert').classList.add('active');
+            }
+        }
+
+        function renderPlayerSidebar() {
+            const projIcon = document.getElementById('p-icon-project');
+            const upgradeText = document.getElementById('p-icon-upgrade-text');
+            
+            // Show Project Tab only if Pro or Ultimate
+            if(appState.plan === 'pro' || appState.plan === 'ultimate') {
+                projIcon.classList.remove('hidden');
+            } else {
+                projIcon.classList.add('hidden');
+            }
+
+            // Update Upgrade Text based on Status
+            if(appState.status === 'trial') {
+                upgradeText.innerHTML = `Trial Active<br><span style="font-size:9px">15 Days Left</span>`;
+            } else {
+                upgradeText.innerHTML = `Start Pro Trial`;
+            }
+        }
+
+        function renderPlayerNudge() {
+            const container = document.getElementById('workshop-nudge-container');
+            if (!container) return;
+            
+            // Scenario A: Personal Lite (Locked + Work Email Nudge)
+            if (appState.plan === 'lite' && appState.emailType === 'personal') {
+                container.innerHTML = `
+                    <div class="pl-item locked">
+                        <div style="font-size:16px;">🔒</div>
+                        <div>
+                            <div class="pl-title">Advanced System Design</div>
+                            <div class="pl-meta">Workshop • Dec 22</div>
+                        </div>
+                    </div>
+                    <div class="nudge-box work">
+                        <b>PROFESSIONAL TRACK</b><br>
+                        This advanced workshop is designed for working professionals only.<br>
+                        <span style="opacity:0.8; font-size:11px;">Unlock for free with your work email.</span>
+                        <button class="btn btn-text" style="margin-top:5px; font-size:11px; text-decoration:underline;" onclick="openAuthModal('work_workshop')">Add Work Email</button>
+                    </div>
+                `;
+            }
+            // Scenario B: Work Lite (Unlocked)
+            else if (appState.plan === 'lite' && appState.emailType === 'work') {
+                container.innerHTML = `
+                    <div class="pl-item">
+                        <div style="color:#10b981;">✓</div>
+                        <div>
+                            <div class="pl-title">Advanced System Design</div>
+                            <div class="pl-meta">Workshop • <span style="color:#10b981; font-weight:bold;">Unlocked (Work Bonus)</span></div>
+                        </div>
+                    </div>
+                    <div class="nudge-box trial">
+                        Want more? <button class="btn btn-text" onclick="activateTrialDirectly()">Start Free Trial</button>
+                    </div>
+                `;
+            }
+            // Scenario C: Pro (Unlocked)
+            else if (appState.plan === 'pro' || appState.plan === 'ultimate') {
+                container.innerHTML = `
+                    <div class="pl-item">
+                        <div>✓</div>
+                        <div>
+                            <div class="pl-title">Advanced System Design</div>
+                            <div class="pl-meta">Included with Pro</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderLMS() {
+            const banner = document.getElementById('lms-banner');
+            const welcome = document.getElementById('lms-welcome');
+            const role = document.getElementById('lms-role');
+            
+            // Overlays - Safe Selection
+            const courseOverlay = document.getElementById('lock-overlay-card-adv'); // Using unique ID
+            const wsOverlay = document.getElementById('ws-lock-overlay');
+            
+            // Recommended Overlays
+            const recProLock = document.getElementById('rec-pro-lock');
+            const recUltLock = document.getElementById('rec-ult-lock');
+
+            banner.className = 'status-alert hidden'; banner.innerHTML = '';
+
+            const isEffectivePro = (appState.plan === 'pro' || appState.plan === 'ultimate') && appState.status !== 'expired';
+            const isUltimate = appState.plan === 'ultimate' && appState.status !== 'expired';
+            
+            // 1. UNLOCK/LOCK LOGIC FOR COURSES (Adv Agents)
+            if (courseOverlay) {
+                if(isEffectivePro) {
+                    courseOverlay.classList.add('hidden');
+                } else {
+                    courseOverlay.classList.remove('hidden');
+                    let btnHtml = "";
+                    if(appState.status === 'expired') btnHtml = `<button class="btn-glass-3d danger" onclick="directBuy('pro')">Re-activate</button>`;
+                    else btnHtml = `<button class="btn-glass-3d royal" onclick="activateTrialDirectly()">Start Trial</button>`;
+                    courseOverlay.innerHTML = `<div style="font-size:24px;">🔒</div><b>Pro Feature</b><div style="margin:5px 0;">${btnHtml}</div>`;
+                }
+            }
+            
+            // Rec Pro Lock
+            if(recProLock) {
+                 if(isEffectivePro) recProLock.classList.add('hidden');
+                 else {
+                    recProLock.classList.remove('hidden');
+                    recProLock.innerHTML = `<div style="font-size:24px;">🔒</div><b>Pro Feature</b><div style="margin:5px 0;"><button class="btn-glass-3d royal" onclick="activateTrialDirectly()">Start Free Trial</button></div>`;
+                 }
+            }
+
+            // 2. ULTIMATE UNLOCK LOGIC
+            if (recUltLock) {
+                if(isUltimate) recUltLock.classList.add('hidden');
+                else recUltLock.classList.remove('hidden');
+            }
+
+            // 3. UNLOCK/LOCK LOGIC FOR WORKSHOPS (The "Lead Trap")
+            const isWorkshopUnlocked = isEffectivePro || (appState.plan === 'lite' && appState.emailType === 'work');
+            
+            if (wsOverlay) {
+                if(isWorkshopUnlocked) {
+                    wsOverlay.classList.add('hidden');
+                } else {
+                    wsOverlay.classList.remove('hidden');
+                    // Nudge for Personal Lite Users to Add Work Email
+                    if(appState.plan === 'lite' && appState.emailType === 'personal') {
+                        wsOverlay.innerHTML = `
+                            <div style="font-size:24px; margin-bottom:5px;">🔒</div>
+                            <b style="font-size:12px; margin-bottom:5px;">Professional Track</b>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px; max-width:200px; line-height:1.4;">
+                                Designed for working professionals only. Unlock for free with work email.
+                            </div>
+                            <button class="btn-glass-3d accent" onclick="openAuthModal('work_workshop')">Add Work Email</button>
+                        `;
+                    } else {
+                        wsOverlay.innerHTML = `<div style="font-size:24px;">🔒</div><b>Locked</b>`;
+                    }
+                }
+            }
+
+            // 4. BANNER LOGIC
+            if (appState.status === 'expired') {
+                welcome.innerText = "Welcome Back"; role.innerText = "Plan Expired";
+                banner.className = 'status-alert expired';
+                banner.innerHTML = `<span><strong>Trial Expired:</strong> Your access has ended.</span> <button class="btn-glass-3d danger" onclick="directBuy('pro')">Re-activate Now</button>`;
+            } 
+            else if (appState.plan === 'lite') {
+                welcome.innerText = "Welcome (Lite)";
+                role.innerText = "Lite Plan";
+                banner.className = 'status-alert lite';
+                // Priority Nudge: Start Trial. Secondary: Work Email is just a text link.
+                banner.innerHTML = `<span><strong>Upgrade:</strong> Get unlimited access.</span> <div class="flex" style="gap:10px"><button class="btn-glass-3d gold" onclick="activateTrialDirectly()">Start Free Trial</button></div>`;
+                
+                if (appState.emailType === 'work') { 
+                    role.innerText = "Lite + Work Bonus";
+                    banner.className = 'status-alert bonus';
+                    // UPDATED: Gift Nudge for Work Email Users
+                    banner.innerHTML = `
+                        <div class="flex flex-col gap-1">
+                            <span><strong>Bonus Active:</strong> 2 Extra Workshops unlocked.</span>
+                            <span style="font-size:12px; opacity:0.9;">🎁 <strong>Share the knowledge:</strong> Gift a free course to up to 10 colleagues (same @domain).</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn-glass-3d teal" onclick="openAuthModal('gift')">Gift Course</button>
+                            <button class="btn-glass-3d secondary" onclick="activateTrialDirectly()">Upgrade to Pro</button>
+                        </div>
+                    `;
+                } 
+            } 
+            else if (appState.plan === 'pro') {
+                welcome.innerText = "Welcome (Pro)"; role.innerText = "Pro Member";
+                if(appState.status === 'trial') {
+                    const days = appState.emailType === 'work' ? 30 : 15;
+                    banner.className = 'status-alert pro';
+                    // UPDATED: Extended Trial Nudge
+                    let extraBtn = (appState.emailType === 'personal') ? `<button class="btn btn-text" onclick="openAuthModal('work_extend')">Extend Trial</button>` : '';
+                    banner.innerHTML = `<span><strong>Trial Active:</strong> ${days} Days Remaining.</span> <div class="flex" style="gap:10px">${extraBtn} <button class="btn-glass-3d royal" onclick="directBuy('pro')">Buy Now</button></div>`;
+                } else {
+                    banner.className = 'status-alert lite';
+                    banner.innerHTML = `<span><strong>Level Up:</strong> Get Live Classes with Ultimate.</span> <button class="btn-glass-3d primary" onclick="directBuy('ultimate')">Upgrade</button>`;
+                }
+            }
+            else if (appState.plan === 'ultimate') {
+                welcome.innerText = "Welcome (Ultimate)"; role.innerText = "Ultimate Member";
+                banner.className = 'status-alert ultimate'; style="background:#f0fdf4; border-color:#dcfce7; color:#15803d;";
+                banner.innerHTML = `<span><strong>Top Tier.</strong> Enjoy your live classes.</span>`;
+            }
+
+            if(banner.innerHTML !== '') banner.classList.remove('hidden');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
+        // Init
+        filterCourses('genai', document.querySelector('.cat-item'));
+        router('home');
+    </script>
+</body>
+</html>

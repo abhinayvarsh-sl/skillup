@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplilearn Evolve - Fixed Prototype v6</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Professional Palette */
+            --primary: #2563eb;       
+            --primary-dark: #1d4ed8;
+            --business: #4f46e5;      
+            --business-dark: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* --- CONTROL PANEL --- */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        .controls-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-weight: 900;
+            font-size: 1.35rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.03em;
+        }
+
+        /* Switchers */
+        .model-switcher {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .model-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .model-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Billing Toggle */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .save-badge {
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        /* --- LAYOUTS --- */
+        .main-container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 24px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .section-header h2 { font-size: 2.25rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.04em; color: var(--text-main); }
+        .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        /* --- TEAM CONTROLS --- */
+        .team-controls {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 16px 32px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 24px;
+            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .team-input-group { display: flex; align-items: center; gap: 12px; }
+        .team-label { font-weight: 700; color: var(--text-main); font-size: 0.95rem; }
+        .team-input { 
+            width: 80px; padding: 8px; text-align: center; font-weight: 700; 
+            border: 2px solid var(--border); border-radius: 8px; font-size: 1.1rem; 
+            color: var(--primary);
+        }
+        .team-input:focus { outline: none; border-color: var(--primary); }
+        .team-range { width: 150px; accent-color: var(--primary); cursor: pointer; }
+        .discount-pill { 
+            background: #eff6ff; color: #2563eb; padding: 6px 12px; 
+            border-radius: 100px; font-size: 0.8rem; font-weight: 800; 
+            text-transform: uppercase; letter-spacing: 0.05em; 
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .discount-pill.visible { opacity: 1; }
+
+        /* --- GRIDS --- */
+        .flat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 24px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 24px;
+        }
+
+        @media (max-width: 1100px) {
+            .flat-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-layout { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 650px) {
+            .flat-grid { grid-template-columns: 1fr; }
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        /* --- CARD DESIGN --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; 
+        }
+        
+        /* Disabled Card State */
+        .card.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.8);
+        }
+
+        .card:hover {
+            border-color: #93c5fd;
+            box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.15);
+            transform: translateY(-4px);
+        }
+        .card.disabled:hover { transform: none; box-shadow: none; border-color: var(--border); }
+
+        .card.highlight {
+            border: 2px solid var(--primary);
+            padding: 31px 23px;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            white-space: nowrap;
+        }
+
+        .card-title { font-size: 1.5rem; font-weight: 800; margin: 0 0 8px 0; color: var(--text-main); letter-spacing: -0.02em; }
+        .card-desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 24px; min-height: 44px; line-height: 1.4; }
+        
+        .price-area { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .price { font-size: 2.5rem; font-weight: 900; color: var(--text-main); letter-spacing: -0.03em; }
+        .price .strike { font-size: 1.25rem; color: #94a3b8; text-decoration: line-through; margin-right: 8px; font-weight: 500; }
+        .period { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-top: 4px;}
+
+        .features-list { list-style: none; padding: 0; margin: 0 0 24px 0; flex-grow: 1; }
+        .features-list li {
+            padding: 10px 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #334155;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.4;
+        }
+        .features-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: 900;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .features-list li.prev-tier {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* TEAM FEATURE VISIBILITY */
+        .li-team {
+            display: none; 
+            color: var(--business);
+            font-weight: 700;
+            background: #eff6ff;
+            margin: 0 -10px;
+            padding: 8px 10px !important;
+            border-radius: 6px;
+        }
+        .li-team::before { color: var(--business) !important; }
+
+        .lead-trigger {
+            background: linear-gradient(to right, #fff7ed, #fff);
+            border: 1px solid #fed7aa;
+            border-left: 4px solid #f97316;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #9a3412;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lead-trigger:hover { background: #fff7ed; transform: translateX(2px); }
+        .lead-trigger b { display: block; margin-bottom: 2px; color: #ea580c; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;}
+
+        .trial-note {
+            text-align:center; 
+            font-size: 0.75rem; 
+            color: var(--text-muted); 
+            margin-top: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+            margin-top: auto;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: white; border-color: #cbd5e1; color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-muted); background: #f8fafc; }
+        .btn-business { background: var(--business); color: white; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-business:hover { background: var(--business-dark); }
+
+        /* Inner Toggles */
+        .inner-toggle-container { display: flex; justify-content: center; margin-bottom: 40px; }
+        .inner-toggle { display: inline-flex; background: #e2e8f0; padding: 6px; border-radius: 100px; }
+        .inner-toggle-btn { padding: 12px 32px; border-radius: 100px; border: none; cursor: pointer; font-weight: 700; background: transparent; color: var(--text-muted); transition: all 0.2s; font-size: 0.95rem; }
+        .inner-toggle-btn.active { background: white; color: var(--text-main); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .inner-toggle-btn[data-type="business"].active { color: var(--business); }
+
+        /* Comparison Styles */
+        .comp-header { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid; }
+        .comp-list li { margin-bottom: 8px; font-size: 0.9rem; line-height: 1.4; padding-left: 20px; position: relative; }
+        .comp-pros li::before { content: "+"; position: absolute; left: 0; font-weight: 800; color: #16a34a; }
+        .comp-cons li::before { content: "-"; position: absolute; left: 0; font-weight: 800; color: #dc2626; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 200; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal { background: white; width: 100%; max-width: 480px; padding: 40px; border-radius: 20px; text-align: center; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal h2 { font-size: 1.75rem; font-weight: 800; margin-top: 0; }
+        .modal input { width: 100%; padding: 16px; margin: 24px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; transition: border-color 0.2s; font-family: 'Satoshi', sans-serif; }
+        .modal input:focus { outline: none; border-color: var(--primary); }
+        .close-modal { position: absolute; top: 20px; right: 24px; font-size: 1.5rem; cursor: pointer; color: #94a3b8; transition: color 0.2s; }
+        .close-modal:hover { color: var(--text-main); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="control-panel">
+        <div class="controls-wrapper">
+            <div class="brand">
+                <span style="font-size:1.5rem;">⚡</span> Simplilearn Evolve
+            </div>
+            <div class="model-switcher">
+                <button class="model-btn active" onclick="switchModel('flat-noteams')">1. Flat (No Teams)</button>
+                <button class="model-btn" onclick="switchModel('hierarchical')">2. Hierarchical</button>
+                <button class="model-btn" onclick="switchModel('category')">3. Category</button>
+                <button class="model-btn" onclick="switchModel('flat')">4. Flat</button>
+                <button class="model-btn" onclick="switchModel('compare')">5. Compare</button>
+            </div>
+            <div class="billing-toggle">
+                <span>Monthly</span>
+                <label class="switch">
+                    <input type="checkbox" id="billingCheck" onchange="toggleBilling()">
+                    <span class="slider"></span>
+                </label>
+                <span>Annual <span class="save-badge">Save 20%</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+
+        <div id="view-flat-noteams" class="view-section block">
+            <div class="section-header">
+                <h2>Flat Subscription (No Teams)</h2>
+                <p>Pure individual focus. Simplified tiers without team bundling.</p>
+            </div>
+            
+            <div class="flat-grid">
+                <div class="card">
+                    <div class="card-title">Lite</div>
+                    <div class="card-desc">Basic skills & workshops.</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    
+                    <div class="lead-trigger" onclick="openModal('free-bonus')">
+                        <b>Bonus Feature</b>
+                        Unlock 2 Adv. Workshops w/ Work Email
+                    </div>
+
+                    <ul class="features-list">
+                        <li>Basic OSL Courses</li>
+                        <li>2 Basic Workshops / month</li>
+                        <li>Completion Certificates</li>
+                    </ul>
+                    <button class="btn btn-outline">Start Lite</button>
+                </div>
+                
+                <div class="card highlight">
+                    <div class="card-badge">Best Value</div>
+                    <div class="card-title">Pro</div>
+                    <div class="card-desc">Advanced learning & AI.</div>
+                    <div class="price-area">
+                        <div class="price" data-m="29" data-a="279">$29</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Lite</li>
+                        <li>Advanced OSL Courses - All Categories</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>2 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="openModal('trial')">Start Trial</button>
+                    <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Ultimate</div>
+                    <div class="card-desc">Live classes & mastery.</div>
+                    <div class="price-area">
+                        <div class="price" data-m="45" data-a="450">$45</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Pro</li>
+                        <li>Advanced LVC Courses - All Categories</li>
+                        <li>Practice Labs</li>
+                        <li>4 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-outline">Get Ultimate</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Enterprise</div>
+                    <div class="card-desc">Organization control.</div>
+                    <div class="price-area">
+                        <div class="price" style="font-size: 2.25rem;">Custom</div>
+                        <div class="period">per user / annual</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Ultimate</li>
+                        <li>SSO & Integrations</li>
+                        <li>Custom Learning Paths</li>
+                        <li>Dedicated CSM</li>
+                    </ul>
+                    <button class="btn btn-outline">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-hierarchical" class="view-section hidden">
+            <div class="section-header">
+                <h2>Hierarchical Subscription</h2>
+                <p>Tailored paths for Individuals vs. Businesses.</p>
+                <div class="inner-toggle-container">
+                    <div class="inner-toggle">
+                        <button class="inner-toggle-btn active" onclick="switchInnerTab('hierarchical', 'personal', this)">Personal (B2C)</button>
+                        <button class="inner-toggle-btn" data-type="business" onclick="switchInnerTab('hierarchical', 'business', this)">Business (B2B)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="h-personal" class="grid-layout">
+                <div class="card">
+                    <div class="card-title">Personal Lite</div>
+                    <div class="card-desc">Explorer</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    <div class="lead-trigger" onclick="openModal('free-bonus')"><b>Bonus Feature</b> Unlock 2 Adv. Workshops w/ Work Email</div>
+                    <ul class="features-list">
+                        <li>Basic OSL Courses</li>
+                        <li>2 Basic Workshops / month</li>
+                        <li>Completion Certificates</li>
+                    </ul>
+                    <button class="btn btn-outline">Start Learning</button>
+                </div>
+                <div class="card highlight">
+                    <div class="card-badge">Most Popular</div>
+                    <div class="card-title">Personal Pro</div>
+                    <div class="card-desc">Serious Self-Learner</div>
+                    <div class="price-area">
+                        <div class="price" data-m="29" data-a="279">$29</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Personal Lite</li>
+                        <li>Advanced OSL Courses - All Categories</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>2 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="openModal('trial')">Start Trial</button>
+                    <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Personal Ultimate</div>
+                    <div class="card-desc">Career Focused</div>
+                    <div class="price-area">
+                        <div class="price" data-m="45" data-a="450">$45</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Personal Pro</li>
+                        <li>Advanced LVC Courses - All Categories</li>
+                        <li>Practice Labs</li>
+                        <li>4 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-outline">Go Ultimate</button>
+                </div>
+            </div>
+            
+            <div id="h-business" class="grid-layout hidden">
+                <div class="card highlight" style="border-color: var(--business);">
+                    <div class="card-badge" style="background: var(--business);">Lead Gen Engine</div>
+                    <div class="card-title">Business Lite</div>
+                    <div class="card-desc">Starter Team</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    <ul class="features-list">
+                        <li><b>Up to 5 Users</b></li>
+                        <li>Basic OSL Courses</li>
+                        <li>Team Dashboard</li>
+                    </ul>
+                    <button class="btn btn-business" onclick="openModal('team')">Start Lite Team</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">Business Pro</div>
+                    <div class="card-desc">Department (6-50 users)</div>
+                    <div class="price-area">
+                        <div class="price" data-m="19" data-a="189">$19</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Business Lite</li>
+                        <li>Advanced OSL Courses - All Categories</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>Team Analytics & Admin</li>
+                    </ul>
+                    <button class="btn btn-outline">Buy for Team</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">Business Ultimate</div>
+                    <div class="card-desc">Scale Up</div>
+                    <div class="price-area">
+                        <div class="price" style="font-size: 2.25rem;">Custom</div>
+                        <div class="period">per user / annual</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Business Pro</li>
+                        <li>Advanced LVC Courses - All Categories</li>
+                        <li>Practice Labs</li>
+                        <li>Advanced Analytics</li>
+                    </ul>
+                    <button class="btn btn-outline">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-category" class="view-section hidden">
+            <div class="section-header">
+                <h2>Category-Based Subscription</h2>
+                <p>Pay by topic breadth. Same features, flexible scope.</p>
+                <div class="inner-toggle-container">
+                    <div class="inner-toggle">
+                        <button class="inner-toggle-btn active" onclick="switchInnerTab('category', 'personal', this)">Personal</button>
+                        <button class="inner-toggle-btn" data-type="business" onclick="switchInnerTab('category', 'business', this)">Business</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="c-personal" class="grid-layout">
+                <div class="card">
+                    <div class="card-title">Lite</div>
+                    <div class="card-desc">Free</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    <div class="lead-trigger" onclick="openModal('free-bonus')"><b>Bonus Feature</b> Unlock 2 Adv. Workshops w/ Work Email</div>
+                    <ul class="features-list">
+                        <li>Basic OSL Courses (1 Category)</li>
+                        <li>2 Basic Workshops / month</li>
+                        <li>Completion Certificates</li>
+                    </ul>
+                    <button class="btn btn-outline">Start Lite</button>
+                </div>
+                <div class="card highlight">
+                    <div class="card-badge">Popular</div>
+                    <div class="card-title">Deep Diver</div>
+                    <div class="card-desc">Pro</div>
+                    <div class="price-area">
+                        <div class="price" data-m="15" data-a="149">$15</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Lite</li>
+                        <li>Advanced OSL Courses (5 Categories)</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>2 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="openModal('trial')">Start Trial</button>
+                    <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">All Access</div>
+                    <div class="card-desc">Ultimate</div>
+                    <div class="price-area">
+                        <div class="price" data-m="45" data-a="450">$45</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Deep Diver</li>
+                        <li>Advanced LVC Courses (All Categories)</li>
+                        <li>Practice Labs</li>
+                        <li>4 Advanced Workshops / month</li>
+                    </ul>
+                    <button class="btn btn-outline">Unlock All</button>
+                </div>
+            </div>
+            
+            <div id="c-business" class="grid-layout hidden">
+                <div class="card highlight" style="border-color: var(--business);">
+                    <div class="card-badge" style="background: var(--business);">Lead Gen Engine</div>
+                    <div class="card-title">Team Lite</div>
+                    <div class="card-desc">Free Team</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    <ul class="features-list">
+                        <li>Basic OSL Courses (2 Categories)</li>
+                        <li>Team Dashboard</li>
+                        <li>Requires Work Email</li>
+                    </ul>
+                    <button class="btn btn-business" onclick="openModal('team')">Start Lite Team</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">Team Pro</div>
+                    <div class="card-desc">Department</div>
+                    <div class="price-area">
+                        <div class="price" data-m="9" data-a="89">$9</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Team Lite</li>
+                        <li>Advanced OSL Courses (10 Categories)</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>Team Analytics</li>
+                    </ul>
+                    <button class="btn btn-outline">Buy Team Pro</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">Team Ultimate</div>
+                    <div class="card-desc">Organization</div>
+                    <div class="price-area">
+                        <div class="price" style="font-size: 2.25rem;">Custom</div>
+                        <div class="period">per user / annual</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Team Pro</li>
+                        <li>Advanced LVC Courses (All Categories)</li>
+                        <li>Practice Labs</li>
+                        <li>Advanced Analytics</li>
+                    </ul>
+                    <button class="btn btn-outline">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="view-flat" class="view-section hidden">
+            <div class="section-header">
+                <h2>Flat Subscription</h2>
+                <p>One simple structure. Unlock bonuses with your work email.</p>
+                
+                <div class="team-controls">
+                    <div class="team-input-group">
+                        <span class="team-label">Team Size:</span>
+                        <input type="number" id="teamSizeInput" class="team-input" value="1" min="1" max="50" oninput="updateTeamPricing()">
+                        <span class="team-label">Users</span>
+                    </div>
+                    <input type="range" id="teamSizeRange" class="team-range" min="1" max="20" value="1" oninput="syncTeamInputs(this.value)">
+                    <span id="discountBadge" class="discount-pill">20% Team Discount</span>
+                </div>
+            </div>
+            
+            <div class="flat-grid">
+                <div id="card-lite" class="card">
+                    <div id="title-lite" class="card-title">Lite</div>
+                    <div class="card-desc">Basic skills & workshops.</div>
+                    <div class="price-area">
+                        <div class="price" data-m="0" data-a="0">$0</div>
+                        <div class="period">per user / forever</div>
+                    </div>
+                    
+                    <div class="lead-trigger" onclick="openModal('free-bonus')">
+                        <b>Bonus Feature</b>
+                        Unlock 2 Adv. Workshops w/ Work Email
+                    </div>
+
+                    <ul class="features-list">
+                        <li>Basic OSL Courses</li>
+                        <li>2 Basic Workshops / month</li>
+                        <li>Completion Certificates</li>
+                        <li class="li-team">Team Dashboard</li>
+                    </ul>
+                    <button id="btn-lite" class="btn btn-outline">Start Lite</button>
+                </div>
+                
+                <div class="card highlight">
+                    <div class="card-badge">Best Value</div>
+                    <div class="card-title">Pro</div>
+                    <div class="card-desc">Advanced learning & AI.</div>
+                    <div class="price-area">
+                        <div id="price-pro" class="price" data-base-m="29" data-base-a="279" data-m="29" data-a="279">$29</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Lite</li>
+                        <li>Advanced OSL Courses - All Categories</li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li class="li-team">Team Analytics Dashboard</li>
+                        <li class="li-team">Admin Management</li>
+                    </ul>
+                    <button id="btn-pro" class="btn btn-primary" onclick="openModal('trial')">Start Trial</button>
+                    <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Ultimate</div>
+                    <div class="card-desc">Live classes & mastery.</div>
+                    <div class="price-area">
+                        <div id="price-ult" class="price" data-base-m="45" data-base-a="450" data-m="45" data-a="450">$45</div>
+                        <div class="period">per user / month</div>
+                    </div>
+                    
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Pro</li>
+                        <li>Advanced LVC Courses - All Categories</li>
+                        <li>Practice Labs</li>
+                        <li class="li-team">Team Analytics Dashboard</li>
+                        <li class="li-team">Admin Management</li>
+                    </ul>
+                    <button id="btn-ult" class="btn btn-outline">Get Ultimate</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Enterprise</div>
+                    <div class="card-desc">Organization control.</div>
+                    <div class="price-area">
+                        <div class="price" style="font-size: 2.25rem;">Custom</div>
+                        <div class="period">per user / annual</div>
+                    </div>
+                    <ul class="features-list">
+                        <li class="prev-tier">Everything in Ultimate</li>
+                        <li>SSO & Integrations</li>
+                        <li>Custom Learning Paths</li>
+                        <li>Dedicated CSM</li>
+                    </ul>
+                    <button class="btn btn-outline">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-compare" class="view-section hidden">
+            <div class="section-header">
+                <h2>Model Comparison</h2>
+                <p>Strategic analysis of B2B Lead Gen vs B2C Monetisation.</p>
+            </div>
+
+            <div class="grid-layout">
+                <div class="card highlight relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-md">Recommended</div>
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">1. Flat (No Teams)</h3>
+                    
+                    <div class="mb-6">
+                        <div class="comp-header border-blue-500 text-blue-700">Goal 1: B2B Lead Gen</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Zero Distraction:</b> 100% focus on individual sign-ups (volume play).</li>
+                            <li>Cleaner data (1 user = 1 human).</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li><b>The "Hidden" Manager:</b> Impossible to distinguish a CTO from a student.</li>
+                            <li>Zero B2B signaling (no "invite team" button).</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="comp-header border-green-500 text-green-700">Goal 2: B2C Monetisation</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Maximum Simplicity:</b> Highest conversion rate for solo users. No "analysis paralysis".</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li><b>Capped LTV:</b> No built-in path to expand wallet share via team invites.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">2. Hierarchical</h3>
+                    
+                    <div class="mb-6">
+                        <div class="comp-header border-blue-500 text-blue-700">Goal 1: B2B Lead Gen</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Strongest Signal:</b> "Start Team" identifies managers.</li>
+                            <li>Sets up a team workspace instantly.</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li>Visibility Risk: Users might miss the "Business" tab.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="comp-header border-green-500 text-green-700">Goal 2: B2C Monetisation</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Better Sales:</b> Sell career growth to individuals, team tools to managers.</li>
+                            <li>Can charge higher prices for specific value.</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li>Small risk of users choosing the wrong path.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-4 text-slate-800">3. Category Based</h3>
+                    
+                    <div class="mb-6">
+                        <div class="comp-header border-blue-500 text-blue-700">Goal 1: B2B Lead Gen</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Startup Friendly:</b> Easier to upsell Pro plans to smaller companies.</li>
+                            <li>Simple hook: "Want more topics?"</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li><b>Revenue Cannibalization:</b> Low-cost Pro plans eat into Enterprise deals.</li>
+                            <li>Weak signal: Wanting more topics doesn't mean they manage a team.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="comp-header border-green-500 text-green-700">Goal 2: B2C Monetisation</div>
+                        <ul class="comp-list comp-pros text-slate-600 mb-3">
+                            <li><b>Easy Upgrade:</b> Simpler path to upsell Pro plans.</li>
+                            <li>Good for learners who want variety.</li>
+                        </ul>
+                        <ul class="comp-list comp-cons text-slate-600">
+                            <li>Specialists won't pay for extra topics.</li>
+                            <li>High churn risk after finishing one topic.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="leadModal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-md p-8 rounded-2xl shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+            <h2 id="modal-title" class="text-2xl font-bold text-slate-900 mb-2">Unlock Features</h2>
+            <p id="modal-desc" class="text-slate-500 mb-6">Enter your email to proceed.</p>
+            <input type="email" id="leadEmail" placeholder="name@company.com" class="w-full p-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:border-blue-500 transition mb-6">
+            <button onclick="submitLead()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition">Continue</button>
+            <p id="modal-sub" class="text-xs text-slate-400 text-center mt-4">Work email recommended for bonus features.</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. MODEL SWITCHING
+        function switchModel(id) {
+            // Buttons
+            document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Views
+            document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('block'));
+            
+            document.getElementById('view-' + id).classList.remove('hidden');
+            document.getElementById('view-' + id).classList.add('block');
+        }
+
+        // 2. INNER TAB SWITCHING (Personal vs Business)
+        function switchInnerTab(model, type, btn) {
+            let pView, bView;
+            
+            // Map inputs to IDs
+            if (model === 'hierarchical') {
+                pView = document.getElementById('h-personal');
+                bView = document.getElementById('h-business');
+            } else if (model === 'category') {
+                pView = document.getElementById('c-personal');
+                bView = document.getElementById('c-business');
+            }
+
+            // Toggle Views
+            if (type === 'personal') {
+                pView.classList.remove('hidden');
+                pView.classList.add('grid'); // Explicitly add grid class
+                bView.classList.add('hidden');
+                bView.classList.remove('grid'); // Explicitly remove grid class
+            } else {
+                pView.classList.add('hidden');
+                pView.classList.remove('grid'); // Explicitly remove grid class
+                bView.classList.remove('hidden');
+                bView.classList.add('grid'); // Explicitly add grid class
+            }
+
+            // Toggle Button Styles (Standardized .active class logic)
+            const parent = btn.parentElement;
+            Array.from(parent.children).forEach(child => {
+                child.classList.remove('active');
+            });
+            btn.classList.add('active');
+        }
+
+        // 3. BILLING LOGIC
+        function toggleBilling() {
+            const isAnnual = document.getElementById('billingCheck').checked;
+            
+            document.querySelectorAll('.price').forEach(el => {
+                const monthlyPrice = parseInt(el.dataset.m);
+                const annualPrice = parseInt(el.dataset.a);
+                
+                if (monthlyPrice === 0) return;
+
+                if(el.id === 'price-pro' || el.id === 'price-ult') {
+                    updateTeamPricing();
+                } else {
+                    if(el.dataset.m && el.dataset.a) {
+                        if(isAnnual) {
+                            const fullAnnual = monthlyPrice * 12;
+                            el.innerHTML = `<span class="strike">$${fullAnnual}</span> $${annualPrice}`;
+                        } else {
+                            el.innerHTML = '$' + monthlyPrice;
+                        }
+                    }
+                }
+                
+                const periodEl = el.nextElementSibling;
+                if(periodEl && periodEl.classList.contains('period')) {
+                    let t = periodEl.innerText;
+                    if(t.includes('month') || t.includes('year')) {
+                        if(isAnnual) t = t.replace('month', 'year');
+                        else t = t.replace('year', 'month');
+                        periodEl.innerText = t;
+                    }
+                }
+            });
+        }
+
+        // 4. DYNAMIC TEAM PRICING & TEAM LITE LOGIC
+        function syncTeamInputs(val) {
+            document.getElementById('teamSizeInput').value = val;
+            updateTeamPricing();
+        }
+
+        function updateTeamPricing() {
+            const size = parseInt(document.getElementById('teamSizeInput').value);
+            const range = document.getElementById('teamSizeRange');
+            if(size <= 20) range.value = size; 
+
+            const isTeam = size >= 2; // Team features start at 2 users
+            const isAnnual = document.getElementById('billingCheck').checked;
+            const discountPill = document.getElementById('discountBadge');
+
+            // 1. Show/Hide Badge
+            if(size >= 5) {
+                discountPill.classList.add('visible');
+                discountPill.innerText = "20% Team Discount";
+            } else if (size >= 2) {
+                 discountPill.classList.add('visible');
+                 discountPill.innerText = "Team Mode Active";
+            } else {
+                discountPill.classList.remove('visible');
+            }
+
+            // 2. Toggle Features in Pro/Ult
+            document.querySelectorAll('.li-team').forEach(el => {
+                el.style.display = isTeam ? 'flex' : 'none';
+            });
+
+            // 3. Update CTA Text & Styles (Pro/Ult)
+            const btnPro = document.getElementById('btn-pro');
+            const btnUlt = document.getElementById('btn-ult');
+            
+            if(isTeam) {
+                btnPro.innerText = "Start Team Trial";
+                btnPro.classList.add('btn-business'); 
+                btnPro.classList.remove('btn-primary');
+                
+                btnUlt.innerText = "Get Team Ultimate";
+                btnUlt.classList.add('btn-business');
+                btnUlt.classList.remove('btn-outline');
+            } else {
+                btnPro.innerText = "Start Trial";
+                btnPro.classList.remove('btn-business');
+                btnPro.classList.add('btn-primary');
+                
+                btnUlt.innerText = "Get Ultimate";
+                btnUlt.classList.remove('btn-business');
+                btnUlt.classList.add('btn-outline');
+            }
+
+            // 4. Calculate Price (Pro/Ult)
+            const calcPrice = (el) => {
+                let base = isAnnual ? parseInt(el.dataset.baseA) : parseInt(el.dataset.baseM);
+                
+                if(size >= 5) {
+                    // Apply 20% Discount
+                    const discounted = Math.round(base * 0.8);
+                    el.innerHTML = `<span class="strike">$${base}</span> $${discounted}`;
+                } else {
+                    // Standard Price
+                    if(isAnnual) {
+                        const monthlyRef = parseInt(el.dataset.baseM);
+                        el.innerHTML = `<span class="strike">$${monthlyRef * 12}</span> $${base}`;
+                    } else {
+                        el.innerHTML = '$' + base;
+                    }
+                }
+            };
+
+            calcPrice(document.getElementById('price-pro'));
+            calcPrice(document.getElementById('price-ult'));
+
+            // 5. HANDLE TEAM LITE CARD LOGIC
+            const cardLite = document.getElementById('card-lite');
+            const titleLite = document.getElementById('title-lite');
+            const btnLite = document.getElementById('btn-lite');
+
+            if (size === 1) {
+                // Individual Mode
+                cardLite.classList.remove('disabled');
+                titleLite.innerText = "Lite";
+                btnLite.innerText = "Start Lite";
+                btnLite.classList.remove('btn-business');
+                btnLite.classList.add('btn-outline');
+            } else if (size <= 5) {
+                // Team Lite Mode (Valid)
+                cardLite.classList.remove('disabled');
+                titleLite.innerText = "Team Lite";
+                btnLite.innerText = "Start Team Lite";
+                btnLite.classList.remove('btn-outline');
+                btnLite.classList.add('btn-business');
+            } else {
+                // Team Lite Limit Exceeded (>5)
+                cardLite.classList.add('disabled');
+                titleLite.innerText = "Team Lite";
+                btnLite.innerText = "Max 5 Users";
+            }
+        }
+
+        // 5. MODAL LOGIC (Trial Days & PLG)
+        const modal = document.getElementById('leadModal');
+        const mTitle = document.getElementById('modal-title');
+        const mDesc = document.getElementById('modal-desc');
+        let currentTrigger = '';
+
+        function openModal(triggerType) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            currentTrigger = triggerType;
+
+            if(triggerType === 'free-bonus') {
+                mTitle.innerText = "Unlock Bonus Workshops";
+                mDesc.innerText = "Use your work email to add 2 Advanced Workshops/mo to your Free plan.";
+            } else if (triggerType === 'trial') {
+                mTitle.innerText = "Start Your Trial";
+                mDesc.innerText = "Enter your email to begin. Work emails get a 30-day trial (vs 15 days for personal).";
+            } else if (triggerType === 'team') {
+                mTitle.innerText = "Start Your Free Team";
+                mDesc.innerText = "Create a workspace anchored to your company domain.";
+            }
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function submitLead() {
+            const email = document.getElementById('leadEmail').value;
+            if(!email.includes('@')) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            // Simple domain check
+            const isPersonal = email.includes('gmail') || email.includes('yahoo') || email.includes('hotmail');
+            
+            if(currentTrigger === 'free-bonus') {
+                if(isPersonal) {
+                    alert("This looks like a personal email. Please use a work email to unlock the bonus.");
+                } else {
+                    alert(`Success! 2 Advanced Workshops unlocked for ${email}.`);
+                    closeModal();
+                }
+            } else if (currentTrigger === 'trial') {
+                const days = isPersonal ? 15 : 30;
+                alert(`Trial Activated for ${email}.\n\nDuration: ${days} Days (${isPersonal ? 'Personal' : 'Work'} Email Detected)`);
+                closeModal();
+            } else {
+                alert(`Lead Captured: ${email}`);
+                closeModal();
+            }
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
