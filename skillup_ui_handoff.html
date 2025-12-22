@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evolve | UI/UX Designer Handoff</title>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+
+    :root{
+      --primary: #2563eb; /* Modern Blue */
+      --primary-glass: rgba(37, 99, 235, 0.1);
+      --dark: #0f172a;
+      --text: #334155;
+      --muted: #64748b;
+      
+      /* Glassmorphism Variables */
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --glass-highlight: rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+      --backdrop: blur(16px) saturate(180%);
+      
+      /* Status Colors */
+      --success-text: #059669; --success-bg: rgba(16, 185, 129, 0.1);
+      --danger-text: #dc2626; --danger-bg: rgba(239, 68, 68, 0.1);
+      --warn-text: #d97706; --warn-bg: rgba(245, 158, 11, 0.1);
+      --info-text: #0284c7; --info-bg: rgba(14, 165, 233, 0.1);
+    }
+
+    *{ box-sizing:border-box; }
+
+    /* Global Font Enforcement */
+    body, button, input, select, textarea {
+      font-family: 'Satoshi', sans-serif;
+    }
+
+    body{
+      margin:0;
+      padding:20px;
+      line-height:1.6;
+      color:var(--text);
+      font-size: 16px;
+      background: #f0f2f5;
+      /* Subtle mesh gradient background */
+      background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+      background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 50%, #dbeafe 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Floating blobs for glass effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -10%;
+      left: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      z-index: -1;
+      animation: float 20s infinite ease-in-out;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -10%;
+      right: -10%;
+      width: 40vw;
+      height: 40vw;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      z-index: -1;
+      animation: float 15s infinite ease-in-out reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, 40px); }
+    }
+
+    a { color:var(--primary); text-decoration:none; font-weight: 600; transition: color 0.2s; }
+    a:hover { color: #1d4ed8; }
+
+    .container{
+      max-width:1140px;
+      margin:0 auto;
+      background: rgba(255, 255, 255, 0.7); /* Base opacity */
+      backdrop-filter: var(--backdrop);
+      -webkit-backdrop-filter: var(--backdrop);
+      border: 1px solid var(--glass-highlight);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      overflow:hidden;
+      min-height: 90vh;
+      display:flex;
+      flex-direction:column;
+      padding-bottom: 40px;
+    }
+
+    /* Glass Header */
+    header{
+      background: rgba(255, 255, 255, 0.4);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 30px 40px;
+      display:flex;
+      gap:20px;
+      justify-content:space-between;
+      align-items:flex-start;
+    }
+    header h1{
+      margin:0;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+    }
+    header p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 700px;
+    }
+
+    .header-right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .badge{
+      background: var(--dark);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform:uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn{
+      background: rgba(255,255,255,0.5);
+      border: 1px solid var(--glass-border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor:pointer;
+      transition: all 0.2s ease;
+    }
+    .btn:hover{ 
+      background: white; 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    }
+
+    /* Floating Glass Nav */
+    .nav-container {
+      padding: 24px 40px 0;
+    }
+    .nav{
+      display:flex;
+      gap: 8px;
+      padding: 6px;
+      background: rgba(0,0,0,0.03);
+      border-radius: 16px;
+      width: fit-content;
+    }
+    .nav-btn{
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .nav-btn:hover{ color: var(--dark); }
+    .nav-btn.active{ 
+      background: white; 
+      color: var(--primary); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+    }
+
+    .content{ padding: 30px 40px 50px; display:none; animation:fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .content.active{ display:block; }
+
+    h2{
+      font-size: 22px;
+      color: var(--dark);
+      margin: 0 0 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2::after {
+      content:'';
+      flex:1;
+      height: 1px;
+      background: linear-gradient(to right, var(--glass-border), transparent);
+    }
+
+    h3{
+      color: var(--dark);
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Glass Cards */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+      border: 1px solid var(--glass-highlight);
+      border-radius: 20px;
+      padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+    .card:hover{ 
+      transform: translateY(-4px); 
+      box-shadow: 0 15px 30px rgba(0,0,0,0.06); 
+      border-color: white;
+    }
+
+    /* Grids */
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .grid-3{ display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:20px; }
+    @media (max-width:920px){
+      .grid-2{ grid-template-columns:1fr; }
+      header, .content{ padding: 20px; }
+    }
+
+    .title-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+    }
+    
+    .pill{
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    
+    .tag{
+      display:inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .tag-high{ background:var(--danger-bg); color:var(--danger-text); }
+    .tag-med{ background:var(--warn-bg); color:var(--warn-text); }
+    .tag-low{ background:var(--success-bg); color:var(--success-text); }
+    .tag-info{ background:var(--info-bg); color:var(--info-text); }
+
+    ul, ol{ margin: 0; padding-left: 20px; }
+    li{ margin-bottom: 8px; font-size: 15px; color: var(--text); }
+
+    .callout{
+      border-left: 4px solid var(--primary);
+      background: rgba(255,255,255,0.5);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+    .callout strong { display: block; margin-bottom: 6px; color: var(--dark); font-size: 16px; }
+    .callout.info{ border-color: var(--info-text); background: linear-gradient(to right, var(--info-bg), transparent); }
+    .callout.success{ border-color: var(--success-text); background: linear-gradient(to right, var(--success-bg), transparent); }
+
+    /* Tables */
+    table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    th, td{
+      text-align:left;
+      padding: 18px;
+      border-bottom: 1px solid var(--glass-border);
+      vertical-align:top;
+    }
+    th{
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    td{ background: rgba(255,255,255,0.3); }
+    tr:last-child td { border-bottom: none; }
+    tr:first-child td:first-child { border-top-left-radius: 12px; }
+    tr:first-child td:last-child { border-top-right-radius: 12px; }
+    tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+    tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+
+    /* Modern Details/Summary */
+    details{
+      margin-top: 20px;
+      padding: 0;
+      background: rgba(255,255,255,0.4);
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 15px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      transition: background 0.2s;
+    }
+    summary:hover { background: rgba(255,255,255,0.2); border-radius: 16px; }
+    summary::-webkit-details-marker{ display:none; }
+    summary::after {
+      content: '+';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: var(--glass-border);
+      color: var(--dark);
+      border-radius: 50%;
+      font-size: 16px;
+    }
+    details[open] summary::after { content: '−'; }
+    details[open] summary { border-bottom: 1px solid var(--glass-border); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    
+    .details-content {
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>Evolve | UI/UX Designer Handoff</h1>
+      <p>
+        Design brief derived from SkillUp Prototype. Includes screen gallery, journeys, and component specifications.
+        <strong>Model: Flat Subscription</strong> (Lite → Pro → Ultimate).
+      </p>
+    </div>
+    <div class="header-right">
+      <span class="badge">Phase 1: Low-Risk Rollout</span>
+    </div>
+  </header>
+
+  <div class="nav-container">
+    <nav class="nav" role="tablist">
+      <button class="nav-btn active" onclick="switchTab(event,'readme')">Overview</button>
+      <button class="nav-btn" onclick="switchTab(event,'context')">Product Snapshot</button>
+      <button class="nav-btn" onclick="switchTab(event,'subscription')">Subscription Model</button>
+      <button class="nav-btn" onclick="switchTab(event,'journeys')">User Journeys</button>
+      <button class="nav-btn" onclick="switchTab(event,'components')">Component Spec</button>
+    </nav>
+  </div>
+
+  <section id="readme" class="content active" role="tabpanel">
+    <h2>Start Here</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="title-row">
+          <h3>Source of Truth</h3>
+          <span class="pill">References</span>
+        </div>
+        <ul>
+          <li><a href="https://abhinayvarsh-sl.github.io/skillup/SkillUp%20Prototype.html" target="_blank">SkillUp Prototype (Final)</a></li>
+          <li><a href="https://www.simplilearn.com/skillup-free-online-courses" target="_blank">Current Homepage</a></li>
+          <li><a href="https://www.simplilearn.com/resources" target="_blank">Free Resources (FRS)</a></li>
+          <li><a href="https://www.simplilearn.com/corporate-training/learning-hub-plus" target="_blank">SLH+ (B2B Reference)</a></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="title-row">
+          <h3>Deliverables</h3>
+          <span class="pill">Figma Output</span>
+        </div>
+        <ol>
+          <li><strong>Mobile-first Key Screens:</strong> Plan Page, Dashboard (locked states), Locked Course Detail.</li>
+          <li><strong>Component Kit:</strong> Pricing cards, banners, modals, lifecycle nudges.</li>
+          <li><strong>States:</strong> Anonymous, Lite, Trial (Personal/Work), Pro, Ultimate, Expired.</li>
+          <li><strong>Interactive Prototype:</strong> Clickable journey covering the "Scenario Runner" list.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong>Core Constraints & Guidelines</strong>
+      <ul>
+        <li><strong>Low Risk Approach:</strong> Minimal changes to paid program pages. Focus on SkillUp/FRS funnels.</li>
+        <li><strong>SEO Preservation:</strong> SkillUp URLs and "Free" messaging must remain intact on entry pages.</li>
+        <li><strong>Design System:</strong> Reuse existing SLH library patterns. Only design new states and marketing surfaces.</li>
+        <li><strong>Pricing Model:</strong> Strict Flat Ladder (Lite → Pro → Ultimate). No category packs.</li>
+      </ul>
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="border-left: 4px solid var(--success-text);">
+        <h3 style="color:var(--success-text)">✅ In Scope</h3>
+        <ul>
+          <li><strong>Funnel Optimization:</strong> SkillUp → Evolve plan page.</li>
+          <li><strong>FRS Integration:</strong> Contextual banners in articles.</li>
+          <li><strong>LMS Nudges:</strong> Dashboard locked states, upgrade modals.</li>
+          <li><strong>B2B:</strong> Enterprise entry point & "Contact Sales" flow.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="border-left: 4px solid var(--danger-text);">
+        <h3 style="color:var(--danger-text)">❌ Out of Scope</h3>
+        <ul>
+          <li><strong>Redesigning Core Program Pages:</strong> Keep existing layout.</li>
+          <li><strong>Self-Serve Enterprise Checkout:</strong> Lead capture only.</li>
+          <li><strong>Complex Pricing:</strong> No hierarchical packs or bundles.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="context" class="content" role="tabpanel">
+    <h2>Product Snapshot</h2>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="title-row">
+          <span class="tag tag-high">Primary Goal</span>
+          <span class="pill">PLG</span>
+        </div>
+        <h3>B2B Lead Generation</h3>
+        <p style="font-size:15px; margin-top:0;">Identify Product Qualified Leads (PQL) via work-email capture.</p>
+        <ul>
+          <li><strong>Mechanism:</strong> Unlock advanced workshops in exchange for verified work email.</li>
+          <li><strong>Success:</strong> Seamless routing to sales teams.</li>
+        </ul>
+        <details>
+          <summary>UX Requirements</summary>
+          <div class="details-content">
+            <ul style="margin-top:0;">
+                <li>Prompt must be value-driven ("Unlock feature"), not intrusive.</li>
+                <li>Clear visual feedback upon verification (Toast + Unlocked Badge).</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <div class="title-row">
+          <span class="tag tag-med">Secondary Goal</span>
+          <span class="pill">B2C Revenue</span>
+        </div>
+        <h3>Subscription Conversion</h3>
+        <p style="font-size:15px; margin-top:0;">Convert free users to paid subscribers.</p>
+        <ul>
+          <li><strong>Flow:</strong> Freemium (Lite) → Pro Trial → Paid Pro.</li>
+          <li><strong>Strategy:</strong> "Pro" is the hero plan. Ultimate is a secondary upsell.</li>
+        </ul>
+        <details>
+          <summary>UX Requirements</summary>
+          <div class="details-content">
+            <ul style="margin-top:0;">
+                <li>Highlight Pro plan visually.</li>
+                <li>Use contextual nudges rather than hard paywalls where possible.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </div>
+    
+    <div class="grid-2" style="margin-top:20px;">
+        <div class="card">
+            <span class="tag tag-info">Scale</span>
+            <h3>High-Volume Nudging</h3>
+            <p style="font-size:15px; margin-top:0;">Hundreds of thousands of monthly users.</p>
+            <ul>
+                <li>Design prompts to be lightweight, repeatable, and non-annoying.</li>
+                <li>Events must be accurate to avoid user frustration.</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <span class="tag tag-med">Reality Check</span>
+            <h3>SkillUp UX & IA Implications</h3>
+             <ul style="margin-top:10px;">
+                <li>Current SkillUp has overlap between Homepage and "Explore".</li>
+                <li><strong>Design Decision:</strong> Lean toward a cleaner "library home + browse" model.</li>
+                <li><strong>Critical:</strong> SEO entry pages (course details) must not feel like a "bait-and-switch".</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="callout">
+      <strong>Entry Points (Funnel Surfaces)</strong>
+      <ul>
+        <li><strong>SEO (SkillUp):</strong> High traffic via specific course pages (not homepage).</li>
+        <li><strong>FRS:</strong> Free articles/resources. Use contextual banners.</li>
+        <li><strong>B2B:</strong> Distinct Enterprise landing page (Contact Sales).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Copy & Interaction Cues (Match Prototype)</h3>
+      <div class="grid-2">
+        <div>
+          <strong style="font-size:14px; text-transform:uppercase; color:var(--muted);">Hero Messaging</strong>
+          <p style="font-size:15px;">"Unlock the world's most comprehensive learning library. 200+ Courses. AI Mentors. Practice Labs."</p>
+        </div>
+        <div>
+           <strong style="font-size:14px; text-transform:uppercase; color:var(--muted);">CTAs</strong>
+           <p style="font-size:15px;">Primary: "Start Free Trial" (No credit card required).<br>Secondary: "View Plans".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="subscription" class="content" role="tabpanel">
+    <h2>Subscription Model</h2>
+
+    <div class="callout success">
+      <strong>Design Principle:</strong> Simplicity. Single ladder. Highlight <strong>Pro</strong> as the hero. Keep <strong>Lite</strong> visible to maintain the "Free" promise.
+    </div>
+
+    <div class="card">
+      <div class="title-row">
+         <h3>Plan Ladder</h3>
+         <span class="pill">Monthly / Annual Toggle</span>
+      </div>
+      
+      <table aria-label="Subscription Plans">
+        <thead>
+          <tr>
+            <th>Tier</th>
+            <th>Pricing</th>
+            <th>Access Level</th>
+            <th>UI Hooks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Lite</strong> (Free)</td>
+            <td>$0</td>
+            <td>Basic OSL, 2 Basic Workshops, Certificates.</td>
+            <td><span class="tag tag-info">Hook</span> Unlock 2 Adv. Workshops with Work Email.</td>
+          </tr>
+          <tr>
+            <td><strong>Pro</strong> (Hero)</td>
+            <td>$29/mo ($279/yr)</td>
+            <td>Lite + Adv. OSL, AI Buddy, 2 Adv. Workshops.</td>
+            <td><span class="tag tag-low">Trial</span> 15-Day (Personal) / 30-Day (Work).</td>
+          </tr>
+          <tr>
+            <td><strong>Ultimate</strong></td>
+            <td>$45/mo ($450/yr)</td>
+            <td>Pro + Adv. LVC, Practice Labs, 4 Adv. Workshops.</td>
+            <td>No trial. Target power users.</td>
+          </tr>
+          <tr>
+            <td><strong>Enterprise</strong></td>
+            <td>Custom</td>
+            <td>SSO, Custom Paths, CSM.</td>
+            <td>CTA: <strong>Contact Sales</strong> (Lead Form).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h3>Design Guardrails: Certificates</h3>
+        <ul>
+          <li><strong>Name Input:</strong> "Ensure name accuracy; edits are disabled post-submission."</li>
+          <li><strong>Validation:</strong> Include review step or confirmation checkbox.</li>
+          <li><strong>Edge Cases:</strong> Handle profanity filters and special characters.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>"Free" Positioning</h3>
+        <ul>
+          <li>Preserve "Free" language on SEO landing pages.</li>
+          <li>Trial CTAs can be styled as "Start for Free" to reduce friction.</li>
+          <li>Pro Trial is the priority path.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="journeys" class="content" role="tabpanel">
+    <h2>User Journeys</h2>
+    
+    <div class="grid-3" id="journeyGrid">
+      
+      <div class="card journey-card" data-keywords="home paid plans pro trial">
+        <div class="title-row">
+          <span class="tag tag-high">Acquisition</span>
+        </div>
+        <h3>Home → Paid Conversion</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Hero → View Plans → Start Trial</p>
+        <ul>
+          <li>Hero communicates library value (200+ courses).</li>
+          <li>CTAs: Start Free Trial (Pro) + View Plans.</li>
+          <li>Plan Page: Highlight Pro.</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="course locked join evolve">
+        <div class="title-row">
+          <span class="tag tag-high">Conversion</span>
+        </div>
+        <h3>Locked Course Detail</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Locked Item → Plan Page → Paid</p>
+        <ul>
+          <li>Show "Locked" state with CTA "Join Evolve to Watch".</li>
+          <li>Allow preview of syllabus/outcomes.</li>
+          <li>Return user to content after upgrade.</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="learning player trial banner">
+        <div class="title-row">
+          <span class="tag tag-med">Engagement</span>
+        </div>
+        <h3>Player Nudges</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Inside Player → Start Trial</p>
+        <ul>
+          <li>Contextual banner (e.g., "⚡ Start Pro Trial").</li>
+          <li>High-intent placement (end of module).</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="expire reactivate downgrade">
+        <div class="title-row">
+          <span class="tag tag-med">Retention</span>
+        </div>
+        <h3>Trial Expiry & Reactivation</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Expire → Downgrade → Reactivate</p>
+        <ul>
+          <li>User downgrades to Lite.</li>
+          <li>Pro content re-locks.</li>
+          <li>CTA: "Reactivate Pro" (Respectful copy).</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="work email lite bonus plg">
+        <div class="title-row">
+          <span class="tag tag-high">PLG / B2B</span>
+        </div>
+        <h3>Work Email Unlock</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Lite → Lite (Work)</p>
+        <ul>
+          <li>Value Exchange: "Unlock 2 Adv. Workshops".</li>
+          <li>Verification Step.</li>
+          <li>"Unlocked" confirmation toast.</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="free article frs evolve banner start learning for free why stop at one course">
+        <div class="title-row">
+          <span class="tag tag-med">Acquisition</span>
+        </div>
+        <h3>Free Article Upsell</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">FRS Article → Evolve Plan</p>
+        <ul>
+          <li>Contextual upsell module in free articles.</li>
+          <li>CTA: "Start Learning for Free" routes to Plan Page.</li>
+          <li>Requires attribution tagging.</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="dashboard locked pro feature start free trial ultimate upgrade to ultimate">
+        <div class="title-row">
+          <span class="tag tag-med">Engagement</span>
+        </div>
+        <h3>Dashboard Nudges</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Dashboard → Locked Card → Trial</p>
+        <ul>
+          <li>Locked cards labelled "Pro Feature" with benefit line.</li>
+          <li>CTA: "Start Free Trial" for Lite users.</li>
+          <li>Ultimate-only items appear sparingly.</li>
+        </ul>
+      </div>
+
+      <div class="card journey-card" data-keywords="enterprise b2b contact sales">
+        <div class="title-row">
+          <span class="tag tag-low">Enterprise</span>
+        </div>
+        <h3>B2B Lead Capture</h3>
+        <p style="font-size:14px; color:var(--muted); margin-top:0;">Landing → Contact Form</p>
+        <ul>
+          <li>Distinct Enterprise positioning (SLH+).</li>
+          <li>Simple form (No checkout).</li>
+          <li>Success state manages expectations.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <details>
+        <summary>Test Scenarios Checklist (Source: Prototype Scenario Runner)</summary>
+        <div class="details-content">
+            <p style="color:var(--muted); margin-bottom:12px;">Use this list to validate the interactive prototype coverage.</p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div>
+                    <strong>Acquisition & Conversion</strong>
+                    <ul>
+                        <li>1. Home → Paid (View Plans)</li>
+                        <li>2. Course → Lite → Trial → Paid</li>
+                        <li>3. Home → Pro (No Trial)</li>
+                        <li>9. Home → Trial → Paid</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>Engagement & Retention</strong>
+                    <ul>
+                        <li>4. Learning → Trial → Paid</li>
+                        <li>8. Full Cycle: Lite → Trial → Expire → Work</li>
+                        <li>11. Learning → Trial(W) → Paid</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>PLG / Work Email</strong>
+                    <ul>
+                        <li>7. Course → Lite(P) → Lite(W)</li>
+                        <li>10. Lite(P) → Lite(W) → Pro</li>
+                        <li>12. Learning → Trial(P) → Trial(W)</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>Other</strong>
+                    <ul>
+                        <li>13. Free Article → Evolve</li>
+                        <li>5. Home → Ultimate (No Trial)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </details>
+
+  </section>
+
+  <section id="components" class="content" role="tabpanel">
+    <h2>Component Specifications</h2>
+    <p style="color:var(--muted); margin-bottom:24px;">Reuse SLH Library for base UI. Define only these specific states and overlays.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Pricing</span>
+        <h3>Plan Card</h3>
+        <ul>
+          <li>Hero Highlight ("Best Value").</li>
+          <li>Trial Trust Line ("15-Day Personal / 30-Day Work").</li>
+          <li>Primary & Secondary (Skip Trial) buttons.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Content</span>
+        <h3>Locked Course Card</h3>
+        <ul>
+          <li>Padlock Icon + "Locked" Label.</li>
+          <li>CTA: "Join Evolve to Watch".</li>
+          <li>Syllabus preview enabled.</li>
+        </ul>
+      </div>
+      
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Nudges</span>
+        <h3>Locked Dashboard Card</h3>
+        <ul>
+          <li>Badge: "Pro Feature" and explanation line.</li>
+          <li>CTA: "Start Free Trial".</li>
+          <li>Ultimate-only badge + "Upgrade" (rare).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Growth</span>
+        <h3>Work Email Module</h3>
+        <ul>
+          <li>Offer: Unlock Advanced Workshops.</li>
+          <li>States: Pending, Verified.</li>
+          <li>Success Toast / Badge.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Lifecycle</span>
+        <h3>Trial Status Banner</h3>
+        <ul>
+          <li>Countdown ("X Days Left").</li>
+          <li>Call to Action ("Use Pro Features").</li>
+          <li>Expiry Warning State.</li>
+        </ul>
+      </div>
+      
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Lifecycle</span>
+        <h3>Trial Expired / Reactivate</h3>
+        <ul>
+          <li>Explain downgrade to Lite.</li>
+          <li>Locked re-entry pattern.</li>
+          <li>Primary CTA: Reactivate Pro.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Outcome</span>
+        <h3>Certificate + Share</h3>
+        <ul>
+          <li>Name input with strict validation.</li>
+          <li>Share CTA (LinkedIn).</li>
+          <li>Upsell to Pro/Next Course.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Auth</span>
+        <h3>Create Account Modal</h3>
+        <ul>
+          <li>Minimal, mobile-optimized.</li>
+          <li>Clear "Continue" path.</li>
+          <li>Non-destructive "Cancel".</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <span class="pill" style="margin-bottom:12px; display:inline-block;">Enterprise</span>
+        <h3>Contact Sales Form</h3>
+        <ul>
+          <li>Short fields.</li>
+          <li>Trust/Privacy disclaimer.</li>
+          <li>Submission confirmation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <details>
+        <summary>State Matrix (Logic Definitions)</summary>
+        <div class="details-content">
+            <div class="card" style="margin:0; box-shadow:none; border:none; background:transparent;">
+                <ul style="margin:0;">
+                  <li><strong>Anonymous:</strong> Home, article, locked course preview → Plan Page → Create Account.</li>
+                  <li><strong>Lite (Personal):</strong> Dashboard with locked Pro cards + Lite workshops/certs.</li>
+                  <li><strong>Lite (Work):</strong> Lite + Bonus Advanced Workshops unlocked after work-email verification.</li>
+                  <li><strong>Trial (Personal):</strong> Pro access for 15 days + "days left" banner + conversion nudges.</li>
+                  <li><strong>Trial (Work):</strong> Pro access for 30 days + work-email verified indicator.</li>
+                  <li><strong>Pro (Paid):</strong> Pro unlocked; occasional Ultimate upsell for power users.</li>
+                  <li><strong>Ultimate (Paid):</strong> Ultimate content unlocked; no trial experience.</li>
+                  <li><strong>Expired:</strong> Downgraded to Lite; Pro content re-locks; Reactivate flows.</li>
+                </ul>
+            </div>
+        </div>
+    </details>
+
+  </section>
+</div>
+
+<script>
+  function switchTab(evt, tabId){
+    document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+    const tab = document.getElementById(tabId);
+    if(tab) tab.classList.add('active');
+    if(evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+</script>
+
+</body>
+</html>
