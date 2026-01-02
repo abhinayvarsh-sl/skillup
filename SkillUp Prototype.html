@@ -10,7 +10,7 @@
     <style>
         /* --- VARIABLES --- */
         :root {
-            --primary: #1264a3;          
+            --primary: #1264a3;           
             --primary-grad: linear-gradient(135deg, #1264a3 0%, #0b3d66 100%);
             --accent: #f97316;
             
@@ -44,6 +44,7 @@
         .text-center { text-align: center; }
         .mt-20 { margin-top: 20px; }
         .mt-40 { margin-top: 40px; }
+        .mb-40 { margin-bottom: 40px; }
         .w-full { width: 100%; }
         .text-sm { font-size: 13px; }
         .font-bold { font-weight: 700; }
@@ -80,7 +81,7 @@
             box-shadow: 
                 0 4px 10px rgba(0, 0, 0, 0.05), /* Soft shadow */
                 inset 0 1px 0 rgba(255,255,255, 0.8); /* Inner top highlight */
-                
+            
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -209,6 +210,7 @@
         nav .container { height: 100%; }
         .brand { font-size: 24px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 8px; cursor: pointer; letter-spacing: -0.5px; }
         .brand span { color: var(--primary); }
+        .logo-img { height: 28px; width: auto; object-fit: contain; }
         
         .hamburger { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--text-main); z-index: 1002; }
         .mobile-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: white; z-index: 1001; padding: 100px 24px 24px; transform: translateX(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; gap: 20px; }
@@ -240,6 +242,19 @@
         @media (min-width: 768px) { .hero h1 { font-size: 60px; } }
         .hero p { font-size: 20px; color: #cbd5e1; margin-bottom: 40px; max-width: 600px; position: relative; z-index: 1; line-height: 1.6; }
         .hero .container { position: relative; z-index: 2; }
+
+        /* PARTNER SECTION - NEW */
+        .partner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .partner-card { 
+            background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px; 
+            position: relative; transition: 0.3s; overflow:hidden; display: flex; flex-direction: column; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .partner-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #cbd5e1; }
+        .p-logo-box { height: 40px; margin-bottom: 20px; display: flex; align-items: center; }
+        .p-logo-box span { font-size: 18px; font-weight: 900; color: #334155; display: flex; align-items: center; gap: 8px; }
+        .partner-logo { height: 32px; width: auto; max-width: 100px; object-fit: contain; }
+        .p-tag { position: absolute; top: 20px; right: 20px; font-size: 10px; font-weight: 800; color: #b45309; background: #fffbeb; padding: 4px 8px; border-radius: 6px; border: 1px solid #fcd34d; letter-spacing: 0.5px; }
 
         /* HOMEPAGE LAYOUT */
         .cat-layout { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 40px; }
@@ -409,8 +424,8 @@
         .cert-corner.top-left { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
         .cert-corner.bottom-right { bottom: 0; right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); background: #1e293b; }
         
-        .cert-logo { font-family: 'Satoshi', sans-serif; font-weight: 900; color: #1e293b; margin-bottom: 24px; font-size: 22px; }
-        .cert-logo span { color: #2563eb; }
+        .cert-logo { margin-bottom: 24px; display: flex; justify-content: center; }
+        .cert-logo img { height: 45px; width: auto; }
         .cert-headline { font-size: 32px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; color: #0f172a; font-family: serif; }
         .cert-subhead { font-size: 15px; color: #64748b; margin-bottom: 36px; }
         .cert-name { font-size: 38px; font-weight: 900; color: #2563eb; margin: 12px auto; border-bottom: 3px solid #e2e8f0; display: inline-block; padding-bottom: 12px; min-width: 350px; font-family: 'Satoshi', sans-serif; }
@@ -504,7 +519,9 @@
 
     <nav class="flex">
         <div class="container flex flex-between w-full">
-            <div class="brand" onclick="router('home')">Simplilearn</div>
+            <div class="brand" onclick="router('home')">
+                <img src="https://abhinayvarsh-sl.github.io/skillup/reusable.svg" alt="Simplilearn" class="logo-img">
+            </div>
             <div id="nav-desktop-actions" class="flex" style="gap:20px"></div>
             <button class="hamburger" onclick="toggleMobileMenu()">☰</button>
         </div>
@@ -534,6 +551,65 @@
             </div>
         </section>
         
+        <!-- NEW PARTNER SECTION - 2nd Fold -->
+        <section class="container mt-40 mb-40">
+            <h2 style="font-weight:900; margin-bottom:20px;">Unlock Premier Partner Courses</h2>
+            <div class="partner-grid">
+                
+                <div class="partner-card">
+                    <span class="p-tag">PARTNER</span>
+                    <div class="p-logo-box">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" class="partner-logo">
+                        <span style="font-size:16px; margin-left:10px;">IBM Skills</span>
+                    </div>
+                    <h3 style="font-size:18px; font-weight:800; margin-bottom:8px; line-height:1.3;">Data Science Professional Certificate</h3>
+                    <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Master Python, SQL, and Data Analysis with IBM experts.</p>
+                    <button class="btn btn-glass-3d primary btn-multiline" style="width:100%; margin-top:auto;" onclick="openAuthModal('trial')">
+                        <span class="flex" style="gap:8px; align-items:center;">
+                            Start Free Trial 
+                            <span class="badge-pro" style="padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">PRO</span>
+                        </span>
+                        <span class="btn-subtext">No credit card required</span>
+                    </button>
+                </div>
+
+                <div class="partner-card">
+                    <span class="p-tag">PARTNER</span>
+                    <div class="p-logo-box">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft" class="partner-logo">
+                        <span style="font-size:16px; margin-left:10px;">Microsoft</span>
+                    </div>
+                    <h3 style="font-size:18px; font-weight:800; margin-bottom:8px; line-height:1.3;">Azure AI Engineer Associate</h3>
+                    <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Build and manage AI solutions on Azure.</p>
+                    <button class="btn btn-glass-3d primary btn-multiline" style="width:100%; margin-top:auto;" onclick="openAuthModal('trial')">
+                        <span class="flex" style="gap:8px; align-items:center;">
+                            Start Free Trial 
+                            <span class="badge-pro" style="padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">PRO</span>
+                        </span>
+                        <span class="btn-subtext">No credit card required</span>
+                    </button>
+                </div>
+
+                <div class="partner-card">
+                    <span class="p-tag">PARTNER</span>
+                    <div class="p-logo-box">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" class="partner-logo">
+                        <span style="font-size:16px; margin-left:10px;">AWS Training</span>
+                    </div>
+                    <h3 style="font-size:18px; font-weight:800; margin-bottom:8px; line-height:1.3;">AWS Cloud Solutions Architect</h3>
+                    <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Design resilient and high-performing architectures.</p>
+                    <button class="btn btn-glass-3d primary btn-multiline" style="width:100%; margin-top:auto;" onclick="openAuthModal('trial')">
+                        <span class="flex" style="gap:8px; align-items:center;">
+                            Start Free Trial 
+                            <span class="badge-pro" style="padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">PRO</span>
+                        </span>
+                        <span class="btn-subtext">No credit card required</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
         <div class="container mb-20">
              <div class="cat-layout">
                 <aside class="sidebar">
@@ -648,7 +724,7 @@
                 <div class="billing-toggle-container">
                     <span class="toggle-label">Monthly</span>
                     <label class="switch">
-                        <input type="checkbox" id="billingCheck" onchange="toggleBilling()">
+                        <input type="checkbox" id="billingCheck" onchange="toggleBilling()" checked>
                         <span class="slider round"></span>
                     </label>
                     <span class="toggle-label">Annual</span>
@@ -674,7 +750,23 @@
                     <div class="plan-desc">Advanced learning & AI.</div>
                     <div class="plan-price" data-m="29" data-a="279">$29</div>
                     <div class="plan-period">per user / month</div>
-                    <ul class="feature-list"><li>Everything in Lite</li><li>Advanced OSL Courses - All Categories</li><li>AI-Powered Learning Buddy</li><li>2 Advanced Workshops / month</li></ul>
+                    
+                    <ul class="feature-list">
+                        <li>Everything in Lite</li>
+                        <li>Advanced OSL Courses - All Categories</li>
+                        <li>
+                            <div class="flex-col flex-start w-full">
+                                <span>Partner Courses Included</span>
+                                <div class="flex gap-2 mt-20" style="margin-top:4px;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" style="height:14px; opacity:0.8;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" style="height:14px; opacity:0.8;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" style="height:14px; opacity:0.8;">
+                                </div>
+                            </div>
+                        </li>
+                        <li>AI-Powered Learning Buddy</li>
+                        <li>2 Advanced Workshops / month</li>
+                    </ul>
                     <button class="btn btn-primary" style="width:100%; margin-top:auto;" onclick="openAuthModal('trial')">Start Trial</button>
                     <button class="btn btn-text w-full mt-20" style="font-size:11px; color:#64748b;" onclick="directBuy('pro')">Buy Now (Skip Trial)</button>
                     <div class="trial-note">15-Day Personal / 30-Day Work Email Trial</div>
@@ -739,6 +831,13 @@
                             <button class="btn-glass-3d secondary" onclick="router('course', 'advanced')">▶ Resume</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="lms-section mt-40">
+                <h3 class="font-bold mb-20" style="font-size:18px;">Partner Courses</h3>
+                <div class="lms-grid" id="lms-partner-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                    <!-- Injected by JS -->
                 </div>
             </div>
 
@@ -884,7 +983,9 @@
                                 <div class="cert-corner top-left"></div>
                                 <div class="cert-corner bottom-right"></div>
                                 
-                                <div class="cert-logo">Simplilearn <span>SkillUp</span></div>
+                                <div class="cert-logo">
+                                    <img src="https://abhinayvarsh-sl.github.io/skillup/reusable.svg" alt="Simplilearn Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='Simplilearn <span>SkillUp</span>'">
+                                </div>
                                 <div class="cert-headline">Certificate of Completion</div>
                                 <div class="cert-subhead">This certificate is proudly presented to</div>
                                 
@@ -1038,12 +1139,19 @@
             let html = '';
             
             // CUSTOM NAV FOR FREE RESOURCE PAGE (Flow 13)
+            // Fix: Check if span exists before accessing style to prevent crash
+            const brandSpan = brandEl.querySelector('span');
+
             if (document.getElementById('view-resource').classList.contains('hidden') === false) {
-                brandEl.innerHTML = 'Simplilearn'; // Remove "Evolve"
+                // Keep Image, Remove Evolve
+                if(brandSpan) brandSpan.style.display = 'none'; 
+                
                 html = `<button class="btn btn-text" onclick="router('home')" style="font-size:14px; font-weight:bold; color:var(--text-main);">Explore Evolve <span class="new-badge" style="background:#f97316; color:white; padding:2px 6px; border-radius:4px; font-size:10px; margin-left:5px;">NEW</span></button>`;
             } 
             else {
-                brandEl.innerHTML = 'Simplilearn <span>Evolve</span>'; // Default
+                // Restore Evolve
+                if(brandSpan) brandSpan.style.display = 'inline'; 
+                
                 if (appState.plan === 'visitor') {
                     // UPDATED NAV CTA ALIGNMENT
                     html = `<div class="flex" style="gap:15px; align-items:flex-start;">
@@ -1084,6 +1192,10 @@
                 switchPlayerTab('track'); // Default to track
                 renderPlayerNudge();
                 renderPlayerSidebar(); 
+            }
+            // Trigger billing toggle logic once on page load if visiting pricing
+            if(view === 'pricing') {
+               setTimeout(toggleBilling, 0); 
             }
             render();
         }
@@ -1245,7 +1357,26 @@
             const isAnnual = document.getElementById('billingCheck').checked;
             document.querySelectorAll('.plan-price').forEach(el => {
                 const m = el.dataset.m; const a = el.dataset.a;
-                if(m && a) el.innerHTML = isAnnual ? `<span style="text-decoration:line-through; font-size:1.5rem; color:#94a3b8; margin-right:8px;">$${m*12}</span> $${a}` : `$${m}`;
+                // If annual is checked, show monthly price derived from annual total
+                if(m && a) {
+                    // Default logic: Show monthly equivalent when annual selected
+                    if(isAnnual) {
+                        const monthlyEq = Math.round(a / 12);
+                        // el.innerHTML = `<span style="text-decoration:line-through; font-size:1.5rem; color:#94a3b8; margin-right:8px;">$${m}</span> $${monthlyEq}`;
+                        el.innerHTML = `$${monthlyEq}`;
+                        // Update period text specifically for visual clarity
+                        const periodEl = el.nextElementSibling;
+                        if(periodEl && periodEl.classList.contains('plan-period')) {
+                             periodEl.innerHTML = "per user / month <br><span style='font-weight:400; font-size:12px'>(billed annually)</span>";
+                        }
+                    } else {
+                        el.innerHTML = `$${m}`;
+                        const periodEl = el.nextElementSibling;
+                        if(periodEl && periodEl.classList.contains('plan-period')) {
+                             periodEl.innerHTML = "per user / month";
+                        }
+                    }
+                }
             });
         }
 
@@ -1346,10 +1477,10 @@
                     
                     // If triggered from Player, reload player state
                     if(!document.getElementById('view-player').classList.contains('hidden')) {
-                         renderPlayerNudge();
-                         renderPlayerSidebar();
-                         router('player'); 
-                         return;
+                          renderPlayerNudge();
+                          renderPlayerSidebar();
+                          router('player'); 
+                          return;
                     }
                 } else showToast("Personal email detected.");
             }
@@ -1542,7 +1673,57 @@
                 }
             }
 
-            // 4. BANNER LOGIC
+            // 4. PARTNER COURSES LOGIC
+            const partnerGrid = document.getElementById('lms-partner-grid');
+            if(partnerGrid) {
+                const partnerHtml = `
+                    <div class="course-card">
+                        <div id="partner-ibm-lock" class="card-lock-overlay ${isEffectivePro ? 'hidden' : ''}">
+                            <div style="font-size:24px;">🔒</div><b>Pro Feature</b>
+                            <button class="btn-glass-3d royal" style="margin-top:10px;" onclick="activateTrialDirectly()">Start Free Trial</button>
+                        </div>
+                        <div class="card-thumb" style="background:white; border-bottom:1px solid #e2e8f0;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" style="height:32px;">
+                        </div>
+                        <div class="card-body">
+                            <h4 style="font-size:14px; font-weight:800;">Data Science Prof. Cert</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">IBM • 120h</div>
+                            <button class="btn-glass-3d primary" style="width:100%;">Resume</button>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <div id="partner-ms-lock" class="card-lock-overlay ${isEffectivePro ? 'hidden' : ''}">
+                            <div style="font-size:24px;">🔒</div><b>Pro Feature</b>
+                            <button class="btn-glass-3d royal" style="margin-top:10px;" onclick="activateTrialDirectly()">Start Free Trial</button>
+                        </div>
+                        <div class="card-thumb" style="background:white; border-bottom:1px solid #e2e8f0;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" style="height:32px;">
+                        </div>
+                        <div class="card-body">
+                            <h4 style="font-size:14px; font-weight:800;">Azure AI Engineer</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">Microsoft • 80h</div>
+                            <button class="btn-glass-3d primary" style="width:100%;">Resume</button>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <div id="partner-aws-lock" class="card-lock-overlay ${isEffectivePro ? 'hidden' : ''}">
+                            <div style="font-size:24px;">🔒</div><b>Pro Feature</b>
+                            <button class="btn-glass-3d royal" style="margin-top:10px;" onclick="activateTrialDirectly()">Start Free Trial</button>
+                        </div>
+                        <div class="card-thumb" style="background:white; border-bottom:1px solid #e2e8f0;">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" style="height:32px;">
+                        </div>
+                        <div class="card-body">
+                            <h4 style="font-size:14px; font-weight:800;">Solutions Architect</h4>
+                            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">AWS • 95h</div>
+                            <button class="btn-glass-3d primary" style="width:100%;">Resume</button>
+                        </div>
+                    </div>
+                `;
+                partnerGrid.innerHTML = partnerHtml;
+            }
+
+            // 5. BANNER LOGIC
             if (appState.status === 'expired') {
                 welcome.innerText = "Welcome Back"; role.innerText = "Plan Expired";
                 banner.className = 'status-alert expired';
