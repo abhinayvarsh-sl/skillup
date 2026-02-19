@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arya - AI Learning & Career Concierge | Simplilearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Using Plus Jakarta Sans for a more modern, tech-forward look -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0056D2', // Deeper, more trustworthy blue
+                            dark: '#0B1120',
+                            accent: '#F59E0B', // Refined orange
+                            surface: '#F8F9FC',
+                            highlight: '#E0F2FE'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(0, 86, 210, 0.15)'
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'float-medium': 'float 5s ease-in-out infinite',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F9FC;
+            height: 100vh;
+            overflow: hidden;
+            color: #1E293B;
+        }
+        
+        /* Glassmorphism & UI Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        
+        .content-card {
+            background: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+            border: 1px solid #F1F5F9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border-color: #BFDBFE;
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .slide-up { animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .scale-in { animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background-color: #94A3B8; }
+
+        /* Hover Menu Fix */
+        .group:hover .group-hover\:block { display: block; }
+        
+        /* Sim Page Styles */
+        .sim-page { display: none; height: 100vh; overflow-y: auto; background: #FFFFFF; width: 100%; position: absolute; top: 0; left: 0; z-index: 50; }
+        .sim-header { height: 64px; border-bottom: 1px solid #F1F5F9; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); z-index: 60; }
+
+        /* Dropdown Styling */
+        select.custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748B' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        /* Tabs */
+        .tab-btn { padding: 10px 20px; color: #64748B; font-weight: 600; border-bottom: 2px solid transparent; transition: all 0.2s; position: relative; }
+        .tab-btn:hover { color: #0056D2; }
+        .tab-btn.active { color: #0056D2; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: #0056D2; border-radius: 2px 2px 0 0; }
+
+        /* Typing Indicator */
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing { 0%, 80%, 100% { transform: scale(0); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+
+        /* Nudge Styles */
+        .article-nudge {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 16px 20px;
+            margin: 32px 0;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .article-nudge::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #0056D2; }
+        .article-nudge:hover { background: #F1F5F9; border-color: #CBD5E1; }
+        
+        .article-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #334155; font-size: 1.05rem; }
+        .article-content h2 { font-size: 1.75rem; font-weight: 800; color: #0F172A; margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+        .article-content h3 { font-size: 1.4rem; font-weight: 700; color: #1E293B; margin-top: 2rem; margin-bottom: 1rem; }
+        
+        .check-list li { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.95rem; color: #334155; align-items: start; }
+        .check-list li i { color: #00A651; margin-top: 0.25rem; flex-shrink: 0; }
+
+        /* Floating Input */
+        .chat-input-wrapper {
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen antialiased selection:bg-blue-100 selection:text-blue-900 overflow-hidden relative">
+
+    <!-- ARYA INTERFACE (Default View) -->
+    <div id="arya-interface" class="flex flex-col h-full w-full absolute inset-0 z-10 bg-[#F8F9FC]">
+        
+        <!-- NEW: ARYA INTRO OVERLAY -->
+        <div id="arya-intro-overlay" class="absolute inset-0 z-[100] bg-[#F8F9FC] flex flex-col items-center justify-center text-center p-6 fade-in hidden">
+            <div class="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <!-- Left: Text Content -->
+                <div class="text-left space-y-8 animate-slide-up relative z-20">
+                    <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-brand-blue text-xs font-extrabold uppercase tracking-widest shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                        Next-Gen Career AI
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+                        Meet <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-cyan-500">Arya.</span><br/>
+                        Your Expert Career Architect.
+                    </h1>
+                    
+                    <div class="space-y-6 pt-4">
+                        <!-- Point 1 -->
+                        <div class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-brand-accent shadow-sm group-hover:border-brand-accent/30 transition-colors shrink-0">
+                                <i class="fas fa-magic text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Zero Prompt Engineering</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed mt-1">Stop guessing keywords. Speak naturally—Arya understands your intent, goals, and context instantly.</p>
+                            </div>
+                        </div>
+
+                        <!-- Point 2 -->
+                        <div class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-brand-blue shadow-sm group-hover:border-brand-blue/30 transition-colors shrink-0">
+                                <i class="fas fa-certificate text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Expert-Vetted Intelligence</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed mt-1">Unlike generic models, Arya is grounded in certified curriculums from Caltech, Purdue, and IBM.</p>
+                            </div>
+                        </div>
+
+                        <!-- Point 3 -->
+                        <div class="flex items-start gap-5 group">
+                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-green-600 shadow-sm group-hover:border-green-500/30 transition-colors shrink-0">
+                                <i class="fas fa-layer-group text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Visual & Interactive Learning</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed mt-1">Don't just read. Learn with interactive flashcards, dynamic roadmaps, and salary visualizations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6">
+                        <button onclick="startAryaExperience()" class="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-brand-blue font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue hover:bg-blue-700 shadow-lg shadow-blue-500/30 text-base w-full md:w-auto">
+                            Start Your Evolution
+                            <i class="fas fa-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Visual Carousel Animation -->
+                <div class="relative hidden md:flex h-full min-h-[600px] items-center justify-center">
+                     <!-- Carousel Container -->
+                     <div class="relative w-[400px] h-[500px]">
+                        <!-- Background Blobs -->
+                        <div class="absolute w-[400px] h-[400px] bg-blue-100/50 rounded-full blur-3xl -top-10 -right-10 animate-pulse"></div>
+                        <div class="absolute w-[300px] h-[300px] bg-purple-100/50 rounded-full blur-3xl bottom-0 left-0 animate-pulse" style="animation-delay: 1s"></div>
+
+                        <!-- CAROUSEL ITEMS -->
+                        
+                        <!-- Item 1: Flashcard -->
+                        <div class="intro-carousel-item absolute inset-0 transition-all duration-700 ease-in-out opacity-100 scale-100 z-20 flex flex-col justify-center">
+                            <div class="bg-white p-8 rounded-3xl shadow-2xl border border-slate-100 transform rotate-[-2deg] hover:rotate-0 transition">
+                                <div class="flex justify-between items-center mb-6">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Knowledge Card</span>
+                                    <i class="fas fa-sync-alt text-brand-blue"></i>
+                                </div>
+                                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-brand-blue text-3xl mb-6 mx-auto"><i class="fas fa-brain"></i></div>
+                                <h3 class="text-2xl font-bold text-slate-900 text-center mb-3">Large Language Model</h3>
+                                <p class="text-sm text-slate-500 text-center leading-relaxed">A probabilistic model trained on vast text data to predict tokens and generate human-like responses.</p>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <span class="bg-white/80 backdrop-blur px-4 py-2 rounded-full text-xs font-bold text-slate-600 shadow-sm border border-slate-200">Interactive Flashcards</span>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Salary Data -->
+                        <div class="intro-carousel-item absolute inset-0 transition-all duration-700 ease-in-out opacity-0 scale-95 z-10 flex flex-col justify-center">
+                            <div class="bg-white p-8 rounded-3xl shadow-2xl border border-slate-100 transform rotate-[2deg]">
+                                <div class="flex justify-between items-center mb-6">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Market Insights</span>
+                                    <i class="fas fa-chart-line text-green-500"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-6">Prompt Engineer Salary</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-2"><span class="font-bold text-slate-700">Certified Expert</span> <span class="font-bold text-green-600">$140,000</span></div>
+                                        <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-green-500 h-3 rounded-full" style="width: 90%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-2"><span class="text-slate-500">Industry Average</span> <span class="text-slate-500">$95,000</span></div>
+                                        <div class="w-full bg-slate-100 rounded-full h-3"><div class="bg-slate-400 h-3 rounded-full" style="width: 60%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <span class="bg-white/80 backdrop-blur px-4 py-2 rounded-full text-xs font-bold text-slate-600 shadow-sm border border-slate-200">Real-time Salary Data</span>
+                            </div>
+                        </div>
+
+                        <!-- Item 3: Video -->
+                        <div class="intro-carousel-item absolute inset-0 transition-all duration-700 ease-in-out opacity-0 scale-95 z-10 flex flex-col justify-center">
+                            <div class="bg-slate-900 p-2 rounded-3xl shadow-2xl border border-slate-700 transform rotate-[-1deg]">
+                                <div class="relative bg-slate-800 rounded-2xl overflow-hidden aspect-video group">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-16 h-16 bg-white/20 backdrop-blur rounded-full flex items-center justify-center text-white text-2xl shadow-lg border border-white/30"><i class="fas fa-play ml-1"></i></div>
+                                    </div>
+                                    <div class="absolute bottom-4 left-4 right-4">
+                                        <div class="h-1 bg-white/20 rounded-full mb-2"><div class="h-1 bg-brand-accent w-1/3 rounded-full"></div></div>
+                                        <div class="flex justify-between text-[10px] text-slate-300 font-bold"><span>02:14</span> <span>Intro to Transformers</span></div>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="text-white font-bold text-sm">Expert Masterclass Series</h4>
+                                    <p class="text-slate-400 text-xs mt-1">Caltech Faculty • 15 Mins</p>
+                                </div>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <span class="bg-white/80 backdrop-blur px-4 py-2 rounded-full text-xs font-bold text-slate-600 shadow-sm border border-slate-200">Bite-sized Video Content</span>
+                            </div>
+                        </div>
+
+                        <!-- Item 4: Roadmap -->
+                        <div class="intro-carousel-item absolute inset-0 transition-all duration-700 ease-in-out opacity-0 scale-95 z-10 flex flex-col justify-center">
+                            <div class="bg-white p-8 rounded-3xl shadow-2xl border border-slate-100 transform rotate-[1deg]">
+                                <div class="flex justify-between items-center mb-6">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Personalized Path</span>
+                                    <i class="fas fa-map-signs text-brand-accent"></i>
+                                </div>
+                                <div class="space-y-0 pl-4 border-l-2 border-slate-100 ml-2">
+                                    <div class="pb-6 relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-brand-blue ring-4 ring-white"></span>
+                                        <h4 class="text-sm font-bold text-brand-blue">Week 1: Foundations</h4>
+                                        <p class="text-xs text-slate-500 mt-1">Python, Statistics, EDA</p>
+                                    </div>
+                                    <div class="pb-6 relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-white"></span>
+                                        <h4 class="text-sm font-bold text-slate-700">Week 2: Machine Learning</h4>
+                                        <p class="text-xs text-slate-500 mt-1">Regression, Classification</p>
+                                    </div>
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-slate-300 ring-4 ring-white"></span>
+                                        <h4 class="text-sm font-bold text-slate-700">Week 3: Deep Learning</h4>
+                                        <p class="text-xs text-slate-500 mt-1">Neural Networks, NLP</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 text-center">
+                                <span class="bg-white/80 backdrop-blur px-4 py-2 rounded-full text-xs font-bold text-slate-600 shadow-sm border border-slate-200">Custom Learning Roadmaps</span>
+                            </div>
+                        </div>
+
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="h-16 flex items-center justify-between px-6 z-40 sticky top-0 glass-panel">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition" onclick="window.location.reload()">
+                    <div class="w-9 h-9 bg-gradient-to-br from-brand-blue to-blue-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-glow">S</div>
+                    <div class="hidden md:flex flex-col justify-center">
+                        <span class="font-bold text-lg tracking-tight text-slate-900">simplilearn<span class="text-brand-blue">.ai</span></span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Manual Source Context Dropdown -->
+                    <div class="relative group flex items-center gap-2 border-l border-slate-200 pl-4">
+                        <select id="source-select" onchange="manualContextChange(this.value)" class="custom-select bg-transparent text-slate-600 text-xs font-bold py-1.5 pr-8 outline-none cursor-pointer hover:text-brand-blue transition w-40 md:w-56 truncate">
+                            <option value="" disabled>Select Context...</option>
+                            <optgroup label="Browsing Category">
+                                <option value="category:Generative AI" selected>Category: Generative AI</option>
+                                <option value="category:Data Science">Category: Data Science</option>
+                                <option value="category:Project Management">Category: Project Management</option>
+                            </optgroup>
+                            <optgroup label="Viewing Course (Free/Paid)">
+                                <option value="course:Generative AI for Beginners">Course: GenAI for Beginners</option>
+                                <option value="course:Python for Data Science">Course: Python for Data Science</option>
+                            </optgroup>
+                            <optgroup label="Viewing Program (Bootcamp)">
+                                <option value="program:PGP in Data Science">Program: PGP in Data Science</option>
+                                <option value="program:AI Engineer Master">Program: AI Engineer Master</option>
+                            </optgroup>
+                            <optgroup label="Reading Article">
+                                <option value="article:Future of AI Jobs">Article: Future of AI Jobs</option>
+                                <option value="article:Top 10 Interview Qs">Article: Top 10 Interview Qs</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleModal(true)" class="bg-brand-dark hover:bg-black text-white px-5 py-2 rounded-full text-xs font-bold transition shadow-lg shadow-blue-900/10">Log In</button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="flex-1 flex overflow-hidden relative">
+            
+            <!-- LEFT PANEL: Knowledge Canvas -->
+            <section id="canvas-container" class="absolute inset-0 z-10 bg-[#F8F9FC] md:static md:flex md:flex-col overflow-y-auto custom-scroll transition-all duration-300 ease-in-out md:w-[65%] p-6 lg:p-10 pb-20 md:pb-6 translate-x-full md:translate-x-0 border-r border-slate-200/60">
+                <button onclick="toggleCanvas()" class="hidden md:flex absolute top-4 right-4 z-50 w-8 h-8 bg-white border border-slate-200 rounded-lg items-center justify-center text-slate-400 hover:text-brand-blue hover:border-brand-blue transition shadow-sm">
+                    <i id="canvas-toggle-icon" class="fas fa-compress-alt text-xs"></i>
+                </button>
+
+                <!-- Dynamic Content Wrapper -->
+                <div id="canvas-content-wrapper" class="w-full h-full">
+                    <div id="canvas-empty" class="flex flex-col items-center justify-center h-full text-center opacity-100 select-none fade-in">
+                        <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mb-8 shadow-soft border border-slate-100">
+                            <i class="fas fa-layer-group text-4xl text-brand-blue opacity-80"></i>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mb-3 tracking-tight">Expert Knowledge Canvas</h3>
+                        <p class="max-w-xs text-slate-500 font-medium text-sm leading-relaxed">Select a learning path or ask Arya to synthesize expert insights, roadmaps, and career data here.</p>
+                    </div>
+                    <!-- Injection Point for Artifacts -->
+                    <div id="artifact-container" class="w-full max-w-4xl mx-auto space-y-6 fade-in"></div>
+                </div>
+
+                <!-- Collapsed State -->
+                <div id="canvas-collapsed-view" class="hidden h-full flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-slate-100 transition group" onclick="toggleCanvas()">
+                      <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200 group-hover:border-brand-blue group-hover:text-brand-blue transition">
+                        <i class="fas fa-layer-group text-slate-400"></i>
+                    </div>
+                    <div class="vertical-text text-xs font-bold text-slate-400 uppercase tracking-widest group-hover:text-brand-blue transition" style="writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);">Expand Canvas</div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL: Chat Assistant -->
+            <section id="chat-container" class="absolute inset-0 z-20 bg-white md:static w-full md:flex-1 min-w-0 flex flex-col chat-sidebar transition-all duration-300 shadow-2xl md:shadow-none">
+                <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-6 custom-scroll pb-24 bg-white">
+                    <!-- Initial State Injected via JS -->
+                </div>
+                <!-- Input Area -->
+                <div class="p-5 bg-white border-t border-slate-100 relative z-50 chat-input-wrapper">
+                    <div id="typing-indicator" class="hidden px-4 py-2 mb-3 text-xs text-slate-500 flex gap-2 items-center bg-slate-50 rounded-full w-fit border border-slate-100">
+                        <span class="font-bold text-brand-blue">Arya</span> is analyzing...
+                        <div class="flex gap-1">
+                            <div class="w-1 h-1 bg-brand-blue rounded-full typing-dot"></div>
+                            <div class="w-1 h-1 bg-brand-blue rounded-full typing-dot"></div>
+                            <div class="w-1 h-1 bg-brand-blue rounded-full typing-dot"></div>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <textarea id="user-input" rows="1" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm font-medium rounded-2xl focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue block pl-5 pr-14 py-4 resize-none shadow-inner transition-all" placeholder="Ask an expert question... (e.g. 'Synthesize key trends')"></textarea>
+                        <button onclick="handleInput()" class="absolute right-2 bottom-2 text-white bg-brand-blue hover:bg-blue-700 w-10 h-10 flex items-center justify-center rounded-xl transition shadow-lg hover:shadow-blue-500/30"><i class="fas fa-arrow-up text-sm"></i></button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p class="text-[10px] text-slate-300 font-medium">Powered by Simplilearn Expert Knowledge Graph</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Mobile Bottom Nav -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-200 flex justify-around items-center z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <button onclick="switchMobileTab('chat')" id="mobile-tab-chat" class="flex flex-col items-center gap-1 text-brand-blue w-1/2 h-full justify-center active"><i class="fas fa-comment-dots text-lg"></i><span class="text-[10px] font-bold">Expert Chat</span></button>
+            <button onclick="switchMobileTab('canvas')" id="mobile-tab-canvas" class="flex flex-col items-center gap-1 text-slate-400 w-1/2 h-full justify-center"><i class="fas fa-layer-group text-lg"></i><span class="text-[10px] font-bold">Canvas</span></button>
+        </nav>
+    </div>
+
+    <!-- Global Scenario Runner (Floating) -->
+    <div id="scenario-runner-container" class="fixed bottom-6 left-6 z-[90] group">
+        <button class="cursor-move flex items-center gap-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-full px-5 py-3 transition shadow-xl hover:-translate-y-1 ring-4 ring-slate-100 relative z-20">
+            <div class="w-6 h-6 rounded-full bg-brand-accent/10 flex items-center justify-center">
+                <i class="fas fa-flask text-brand-accent"></i>
+            </div>
+            <span class="font-bold">Simulate Flow</span>
+            <i class="fas fa-chevron-up text-[10px] ml-1 text-slate-400"></i>
+        </button>
+        
+        <!-- Dropdown Content (Dropup) with Padding Fix -->
+        <div class="hidden group-hover:block absolute bottom-full left-0 pb-4 w-80 origin-bottom-left transition-all duration-200 z-10">
+            <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 relative overflow-hidden">
+                <div class="text-[10px] uppercase font-bold text-slate-400 px-4 py-3 border-b border-slate-50 mb-1 bg-slate-50/50">Select User Flow</div>
+                <button onclick="runScenario('direct')" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-brand-blue rounded-xl transition flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm"><i class="fas fa-home text-slate-400"></i></span> <div><div class="text-slate-900">Direct Visit</div><div class="text-[10px] font-medium text-slate-400 font-normal">Homepage Experience</div></div></button>
+                <button onclick="simulatePage('category')" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-brand-blue rounded-xl transition flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm"><i class="fas fa-folder text-slate-400"></i></span> <div><div class="text-slate-900">Category Page</div><div class="text-[10px] font-medium text-slate-400 font-normal">Browsing Generative AI</div></div></button>
+                <button onclick="simulatePage('program')" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-brand-blue rounded-xl transition flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm"><i class="fas fa-graduation-cap text-slate-400"></i></span> <div><div class="text-slate-900">Program Page</div><div class="text-[10px] font-medium text-slate-400 font-normal">PGP Data Science</div></div></button>
+                <button onclick="simulatePage('course')" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-brand-blue rounded-xl transition flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm"><i class="fas fa-video text-slate-400"></i></span> <div><div class="text-slate-900">Course Page</div><div class="text-[10px] font-medium text-slate-400 font-normal">Free Course</div></div></button>
+                <button onclick="simulatePage('article')" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-brand-blue rounded-xl transition flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm"><i class="fas fa-newspaper text-slate-400"></i></span> <div><div class="text-slate-900">Article Page</div><div class="text-[10px] font-medium text-slate-400 font-normal">Blog Post Reading</div></div></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SIMULATED PAGES ==================== -->
+    
+    <!-- CATEGORY PAGE -->
+    <div id="page-category" class="sim-page bg-[#FAFAFA]">
+        <div class="sim-header sticky top-0 bg-white/90 backdrop-blur-md z-50 px-6 border-b border-slate-100">
+            <div class="flex items-center gap-4">
+                <div class="font-extrabold text-xl tracking-tight text-slate-900">simplilearn</div>
+            </div>
+            <div class="flex items-center gap-4">
+                 <div class="relative hidden md:block group">
+                    <input type="text" placeholder="Search expert courses..." class="bg-slate-100 group-hover:bg-white border border-transparent group-hover:border-slate-200 rounded-full px-4 py-2 text-xs w-64 transition-all outline-none">
+                    <i class="fas fa-search absolute right-4 top-2.5 text-slate-400 text-xs"></i>
+                </div>
+                <button class="text-slate-600 hover:text-brand-blue font-bold text-xs transition">Log In</button>
+                <button class="bg-brand-blue text-white px-5 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">Get Started</button>
+            </div>
+        </div>
+
+        <div class="bg-white py-16 px-6 border-b border-slate-100">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+                <div class="max-w-2xl">
+                    <nav class="text-[10px] text-brand-blue font-bold uppercase tracking-widest mb-4">Home / Generative AI</nav>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] mb-6">Master Generative AI <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-cyan-500">with Industry Experts</span></h1>
+                    <p class="text-slate-500 text-lg mb-8 max-w-lg leading-relaxed">Curated learning paths for Prompt Engineering, LLM Architecture, and AI Ethics. Validated by top tech firms.</p>
+                    
+                    <div class="flex items-center gap-6 text-sm text-slate-600 mb-10">
+                        <div class="flex items-center gap-1.5"><i class="fas fa-star text-brand-accent"></i><span class="font-bold text-slate-900">4.8/5</span> Average Rating</div>
+                        <div class="flex items-center gap-1.5"><i class="fas fa-user-check text-slate-400"></i> <span class="font-bold text-slate-900">250k+</span> Professionals</div>
+                    </div>
+                    
+                    <!-- ARYA NUDGE -->
+                    <div class="inline-flex items-center gap-4 bg-gradient-to-r from-slate-50 to-white border border-slate-200 p-2 pr-6 rounded-full cursor-pointer hover:shadow-lg hover:border-brand-blue/30 transition group" onclick="activateArya('category', 'Generative AI', 'match')">
+                        <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white shadow-md group-hover:scale-110 transition">
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-bold text-xs text-slate-900">Expert Recommendation Engine</h4>
+                            <p class="text-[10px] text-slate-500">Analyze your profile to find the best fit.</p>
+                        </div>
+                        <i class="fas fa-arrow-right text-slate-300 group-hover:text-brand-blue ml-2"></i>
+                    </div>
+                </div>
+                <div class="hidden md:block w-[450px] relative">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full blur-3xl opacity-50"></div>
+                    <img src="https://img.freepik.com/free-photo/ai-technology-microchip-background-digital-transformation-concept_53876-124669.jpg" class="relative rounded-2xl shadow-2xl w-full object-cover h-72 border-4 border-white">
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Grid Section -->
+        <div class="max-w-7xl mx-auto px-6 py-16">
+            <div class="flex justify-between items-end mb-10">
+                <h2 class="text-2xl font-bold text-slate-900">Featured Learning Paths</h2>
+                <a href="#" class="text-xs font-bold text-brand-blue hover:underline">View All Courses</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Course Card 1 -->
+                <div class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300 group">
+                    <div class="h-44 bg-slate-100 relative overflow-hidden">
+                        <img src="https://img.freepik.com/free-vector/gradient-ai-cloud-illustration_23-2149156710.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-[10px] font-bold shadow-sm flex items-center gap-2">
+                            <i class="fab fa-microsoft text-blue-500 text-sm"></i> Microsoft
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-slate-900 text-lg mb-2 leading-tight">Generative AI for Business Leaders</h3>
+                        <p class="text-xs text-slate-500 mb-6 font-medium uppercase tracking-wide">4 Months • Executive Bootcamp</p>
+                        <button class="w-full border border-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs hover:bg-slate-900 hover:text-white hover:border-slate-900 transition">View Curriculum</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 2 -->
+                <div class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300 group">
+                    <div class="h-44 bg-slate-100 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                        <img src="https://img.freepik.com/free-photo/medium-shot-man-wearing-vr-glasses_23-2149126949.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-brand-accent text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shadow-sm z-20">
+                            Bestseller
+                        </div>
+                        <div class="absolute bottom-4 left-4 text-white font-bold text-xs z-20 flex items-center gap-2">
+                             <i class="fas fa-university text-brand-accent"></i> Caltech
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-slate-900 text-lg mb-2 leading-tight">Post Graduate Program in AI & ML</h3>
+                        <p class="text-xs text-slate-500 mb-6 font-medium uppercase tracking-wide">6 Months • University Certificate</p>
+                        <button class="w-full bg-brand-blue text-white font-bold py-3 rounded-xl text-xs hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">Apply Now</button>
+                    </div>
+                </div>
+
+                <!-- Course Card 3 -->
+                <div class="bg-white rounded-2xl shadow-soft border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300 group">
+                    <div class="h-44 bg-slate-100 relative overflow-hidden">
+                        <img src="https://img.freepik.com/free-photo/standard-quality-control-concept-m_23-2150041848.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-[10px] font-bold shadow-sm flex items-center gap-2">
+                            <i class="fas fa-cube text-purple-600 text-sm"></i> IBM
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-slate-900 text-lg mb-2 leading-tight">Applied Generative AI Specialization</h3>
+                        <p class="text-xs text-slate-500 mb-6 font-medium uppercase tracking-wide">3 Months • Professional Cert</p>
+                        <button class="w-full border border-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs hover:bg-slate-900 hover:text-white hover:border-slate-900 transition">View Curriculum</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ARYA NUDGE: SKILL QUIZ -->
+            <div class="my-16 bg-slate-900 rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-brand-blue opacity-20 rounded-full blur-[100px] transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+                <div class="relative z-10 max-w-lg">
+                    <div class="inline-block bg-white/10 text-brand-accent text-[10px] font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">Skill Assessment</div>
+                    <h3 class="text-3xl font-extrabold text-white mb-3">Validate your expertise</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Take a 2-minute adaptive assessment. Our AI will benchmark your skills against industry standards and recommend a tailored learning path.</p>
+                </div>
+                <button onclick="activateArya('category', 'Generative AI', 'quiz')" class="relative z-10 bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:scale-105 transition shadow-xl whitespace-nowrap border-2 border-transparent hover:border-brand-accent">
+                    Assess My Skills
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROGRAM PAGE -->
+    <div id="page-program" class="sim-page bg-slate-50">
+        <div class="sim-header sticky top-0 bg-white z-50 px-6 shadow-sm">
+            <div class="flex items-center gap-6">
+                <div class="font-bold text-xl tracking-tight text-slate-900">simplilearn</div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-3">
+                    <span class="bg-black text-white px-1.5 py-0.5 font-serif rounded-sm">P</span> PURDUE UNIVERSITY
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-xs font-bold text-slate-500">
+                <a href="#overview" class="hover:text-brand-blue transition">Overview</a>
+                <a href="#curriculum" class="hover:text-brand-blue transition">Curriculum</a>
+                <a href="#reviews" class="hover:text-brand-blue transition">Reviews</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="bg-brand-accent text-white px-6 py-2.5 rounded-lg text-xs font-bold hover:bg-orange-600 transition shadow-md shadow-orange-500/20">Apply Now</button>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="bg-slate-900 text-white py-20 px-6 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-30 bg-[url('https://www.purdue.edu/brand/images/masthead-sample.jpg')] bg-cover bg-center mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
+            
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+                <div class="lg:col-span-8 space-y-8">
+                    <div class="inline-block bg-white/10 backdrop-blur border border-white/20 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Global #1 Ranked Program</div>
+                    <h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight">Post Graduate Program <br/>in Data Science</h1>
+                    <p class="text-slate-300 text-lg max-w-2xl leading-relaxed">Accelerate your career with this acclaimed program from Purdue University. Master R, Python, ML, & Data Viz with expert-led live classes.</p>
+                    
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <div class="bg-white/5 backdrop-blur px-5 py-3 rounded-xl border border-white/10">
+                            <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Duration</p>
+                            <p class="font-bold text-white">11 Months</p>
+                        </div>
+                        <div class="bg-white/5 backdrop-blur px-5 py-3 rounded-xl border border-white/10">
+                            <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Format</p>
+                            <p class="font-bold text-white">Online Bootcamp</p>
+                        </div>
+                         <div class="bg-white/5 backdrop-blur px-5 py-3 rounded-xl border border-white/10">
+                            <p class="text-[10px] text-slate-400 uppercase font-bold mb-1">Alumni Status</p>
+                            <p class="font-bold text-white">Purdue Membership</p>
+                        </div>
+                    </div>
+                    
+                    <!-- ARYA NUDGE: ELIGIBILITY -->
+                    <div class="mt-4 flex items-center gap-4 max-w-md bg-gradient-to-r from-brand-blue/20 to-transparent border border-brand-blue/30 p-3 pr-6 rounded-2xl cursor-pointer hover:bg-brand-blue/30 transition group" onclick="activateArya('program', 'PGP in Data Science', 'eligibility')">
+                         <div class="w-12 h-12 bg-brand-blue rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Check Eligibility</h4>
+                            <p class="text-xs text-blue-200">Verify prerequisites for this university program.</p>
+                        </div>
+                        <i class="fas fa-arrow-right text-white/50 ml-auto group-hover:text-white transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8 space-y-12">
+                <!-- Curriculum -->
+                <div id="curriculum">
+                    <div class="flex items-end justify-between mb-8">
+                        <h2 class="text-2xl font-bold text-slate-900">Program Curriculum</h2>
+                        <button onclick="activateArya('program', 'PGP in Data Science', 'brochure')" class="flex items-center gap-2 text-brand-blue bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg text-xs font-bold transition">
+                            <i class="fas fa-download"></i> Download Syllabus via Arya
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                         <div class="group border border-slate-200 rounded-2xl bg-white overflow-hidden hover:border-brand-blue/50 transition">
+                            <div class="p-5 flex justify-between items-center cursor-pointer">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Module 01</p>
+                                    <h4 class="font-bold text-base text-slate-900 group-hover:text-brand-blue transition">Python for Data Science</h4>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition"><i class="fas fa-chevron-down text-slate-400 text-xs"></i></div>
+                            </div>
+                        </div>
+                        <div class="group border border-slate-200 rounded-2xl bg-white overflow-hidden hover:border-brand-blue/50 transition">
+                            <div class="p-5 flex justify-between items-center cursor-pointer">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Module 02</p>
+                                    <h4 class="font-bold text-base text-slate-900 group-hover:text-brand-blue transition">Data Analytics with R</h4>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition"><i class="fas fa-chevron-down text-slate-400 text-xs"></i></div>
+                            </div>
+                        </div>
+                        <div class="group border border-slate-200 rounded-2xl bg-white overflow-hidden hover:border-brand-blue/50 transition">
+                            <div class="p-5 flex justify-between items-center cursor-pointer">
+                                <div>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Module 03</p>
+                                    <h4 class="font-bold text-base text-slate-900 group-hover:text-brand-blue transition">Machine Learning Techniques</h4>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition"><i class="fas fa-chevron-down text-slate-400 text-xs"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ROI Nudge -->
+                <div class="bg-slate-900 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-900/20 to-transparent"></div>
+                    <div class="relative z-10">
+                        <h3 class="font-bold text-xl text-white mb-2">Analyze Your ROI</h3>
+                        <p class="text-sm text-slate-400">See how this program translates to salary hikes based on 2025 market data.</p>
+                    </div>
+                    <button onclick="activateArya('program', 'PGP in Data Science', 'roi')" class="relative z-10 bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-green-900/30 transform hover:scale-105 transition flex items-center gap-2">
+                        <i class="fas fa-calculator"></i> Calculate ROI
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="lg:col-span-4 space-y-8">
+                <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 sticky top-24">
+                    <h3 class="text-lg font-bold text-slate-900 mb-6">Upcoming Cohort</h3>
+                    
+                    <div class="flex items-center gap-4 mb-8 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                         <div class="text-center bg-white rounded-lg p-2 border border-slate-200 min-w-[60px] shadow-sm">
+                            <span class="block text-[10px] font-bold text-slate-400">FEB</span>
+                            <span class="block text-2xl font-black text-slate-900">24</span>
+                         </div>
+                         <div>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Weekend Batch</p>
+                            <p class="text-xs font-bold text-red-500 flex items-center gap-1"><i class="fas fa-fire"></i> Filling Fast</p>
+                         </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <p class="text-xs text-slate-500 mb-2 font-bold uppercase">Total Program Fee</p>
+                        <div class="flex items-end gap-3">
+                             <span class="text-4xl font-black text-slate-900 tracking-tight">$2,499</span>
+                             <span class="text-sm text-slate-400 line-through mb-1.5 font-medium">$3,500</span>
+                        </div>
+                        <p class="text-[10px] text-green-600 font-bold mt-2 bg-green-50 inline-block px-2 py-1 rounded">Save 28% today</p>
+                    </div>
+
+                    <button class="w-full bg-brand-accent hover:bg-orange-600 text-white font-bold py-4 rounded-xl text-sm transition shadow-lg shadow-orange-500/20 mb-3">Secure Your Seat</button>
+                    <button class="w-full bg-white border border-slate-200 text-slate-700 font-bold py-4 rounded-xl text-sm hover:bg-slate-50 transition">Talk to Advisor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COURSE PAGE -->
+    <div id="page-course" class="sim-page bg-slate-50">
+        <div class="sim-header sticky top-0 bg-white z-50 shadow-sm px-6">
+            <div class="flex items-center gap-4">
+                <div class="font-bold text-xl tracking-tight text-slate-900">simplilearn</div>
+                <div class="text-[10px] font-extrabold text-brand-blue uppercase bg-blue-50 px-2 py-1 rounded tracking-widest">SkillUp</div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-slate-600 text-xs font-bold hover:text-brand-blue">Browse Library</button>
+                <button class="bg-brand-blue text-white px-5 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition">Log In</button>
+            </div>
+        </div>
+
+        <div class="bg-brand-dark text-white pt-16 pb-32 px-6 relative">
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent"></div>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+                <div class="space-y-6">
+                    <nav class="text-[10px] text-blue-300 font-bold uppercase tracking-widest mb-2">Home / SkillUp / Free Course</nav>
+                    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Generative AI for Beginners</h1>
+                    <div class="flex items-center gap-6 text-sm mt-2 text-slate-300">
+                        <div class="flex items-center gap-1.5"><i class="fas fa-star text-yellow-400"></i><span class="font-bold text-white">4.8</span></div>
+                        <div class="flex items-center gap-1.5"><i class="fas fa-user-friends"></i> <span class="font-bold text-white">120k</span> Learners</div>
+                        <div class="flex items-center gap-1.5"><i class="fas fa-clock"></i> <span class="font-bold text-white">3 Hours</span></div>
+                    </div>
+                    <p class="text-slate-300 text-base max-w-xl leading-relaxed">Master the basics of Generative AI, LLMs, and Prompt Engineering in this free self-paced course designed by industry experts.</p>
+                </div>
+                
+                <div class="hidden lg:block">
+                    <div class="bg-white rounded-3xl shadow-2xl p-5 w-96 ml-auto transform translate-y-16">
+                        <div class="relative aspect-video bg-slate-900 rounded-2xl overflow-hidden mb-5 group cursor-pointer">
+                            <img src="https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg" class="opacity-70 w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-brand-blue text-lg shadow-lg group-hover:scale-110 transition"><i class="fas fa-play ml-1"></i></div>
+                            </div>
+                        </div>
+                        <button class="w-full bg-brand-blue hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-500/20 mb-3 transition">Start Learning for Free</button>
+                        <p class="text-center text-[10px] text-slate-400 font-bold uppercase tracking-wide">90 Days Access Included</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8 space-y-12">
+                <!-- Skills -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                    <h2 class="text-xl font-bold text-slate-900 mb-6">Skills You Will Acquire</h2>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 check-list">
+                        <li><i class="fas fa-check-circle"></i> Prompt Engineering Strategies</li>
+                        <li><i class="fas fa-check-circle"></i> Large Language Models (LLMs)</li>
+                        <li><i class="fas fa-check-circle"></i> AI Ethics & Safety</li>
+                        <li><i class="fas fa-check-circle"></i> Building AI Applications</li>
+                    </ul>
+                </div>
+
+                <!-- Eligibility Nudge -->
+                <div class="article-nudge cursor-pointer hover:shadow-md transition bg-gradient-to-r from-orange-50 to-white border-l-brand-accent" onclick="activateArya('course', 'Generative AI for Beginners', 'prereq')">
+                     <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-accent shadow-sm border border-orange-100">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-slate-900">Is this course right for you?</h4>
+                            <p class="text-xs text-slate-500">Check prerequisites with our Expert Agent.</p>
+                        </div>
+                    </div>
+                    <button class="text-xs font-bold bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg shadow-sm hover:text-brand-accent transition">Check Now</button>
+                </div>
+
+                <!-- Syllabus -->
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-6">Course Content</h2>
+                    <div class="space-y-4">
+                        <div class="border border-slate-200 rounded-2xl p-5 bg-white flex justify-between items-center cursor-pointer hover:border-brand-blue/50 transition">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Lesson 01</p>
+                                <h4 class="font-bold text-sm text-slate-800">Introduction to Generative AI</h4>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded">15:00</span>
+                        </div>
+                         <div class="border border-slate-200 rounded-2xl p-5 bg-white flex justify-between items-center cursor-pointer hover:border-brand-blue/50 transition">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Lesson 02</p>
+                                <h4 class="font-bold text-sm text-slate-800">Prompt Engineering Fundamentals</h4>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded">45:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Study Plan Nudge -->
+                    <div class="article-nudge cursor-pointer hover:shadow-md transition mt-8 border-l-brand-blue" onclick="activateArya('course', 'Generative AI for Beginners', 'syllabus')">
+                         <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm border border-blue-50">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900">Need a structured plan?</h4>
+                                <p class="text-xs text-slate-500">Generate a personalized 4-week roadmap.</p>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold bg-brand-blue text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">Create Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTICLE PAGE -->
+    <div id="page-article" class="sim-page bg-white">
+        <div class="sim-header sticky top-0 bg-white/95 backdrop-blur z-50 shadow-sm px-6">
+            <div class="flex items-center gap-6">
+                <div class="font-bold text-xl tracking-tight text-slate-900">simplilearn</div>
+                <div class="hidden md:flex gap-6 text-xs font-bold text-slate-600">
+                    <a href="#" class="hover:text-brand-blue transition">All Courses</a>
+                    <a href="#" class="hover:text-brand-blue transition">Corporate</a>
+                    <a href="#" class="text-brand-blue">Blog</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="bg-brand-dark text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-black transition">Log In</button>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div class="lg:col-span-8">
+                <nav class="flex text-xs text-slate-500 mb-6 font-medium" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2">
+                        <li><a href="#" class="hover:text-brand-blue">Home</a></li>
+                        <li><span class="text-slate-300">/</span></li>
+                        <li><a href="#" class="hover:text-brand-blue">Artificial Intelligence</a></li>
+                        <li class="text-slate-300">/</li>
+                        <li class="font-bold text-slate-900">Future of Jobs</li>
+                    </ol>
+                </nav>
+
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">The Future of AI Jobs in 2026: Trends, Salaries, and Skills You Need</h1>
+                
+                <div class="flex items-center gap-4 mb-10 pb-8 border-b border-slate-100">
+                    <div class="w-12 h-12 rounded-full bg-slate-200 overflow-hidden ring-2 ring-white shadow-sm"><img src="https://i.pravatar.cc/100?img=33" class="w-full h-full object-cover"></div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-900">By Sarah Jenkins</p>
+                        <p class="text-[10px] text-slate-500 font-medium">Expert Contributor • Updated Feb 14, 2026</p>
+                    </div>
+                </div>
+
+                <div class="w-full h-80 bg-slate-100 rounded-3xl mb-10 overflow-hidden relative shadow-inner">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-slate-900/60 to-transparent flex items-end p-8">
+                        <span class="text-white text-xs font-bold bg-brand-accent px-3 py-1 rounded-md shadow-lg">TRENDING NOW</span>
+                    </div>
+                </div>
+
+                <div class="article-content text-slate-700">
+                    <p>Artificial Intelligence is no longer just a buzzword; it is the driving force behind the Fourth Industrial Revolution. As we approach 2026, the landscape of employment is shifting dramatically.</p>
+                    
+                    <!-- CONTEXTUAL NUDGE 1: SUMMARY -->
+                    <div class="article-nudge cursor-pointer" onclick="activateArya('article', 'Future of AI Jobs', 'summary')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm border border-blue-100">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900">Executive Briefing</h4>
+                                <p class="text-xs text-slate-500">Generate a 3-bullet expert summary.</p>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold bg-brand-blue text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition">Summarize</button>
+                    </div>
+
+                    <h2>1. The Rise of the AI Engineer</h2>
+                    <p>The demand for AI Engineers has grown by 344% in the last two years. Unlike data scientists who focus on analysis, AI engineers build the infrastructure that allows models to function in production environments.</p>
+                    
+                    <h3>Key Salary Trends</h3>
+                    <p>Compensation for AI roles has skyrocketed. Entry-level positions now command salaries that were previously reserved for senior engineers in traditional software development.</p>
+
+                    <!-- CONTEXTUAL NUDGE 2: SALARY -->
+                    <div class="article-nudge cursor-pointer border-l-green-500" onclick="activateArya('article', 'Future of AI Jobs', 'career')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-600 shadow-sm border border-green-100">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900">Market Salary Data</h4>
+                                <p class="text-xs text-slate-500">View verified career ladders & pay scales.</p>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg shadow-sm hover:text-green-600 transition">View Data</button>
+                    </div>
+
+                    <h2>2. Essential Skills for 2026</h2>
+                    <p>To survive in this new economy, technical skills are non-negotiable. However, soft skills like "AI Ethics" and "Prompt Engineering" are becoming equally critical.</p>
+
+                    <!-- CONTEXTUAL NUDGE 3: QUIZ -->
+                    <div class="bg-brand-dark text-white rounded-3xl p-8 my-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+                        <div class="relative z-10 flex items-center gap-5">
+                            <div class="text-4xl text-brand-accent"><i class="fas fa-brain"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg">Test your understanding</h4>
+                                <p class="text-xs text-slate-400 mt-1">Take a 1-minute quiz on AI trends.</p>
+                            </div>
+                        </div>
+                        <button onclick="activateArya('article', 'Future of AI Jobs', 'quiz')" class="relative z-10 bg-brand-accent hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl transition text-sm whitespace-nowrap shadow-lg">Start Quiz</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-4 space-y-8">
+                <div class="border border-slate-200 rounded-2xl p-6 shadow-soft sticky top-24 bg-white">
+                    <span class="text-[10px] font-bold text-brand-blue bg-blue-50 px-3 py-1 rounded-full uppercase mb-4 inline-block">Recommended Program</span>
+                    <h3 class="font-bold text-lg text-slate-900 mb-2 leading-tight">Post Graduate Program in AI & Machine Learning</h3>
+                    <p class="text-xs text-slate-500 mb-6 font-medium">Purdue University & Simplilearn</p>
+                    <button class="w-full bg-brand-blue text-white font-bold py-3 rounded-xl text-sm hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">Download Brochure</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FLOATING ACTION BUTTON -->
+        <div id="arya-floater" onclick="activateArya('article', 'Future of AI Jobs')" class="fixed bottom-8 right-1/2 translate-x-1/2 md:translate-x-0 md:right-8 z-[60] cursor-pointer hidden">
+            <div class="bg-brand-dark text-white px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 hover:scale-105 transition-transform border border-slate-700/50 backdrop-blur-md">
+                <div class="w-8 h-8 bg-brand-blue rounded-full flex items-center justify-center text-white font-bold shadow-glow relative overflow-hidden">
+                    <span class="absolute inset-0 bg-white/20 animate-pulse"></span>
+                    <i class="fas fa-sparkles text-xs"></i>
+                </div>
+                <span class="font-bold text-sm tracking-wide">Learn faster with Arya AI</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="enroll-modal" class="hidden absolute inset-0 bg-slate-900/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center scale-in shadow-2xl border border-white/20">
+            <div class="w-14 h-14 bg-blue-50 text-brand-blue rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <i class="fas fa-bookmark text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-extrabold text-slate-900 mb-2" id="modal-title">Save Your Progress</h3>
+            <p class="text-sm text-slate-500 mb-8 leading-relaxed" id="modal-desc">Create a free account to save this plan and track your quiz scores.</p>
+            <div class="mb-4">
+                <input type="email" placeholder="work@email.com" class="w-full px-5 py-3.5 rounded-xl border border-slate-200 text-sm focus:border-brand-blue focus:ring-2 focus:ring-blue-100 outline-none bg-slate-50 transition">
+            </div>
+            <button onclick="alert('Success! Content sent to email.'); toggleModal(false);" class="w-full bg-brand-blue hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-500/20 mb-4" id="modal-btn">
+                Create Free Account
+            </button>
+            <button onclick="toggleModal(false)" class="text-xs text-slate-400 font-bold hover:text-slate-600 transition">No thanks, continue as guest</button>
+        </div>
+    </div>
+
+    <script>
+        const dom = {
+            arya: document.getElementById('arya-interface'),
+            pages: { 
+                category: document.getElementById('page-category'), 
+                program: document.getElementById('page-program'), 
+                course: document.getElementById('page-course'), 
+                article: document.getElementById('page-article') 
+            },
+            chatHistory: document.getElementById('chat-history'),
+            artifactContainer: document.getElementById('artifact-container'),
+            sourceSelect: document.getElementById('source-select'),
+            userInput: document.getElementById('user-input'),
+            typingIndicator: document.getElementById('typing-indicator'),
+            modal: document.getElementById('enroll-modal'),
+            canvasContainer: document.getElementById('canvas-container'),
+            canvasToggle: document.getElementById('canvas-toggle-icon'),
+            canvasContent: document.getElementById('canvas-content-wrapper'),
+            canvasCollapsed: document.getElementById('canvas-collapsed-view'),
+            mobileTabs: { chat: document.getElementById('mobile-tab-chat'), canvas: document.getElementById('mobile-tab-canvas') },
+            introOverlay: document.getElementById('arya-intro-overlay') // NEW
+        };
+        
+        // --- KEYBOARD LISTENER ---
+        if (dom.userInput) {
+            dom.userInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleInput();
+                }
+            });
+        }
+
+        // Data Mappings
+        const topicMapping = { 
+            "Generative AI": "Generative AI", 
+            "Data Science": "Data Science", 
+            "Project Management": "Project Management", 
+            "Python for Data Science": "Data Science",
+            "Generative AI for Beginners": "Generative AI",
+            "Agile Scrum Master": "Project Management", 
+            "PGP in Data Science": "Data Science", 
+            "AI Engineer Master": "Generative AI", 
+            "Future of AI Jobs": "Generative AI", 
+            "Top 10 Interview Qs": "Data Science" 
+        };
+
+        // CONTENT DATABASE (Expert Tone Updates)
+        const contentDatabase = {
+            "Generative AI": {
+                summary: {
+                    title: "Executive Synthesis: Generative AI",
+                    highlights: ["Market Valuation: Projected $1.3T by 2032 (Bloomberg Intelligence)", "Adoption Metric: >60% adoption in Fortune 500 for process automation", "Core Application: High impact in Content Generation, Coding Assistants, and Customer Ops"],
+                    trends: ["Multimodal Architecture (Text-to-Video/Image)", "Small Language Models (SLMs) for Edge Computing", "Autonomous AI Agents in Enterprise"],
+                    takeaway: "The domain is transitioning from experimental pilots to production-grade deployment. Proficiency in Prompt Engineering and RAG pipelines is now a baseline requirement."
+                },
+                flashcards: [{ title: "Hallucination", icon: "fas fa-eye-slash", text: "A phenomenon where an LLM generates plausible but factually incorrect information due to probabilistic token prediction." }, { title: "Tokenization", icon: "fas fa-coins", text: "The process of converting text into numerical tokens (sub-words) for model processing." }, { title: "Few-Shot Prompting", icon: "fas fa-list-ol", text: "In-context learning technique providing specific examples to guide model output without parameter updates." }, { title: "Temperature", icon: "fas fa-thermometer-half", text: "Hyperparameter controlling the stochasticity of predictions; higher values yield more creative/random outputs." }],
+                quiz: [{ q: "Define 'Token' in the context of LLMs:", options: ["A crypto asset", "The fundamental unit of text processing", "An API authentication key"], ans: 1, why: "LLMs process text in chunks called tokens, typically representing ~4 characters of English text." }, { q: "Impact of increasing 'Temperature':", options: ["Higher determinism", "Increased creativity/randomness", "Faster inference latency"], ans: 1, why: "Higher temperature flattens the probability distribution, making lower-probability tokens more likely." }, { q: "What does RAG stand for?", options: ["Retrieval-Augmented Generation", "Random AI Generator", "Recursive Algorithm Graph"], ans: 0, why: "RAG optimizes output by referencing an authoritative knowledge base outside its training data." }],
+                career: { 
+                    role: "AI Prompt Engineer", salaryNon: "$95,000", salaryCert: "$130,000", 
+                    interview: ["Explain the Chain-of-Thought (CoT) prompting technique.", "Strategies to mitigate LLM hallucinations in production?", "Comparative analysis of GPT-4 vs. Claude 3 architecture?"],
+                    ladder: [ { level: "Associate", role: "Jr. AI Engineer", exp: "0-2 Yrs", pay: "$85k" }, { level: "Senior", role: "AI Systems Architect", exp: "3-5 Yrs", pay: "$145k" }, { level: "Principal", role: "Head of AI Product", exp: "6+ Yrs", pay: "$190k" } ]
+                },
+                syllabus: [{ title: "Week 1: Transformer Architecture", desc: "Attention mechanisms, embeddings, and tokenization deep dive." }, { title: "Week 2: Advanced Prompting", desc: "Zero-shot, Few-shot, and Chain-of-Thought methodologies." }, { title: "Week 3: API Integration", desc: "Building scalable apps with OpenAI API and LangChain." }, { title: "Week 4: Deployment & Ethics", desc: "Model fine-tuning concepts and responsible AI frameworks." }],
+                courses: { free: { title: "GenAI Fundamentals", duration: "2 Hours" }, paid: { title: "PGP in Generative AI", duration: "4 Months" } }
+            },
+            "Data Science": {
+                summary: {
+                    title: "Executive Synthesis: Data Science",
+                    highlights: ["Industry Ranking: #1 Emerging Job (LinkedIn Report)", "Tech Stack: Python retains 90% dominance in production pipelines", "Paradigm Shift: Rapid adoption of Automated ML (AutoML) tools"],
+                    trends: ["Privacy-Preserving Machine Learning", "Real-time Streaming Analytics", "Graph Neural Networks (GNNs)"],
+                    takeaway: "Data literacy has evolved into a core business competency. The industry focus is shifting from model development to MLOps and scalable deployment."
+                },
+                flashcards: [{ title: "Overfitting", icon: "fas fa-chart-line", text: "Modeling error where a function fits training data too closely, capturing noise rather than the underlying pattern." }, { title: "Pandas", icon: "fas fa-table", text: "Foundational Python library for high-performance data manipulation and analysis structures." }, { title: "Regression Analysis", icon: "fas fa-ruler-combined", text: "Statistical method for estimating relationships among variables." }, { title: "Imputation", icon: "fas fa-eraser", text: "The technique of replacing missing data with substituted values to retain dataset integrity." }],
+                quiz: [{ q: "Primary library for data visualization?", options: ["NumPy", "Matplotlib", "Requests"], ans: 1, why: "Matplotlib is the industry-standard plotting library for Python." }, { q: "Supervised Learning requires:", options: ["Labeled dataset", "Unstructured data", "No input data"], ans: 0, why: "Supervised algorithms learn to map inputs to outputs based on example input-output pairs." }, { q: "Best approach for missing data?", options: ["Imputation", "Deletion", "Context-dependent"], ans: 2, why: "While imputation is common, the strategy depends entirely on the nature of the missingness (MCAR/MAR)." }],
+                career: { 
+                    role: "Data Scientist", salaryNon: "$90,000", salaryCert: "$135,000", 
+                    interview: ["Derive the Central Limit Theorem.", "Contrast Bagging vs. Boosting ensemble methods.", "Techniques for handling imbalanced datasets?"],
+                    ladder: [ { level: "Analyst", role: "Data Analyst", exp: "0-2 Yrs", pay: "$75k" }, { level: "Specialist", role: "Data Scientist", exp: "2-5 Yrs", pay: "$125k" }, { level: "Lead", role: "Principal Data Scientist", exp: "6+ Yrs", pay: "$170k" } ]
+                },
+                syllabus: [{ title: "Week 1: Python for Data Science", desc: "Data structures, algorithms, and performance optimization." }, { title: "Week 2: Exploratory Data Analysis", desc: "Advanced visualization and statistical inference." }, { title: "Week 3: Statistical Methods", desc: "Hypothesis testing, probability distributions, and A/B testing." }, { title: "Week 4: Machine Learning", desc: "Supervised/Unsupervised algorithms and Scikit-Learn." }],
+                courses: { free: { title: "Python for Data Science", duration: "6 Hours" }, paid: { title: "PGP in Data Science", duration: "11 Months" } }
+            },
+            "Project Management": {
+                summary: {
+                    title: "Executive Synthesis: Project Management",
+                    highlights: ["Certification Impact: PMP holders earn 32% higher median salaries", "Methodology: Hybrid (Agile + Waterfall) is the dominant industry standard", "Skill Shift: Leadership and Strategic Business Mgmt now outweigh technical tools"],
+                    trends: ["AI-Driven Project Analytics", "Remote Team Orchestration", "Sustainability Integration"],
+                    takeaway: "The role is pivoting from 'Taskmaster' to 'Value Deliverer'. Strategic alignment and stakeholder management are paramount."
+                },
+                flashcards: [{ title: "Agile", icon: "fas fa-sync-alt", text: "Iterative approach focusing on continuous releases and customer feedback." }, { title: "Scrum", icon: "fas fa-users", text: "A heuristic framework for managing complex work, utilizing sprints and specific roles." }, { title: "Stakeholder Analysis", icon: "fas fa-handshake", text: "Process of identifying people affected by the project and prioritizing their requirements." }, { title: "Kanban", icon: "fas fa-columns", text: "Visual workflow management method to define, manage, and improve services." }],
+                quiz: [{ q: "Typical Sprint duration?", options: ["1-4 Weeks", "3 Months", "Variable"], ans: 0, why: "Sprints are time-boxed iterations, typically lasting 2 weeks to ensuring feedback loops." }, { q: "Who owns the Product Backlog?", options: ["Scrum Master", "Product Owner", "Dev Team"], ans: 1, why: "The Product Owner is the single source of truth for value prioritization." }, { q: "Daily Stand-up timebox?", options: ["1 Hour", "15 Minutes", "Unlimited"], ans: 1, why: "Daily Scrums are strictly time-boxed to maintain focus and efficiency." }],
+                career: { 
+                    role: "Scrum Master", salaryNon: "$80,000", salaryCert: "$120,000", 
+                    interview: ["Strategies for managing scope creep?", "Walk through the Scrum ceremonies.", "Waterfall vs Agile: When to use which?"],
+                    ladder: [ { level: "Entry", role: "Project Coordinator", exp: "0-2 Yrs", pay: "$70k" }, { level: "Mid", role: "Scrum Master", exp: "3-5 Yrs", pay: "$115k" }, { level: "Senior", role: "Program Director", exp: "6+ Yrs", pay: "$155k" } ]
+                },
+                syllabus: [{ title: "Week 1: PM Fundamentals", desc: "Project Lifecycle, Triple Constraint, and Initiating." }, { title: "Week 2: Agile Mindset", desc: "Manifesto, Principles, and servant leadership." }, { title: "Week 3: Scrum Framework", desc: "Events, Artifacts, Roles, and Rules." }, { title: "Week 4: Tools & Metrics", desc: "JIRA workflows, Velocity, and Burndown charts." }],
+                courses: { free: { title: "Intro to PM", duration: "3 Hours" }, paid: { title: "PMP Certification", duration: "6 Months" } }
+            }
+        };
+
+        let currentTopic = "Generative AI"; 
+        let currentFlashcard = 0; 
+        let quizState = { current: 0, score: 0 }; 
+        let isCanvasCollapsed = false;
+
+        const defaultContent = contentDatabase["Generative AI"];
+        const sourceContexts = { 
+            "category": { prompts: ["Synthesize Key Concepts", "Quiz My Proficiency", "Analyze Career Path", "Draft Study Roadmap"] }, 
+            "course": { prompts: ["Analyze Syllabus", "Check Prerequisites", "Project Scope Details", "Enrollment Options"] }, 
+            "program": { prompts: ["Placement Analytics", "Salary ROI Data", "Job Guarantee Details", "Download Brochure"] }, 
+            "article": { prompts: ["Executive Summary", "Key Takeaways", "Quiz on Trends", "Related Courses"] } 
+        };
+
+        function hideAllPages() {
+            Object.values(dom.pages).forEach(p => {
+                if (p) p.style.display = 'none';
+            });
+        }
+
+        // --- UPDATED SCENARIO RUNNER LOGIC ---
+        function runScenario(flow) {
+            if (dom.arya) dom.arya.classList.add('hidden'); 
+            hideAllPages();
+            
+            // Hide intro overlay by default for non-direct flows
+            if(dom.introOverlay) dom.introOverlay.classList.add('hidden');
+
+            // Clear any existing carousel interval
+            if (window.carouselInterval) {
+                clearInterval(window.carouselInterval);
+                window.carouselInterval = null;
+            }
+
+            if (flow === 'direct') { 
+                if (dom.arya) dom.arya.classList.remove('hidden'); 
+                if (dom.sourceSelect) dom.sourceSelect.value = ""; 
+                
+                // Show Intro Overlay
+                if(dom.introOverlay) {
+                    dom.introOverlay.classList.remove('hidden');
+                    dom.introOverlay.classList.add('flex');
+                    startCarousel(); // Start the carousel animation
+                }
+            }
+        }
+        
+        // --- NEW FUNCTION: TRANSITION FROM INTRO TO CHAT ---
+        function startAryaExperience() {
+            if(dom.introOverlay) {
+                // Clear interval
+                if (window.carouselInterval) {
+                    clearInterval(window.carouselInterval);
+                    window.carouselInterval = null;
+                }
+                
+                // Fade out effect
+                dom.introOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    dom.introOverlay.classList.add('hidden');
+                    dom.introOverlay.classList.remove('flex');
+                    dom.introOverlay.style.opacity = '1'; // Reset for next time
+                    resetArya("cold"); 
+                }, 500); // Match transition duration
+            } else {
+                resetArya("cold");
+            }
+        }
+        
+        // --- CAROUSEL LOGIC ---
+        let currentCarouselIndex = 0;
+        function startCarousel() {
+            const items = document.querySelectorAll('.intro-carousel-item');
+            if (items.length === 0) return;
+            
+            // Reset state
+            currentCarouselIndex = 0;
+            updateCarousel(items);
+
+            window.carouselInterval = setInterval(() => {
+                currentCarouselIndex = (currentCarouselIndex + 1) % items.length;
+                updateCarousel(items);
+            }, 3000);
+        }
+
+        function updateCarousel(items) {
+            items.forEach((item, index) => {
+                if (index === currentCarouselIndex) {
+                    item.classList.remove('opacity-0', 'scale-95', 'z-10');
+                    item.classList.add('opacity-100', 'scale-100', 'z-20');
+                } else {
+                    item.classList.remove('opacity-100', 'scale-100', 'z-20');
+                    item.classList.add('opacity-0', 'scale-95', 'z-10');
+                }
+            });
+        }
+
+        function simulatePage(pageType) { 
+            if (dom.arya) dom.arya.classList.add('hidden'); 
+            hideAllPages(); 
+            if (dom.pages[pageType]) dom.pages[pageType].style.display = 'block'; 
+        }
+
+        function backToHome() { 
+            if (dom.arya) dom.arya.classList.remove('hidden'); 
+            hideAllPages(); 
+        }
+        
+        function activateArya(sourceType, topic, intent = null) {
+            hideAllPages(); 
+            if (dom.arya) dom.arya.classList.remove('hidden');
+            let contextValue = `${sourceType}:${topic}`;
+            if(sourceType === 'program') contextValue = 'program:PGP in Data Science'; else if(sourceType === 'category') contextValue = 'category:Generative AI'; else if(sourceType === 'course') contextValue = 'course:Generative AI for Beginners'; else if(sourceType === 'article') contextValue = 'article:Future of AI Jobs';
+            if (dom.sourceSelect) dom.sourceSelect.value = contextValue; 
+            resetArya(sourceType, topic, intent);
+        }
+        
+        function manualContextChange(value) { if(!value) return; const parts = value.split(':'); resetArya(parts[0], parts[1]); }
+
+        function getChatSummaryHTML(topic) {
+            const data = contentDatabase[topic] || contentDatabase["Generative AI"];
+            const s = data.summary;
+            return `<div class="flex flex-col gap-3 text-sm"><strong class="text-slate-900 text-base block border-b border-slate-100 pb-2 mb-1">${s.title}</strong><p class="text-slate-700 mb-2 leading-relaxed">${s.takeaway}</p><strong class="text-slate-800 text-xs uppercase tracking-wider font-bold mt-1 text-brand-blue">Key Highlights</strong><ul class="list-disc pl-4 space-y-1.5 text-slate-600 mb-3">${s.highlights.map(h => `<li>${h}</li>`).join('')}</ul><strong class="text-slate-800 text-xs uppercase tracking-wider font-bold mt-1 text-brand-accent">Emerging Trends</strong><ul class="list-disc pl-4 space-y-1.5 text-slate-600">${s.trends.map(t => `<li>${t}</li>`).join('')}</ul></div>`;
+        }
+
+        function resetArya(mode, topic = "", intent = null) {
+            if (dom.chatHistory) dom.chatHistory.innerHTML = ""; 
+            if (dom.artifactContainer) dom.artifactContainer.innerHTML = ""; 
+            if (document.getElementById('canvas-empty')) document.getElementById('canvas-empty').classList.remove('hidden');
+            if(topic) currentTopic = topicMapping[topic] || topic;
+            
+            const artifactsIntents = ['quiz', 'career', 'prereq', 'syllabus', 'eligibility', 'roi', 'brochure', 'match'];
+            const shouldBeExpanded = intent && artifactsIntents.includes(intent);
+
+            if (shouldBeExpanded) {
+                if (isCanvasCollapsed) toggleCanvas();
+            } else {
+                if (!isCanvasCollapsed) toggleCanvas();
+            }
+
+            let msg = ""; let chips = [];
+            
+            if (intent === 'quiz') {
+                msg = `I've initialized the **Competency Assessment** module for **${topic}**. Please proceed to the Canvas to benchmark your skills.`;
+                setTimeout(() => showArtifact('quiz'), 600);
+            } else if (intent === 'summary') {
+                 msg = getChatSummaryHTML(currentTopic);
+            } else if (intent === 'career') {
+                msg = `Retrieving verified market data for **${topic}**. I've populated the canvas with career ladders and salary insights.`;
+                setTimeout(() => showArtifact('career'), 600);
+            } else if (intent === 'prereq') { 
+                msg = `Let's evaluate your profile against the **${topic}** prerequisites. I've loaded the checklist.`;
+                setTimeout(() => showArtifact('quiz'), 600); 
+            } else if (intent === 'syllabus') { 
+                msg = `I've architected a 4-week structured learning path for **${topic}**. You can review the modules in the Canvas.`;
+                setTimeout(() => showArtifact('study'), 600);
+            } else if (intent === 'eligibility') { 
+                msg = `Initiating eligibility verification for **${topic}**. Please answer the preliminary questions.`;
+                setTimeout(() => showArtifact('quiz'), 600);
+            } else if (intent === 'roi') { 
+                msg = `Based on 2025 placement data, **${topic}** certification yields a 55% average salary increment. Detailed breakdown is on the canvas.`;
+                setTimeout(() => showArtifact('career'), 600);
+            } else if (intent === 'brochure') { 
+                msg = `I've extracted the comprehensive curriculum for **${topic}**. Review the module breakdown on the left.`;
+                setTimeout(() => showArtifact('study'), 600);
+            } else if (intent === 'match') { 
+                msg = `Analyzing your profile... I can recommend the optimal learning path. Let's start by defining your current role.`;
+                setTimeout(() => showArtifact('learning'), 600);
+            } else {
+                if (mode === "cold") { msg = "Greetings. I am Arya, trained on Simplilearn's expert curriculum. **How can I accelerate your career architecture today?**"; chips = ["Generative AI", "Data Science", "Project Management"]; } 
+                else if (mode === "category") { msg = `You are exploring the **${topic}** domain. I can provide expert career mapping or curriculum analysis.`; } 
+                else if (mode === "program") { msg = `Reviewing **${topic}** details. Would you like a deep dive into placement statistics or eligibility?`; } 
+                else if (mode === "course") { msg = `The **${topic}** course is highly rated. Shall I analyze the prerequisites for you?`; } 
+                else if (mode === "article") { msg = `Analyzing **"${topic}"**. I can extract an executive summary or benchmark your skills against these trends.`; }
+            }
+            
+            if (mode !== "cold" && !intent) { const context = sourceContexts[mode] || sourceContexts["category"]; chips = context.prompts.map(p => p.replace("{topic}", topic)); }
+            
+            appendBotMessage(msg); if(chips.length) appendChips(chips);
+        }
+
+        function getContent() { return contentDatabase[currentTopic] || defaultContent; }
+
+        function toggleModal(show, context = 'generic') {
+            if (show) {
+                const title = document.getElementById('modal-title');
+                const desc = document.getElementById('modal-desc');
+                const btn = document.getElementById('modal-btn');
+                
+                if (title && desc && btn) {
+                    if (context === 'flashcards') { title.innerText = "Expert Deck Access"; desc.innerText = "Enter your email to secure this expert flashcard deck."; btn.innerText = "Download Resources"; } 
+                    else if (context === 'interview') { title.innerText = "Get Interview Guide"; desc.innerText = `Unlock top 50 ${currentTopic} interview questions curated by hiring managers.`; btn.innerText = "Get the Guide"; } 
+                    else if (context === 'syllabus') { title.innerText = "Full Curriculum Access"; desc.innerText = "Get the detailed week-by-week expert learning plan."; btn.innerText = "Download Plan"; } 
+                    else if (context === 'quiz_save') { title.innerText = "Save Performance Data"; desc.innerText = `Excellent work! Save your score of ${quizState.score}/3 to your professional profile.`; btn.innerText = "Save Score"; }
+                    else { title.innerText = "Save Your Progress"; desc.innerText = "Create a free account to save this roadmap."; btn.innerText = "Create Free Account"; }
+                }
+                
+                if (dom.modal) dom.modal.classList.remove('hidden');
+            } else { if (dom.modal) dom.modal.classList.add('hidden'); }
+        }
+
+        function renderCareer(data) {
+            const c = data.career;
+            return `
+            <div class="space-y-6 fade-in">
+                <div class="content-card rounded-2xl p-8 bg-white border-l-4 border-l-brand-blue">
+                    <h3 class="font-bold text-xl mb-8 text-slate-800">Expert Career Path: ${currentTopic}</h3>
+                    <div class="relative flex justify-between items-start text-center">
+                        <div class="absolute top-5 left-0 right-0 h-1.5 bg-slate-100 -z-10 rounded-full"></div>
+                        ${c.ladder.map((step, i) => `
+                            <div class="flex flex-col items-center gap-3 group relative">
+                                <div class="w-10 h-10 rounded-full ${i===1 ? 'bg-brand-blue text-white ring-8 ring-blue-50' : 'bg-slate-800 text-white'} flex items-center justify-center text-sm font-bold border-4 border-white shadow-md z-10 transition-transform hover:scale-110">${i+1}</div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-soft mt-2 min-w-[110px] md:min-w-[130px] hover:border-brand-blue/30 transition">
+                                    <p class="text-sm font-bold text-slate-800">${step.role}</p>
+                                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wide mt-1">${step.exp}</p>
+                                    <p class="text-xs font-bold text-green-600 mt-1">${step.pay}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="content-card p-6 rounded-2xl bg-white"><h3 class="font-bold text-base text-slate-800 mb-4">Compensation Analysis</h3><div class="space-y-6"><div><div class="flex justify-between text-xs mb-2 font-medium"><span class="text-slate-500">Base Professional</span><span class="font-bold text-slate-700">${c.salaryNon}</span></div><div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div class="bg-slate-400 h-full rounded-full" style="width: 60%"></div></div></div><div><div class="flex justify-between text-xs mb-2 font-medium"><span class="font-bold text-brand-blue">Certified Specialist</span><span class="font-bold text-brand-blue">${c.salaryCert}</span></div><div class="w-full bg-blue-50 rounded-full h-2.5 overflow-hidden"><div class="bg-brand-blue h-full rounded-full shadow-[0_0_10px_rgba(0,86,210,0.5)]" style="width: 85%"></div></div></div></div></div>
+                    <div class="content-card p-6 rounded-2xl bg-white"><h3 class="font-bold text-base text-slate-800 mb-4">Technical Interview Prep</h3><ul class="space-y-3">${c.interview.map(q => `<li class="text-xs text-slate-600 border-b border-slate-50 pb-3 flex gap-3"><i class="fas fa-question-circle text-brand-accent mt-0.5"></i> <strong class="block text-slate-700">${q}</strong></li>`).join('')}</ul><button onclick="toggleModal(true, 'interview')" class="mt-4 w-full py-2.5 rounded-lg border border-brand-blue text-brand-blue text-xs font-bold hover:bg-blue-50 transition">Access Full Question Bank</button></div>
+                </div>
+                <h3 class="font-bold text-lg mt-8 mb-2 text-slate-900">Recommended Certification Paths</h3>
+                ${renderCoursesHTML(data)}
+            </div>`;
+        }
+
+        function renderLearning(data) {
+            return `
+            <div id="artifact-learning" class="content-card rounded-2xl overflow-hidden bg-white fade-in border-0 shadow-lg">
+                <div class="flex justify-between items-center p-6 pb-4 bg-slate-50 border-b border-slate-100">
+                    <div><span class="text-[10px] text-brand-accent font-extrabold uppercase tracking-widest">Expert Insight</span><h2 class="text-2xl font-bold text-slate-900 mt-1">${currentTopic}</h2></div>
+                    <button onclick="toggleModal(true, 'flashcards')" class="text-xs font-bold text-brand-blue bg-white border border-blue-100 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition"><i class="fas fa-download mr-1"></i> Save Deck</button>
+                </div>
+                <div class="px-6 pt-2 bg-slate-50 border-b border-slate-200 flex gap-6 text-sm font-medium"><button onclick="switchTab('flash')" id="tab-flash" class="tab-btn active">Key Concepts</button><button onclick="switchTab('video')" id="tab-video" class="tab-btn">Video Overview</button></div>
+                <div id="content-flash" class="p-8"><div id="flashcard-display" class="min-h-[14rem] flex flex-col items-center justify-center text-center p-8 bg-white rounded-2xl border border-slate-100 shadow-soft hover:shadow-lg transition-shadow duration-300"></div><div class="flex justify-center items-center gap-6 mt-8"><button onclick="prevFlashcard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue transition flex items-center justify-center shadow-sm"><i class="fas fa-chevron-left"></i></button><span class="text-xs font-bold text-slate-400 uppercase tracking-widest" id="flashcard-counter">1/4</span><button onclick="nextFlashcard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue transition flex items-center justify-center shadow-sm"><i class="fas fa-chevron-right"></i></button></div></div>
+                <div id="content-video" class="hidden p-8"><div class="aspect-video bg-slate-900 rounded-2xl flex items-center justify-center text-white relative group cursor-pointer shadow-2xl overflow-hidden"><div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-brand-blue/10 transition"></div><div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:scale-110 transition border border-white/30"><i class="fas fa-play text-2xl pl-1"></i></div><p class="absolute bottom-6 text-sm font-bold tracking-wide">Expert Module: Intro to ${currentTopic}</p></div></div>
+            </div>`;
+        }
+        
+        function renderStudy(data) {
+            return `
+            <div class="content-card p-10 rounded-2xl bg-white fade-in text-center border-t-4 border-t-brand-blue">
+                <div class="w-16 h-16 bg-blue-50 text-brand-blue rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner"><i class="fas fa-graduation-cap text-3xl"></i></div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-8">4-Week Expert Roadmap: ${currentTopic}</h2>
+                <div class="text-left space-y-0 pl-6 border-l-2 border-slate-100 ml-6 mb-10">
+                    ${data.syllabus.map((w,i) => `<div class="${i<3?'pb-8':''} relative group"><span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-300 group-hover:border-brand-blue transition"></span><h4 class="text-base font-bold text-slate-800 group-hover:text-brand-blue transition">${w.title}</h4><p class="text-xs text-slate-500 mt-2 leading-relaxed">${w.desc}</p></div>`).join('')}
+                </div>
+                <button onclick="toggleModal(true, 'syllabus')" class="bg-brand-dark text-white px-8 py-3 rounded-xl text-xs font-bold w-full hover:bg-black transition shadow-lg">Download Full Syllabus</button>
+            </div>
+            <h3 class="font-bold text-lg mt-8 mb-4 text-slate-900">Recommended Certification Paths</h3>
+            <div class="mt-2">${renderCoursesHTML(data)}</div>`;
+        }
+
+        // --- Render Helpers ---
+        function renderFlashcard() { 
+            const d = getContent(); const c = d.flashcards[currentFlashcard]; 
+            const el = document.getElementById('flashcard-display');
+            const cnt = document.getElementById('flashcard-counter');
+            if (el) el.innerHTML = `<div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-brand-blue text-2xl mb-6 shadow-sm"><i class="${c.icon}"></i></div><h3 class="font-bold text-xl text-slate-900 mb-3">${c.title}</h3><p class="text-sm text-slate-600 leading-relaxed max-w-sm">${c.text}</p>`; 
+            if (cnt) cnt.innerText = `${currentFlashcard + 1} / ${d.flashcards.length}`; 
+        }
+        function nextFlashcard() { const d = getContent(); currentFlashcard = (currentFlashcard + 1) % d.flashcards.length; renderFlashcard(); }
+        function prevFlashcard() { const d = getContent(); currentFlashcard = (currentFlashcard - 1 + d.flashcards.length) % d.flashcards.length; renderFlashcard(); }
+        
+        function renderQuizFrame(data) { return `<div class="content-card rounded-2xl bg-white p-8 fade-in"><div class="flex justify-between items-center mb-8 pb-6 border-b border-slate-100"><div><span class="text-[10px] font-extrabold text-brand-accent bg-orange-50 px-3 py-1 rounded-full uppercase tracking-widest">Skill Check</span><h2 class="text-xl font-bold text-slate-900 mt-2">Question <span id="quiz-current">1</span> <span class="text-slate-400 font-normal">/ 3</span></h2></div></div><div id="quiz-container"><p id="quiz-question" class="text-lg font-bold text-slate-800 mb-8 leading-snug"></p><div id="quiz-options" class="space-y-3"></div><div id="quiz-feedback" class="hidden mt-6 p-5 bg-slate-50 border border-slate-200 rounded-2xl"><p id="feedback-title" class="font-bold text-sm mb-2"></p><p id="feedback-text" class="text-xs text-slate-600 leading-relaxed"></p></div></div><div class="flex justify-end mt-8 pt-6 border-t border-slate-100"><button onclick="nextQuestion()" id="btn-next" class="px-6 py-2.5 rounded-lg bg-slate-900 text-white text-xs font-bold opacity-50 cursor-not-allowed transition hover:shadow-lg" disabled>Next Question <i class="fas fa-arrow-right ml-2"></i></button></div></div>`; }
+        function startQuiz() { quizState = { current: 0, score: 0 }; renderQuestion(); }
+        function renderQuestion() { 
+            const d = getContent(); const q = d.quiz[quizState.current]; 
+            const qCur = document.getElementById('quiz-current');
+            const qTxt = document.getElementById('quiz-question');
+            const qFb = document.getElementById('quiz-feedback');
+            const btn = document.getElementById('btn-next');
+            const optDiv = document.getElementById('quiz-options');
+
+            if (qCur) qCur.innerText = quizState.current + 1; 
+            if (qTxt) qTxt.innerText = q.q; 
+            if (qFb) qFb.classList.add('hidden'); 
+            
+            if (btn) {
+                btn.disabled = true; 
+                btn.classList.add('opacity-50', 'cursor-not-allowed'); 
+                btn.innerText = "Next Question"; 
+            }
+            
+            if (optDiv) {
+                optDiv.innerHTML = ''; 
+                q.options.forEach((opt, idx) => { 
+                    const b = document.createElement('button'); 
+                    b.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-brand-blue hover:bg-blue-50 transition flex items-center group option-btn relative overflow-hidden"; 
+                    b.onclick = () => checkAnswer(b, idx, q.ans, q.why); 
+                    b.innerHTML = `<div class="w-6 h-6 rounded-full border-2 border-slate-300 mr-3 flex items-center justify-center group-hover:border-brand-blue text-[10px] text-transparent"><i class="fas fa-check"></i></div><span class="text-sm font-semibold text-slate-700 group-hover:text-brand-blue">${opt}</span>`; 
+                    optDiv.appendChild(b); 
+                }); 
+            }
+        }
+        function checkAnswer(btn, selected, correct, rationale) { 
+            document.querySelectorAll('.option-btn').forEach(b => b.disabled = true); 
+            const isCorrect = selected === correct; 
+            if(isCorrect) quizState.score++; 
+            btn.classList.remove('bg-white', 'border-slate-200', 'hover:border-brand-blue', 'hover:bg-blue-50'); 
+            btn.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50', isCorrect ? 'border-green-400' : 'border-red-300'); 
+            btn.querySelector('div').classList.remove('border-slate-300', 'text-transparent');
+            btn.querySelector('div').classList.add(isCorrect ? 'border-green-500' : 'border-red-500', isCorrect ? 'bg-green-500' : 'bg-red-500', 'text-white');
+            
+            const fb = document.getElementById('quiz-feedback'); 
+            if (fb) fb.classList.remove('hidden'); 
+            
+            const fbTitle = document.getElementById('feedback-title');
+            if (fbTitle) {
+                fbTitle.innerText = isCorrect ? "Excellent! That is correct." : "Not quite."; 
+                fbTitle.className = isCorrect ? "font-bold text-sm mb-2 text-green-700" : "font-bold text-sm mb-2 text-red-700";
+            }
+            
+            const fbText = document.getElementById('feedback-text');
+            if (fbText) fbText.innerText = rationale; 
+            
+            const n = document.getElementById('btn-next'); 
+            if (n) {
+                n.disabled = false; 
+                n.classList.remove('opacity-50', 'cursor-not-allowed'); 
+                if(quizState.current === 2) n.innerText = "View Analysis"; 
+            }
+        }
+        function nextQuestion() { quizState.current++; if(quizState.current < 3) renderQuestion(); else showArtifact('enroll'); }
+        
+        // --- Chat Interaction ---
+        function handleInput(textOverride) { 
+            if (!dom.userInput) return;
+            const val = textOverride || dom.userInput.value.trim(); 
+            if(!val) return; 
+            
+            appendUserMessage(val); 
+            dom.userInput.value = ""; 
+            
+            simulateTyping(() => {
+                const lower = val.toLowerCase(); 
+                
+                // NEW: Handle Context Switch
+                const domains = ["Generative AI", "Data Science", "Project Management"];
+                const domainMatch = domains.find(d => d.toLowerCase() === lower);
+                
+                if (domainMatch) {
+                    currentTopic = domainMatch;
+                    if (dom.sourceSelect) dom.sourceSelect.value = `category:${domainMatch}`; // Update Dropdown
+                    
+                    const contextData = sourceContexts["category"];
+                    const chips = contextData.prompts.map(p => p.replace("{topic}", domainMatch));
+                    
+                    const reply = `Context switched to **${domainMatch}**. I am ready to provide expert insights. [OPTIONS: ${chips.join(', ')}]`;
+                    processBotResponse(reply);
+                    return;
+                }
+
+                let reply = `I've analyzed your request regarding ${currentTopic}. [TRIGGER_LEARNING]`; 
+                
+                if(lower.includes('quiz')) reply = "Initiating competency benchmark protocol. [TRIGGER_QUIZ]"; 
+                else if(lower.includes('career') || lower.includes('salary') || lower.includes('job')) reply = `Retrieving 2025 market data for ${currentTopic}. [TRIGGER_CAREER]`; 
+                else if(lower.includes('study') || lower.includes('syllabus')) reply = "Architecting your personalized learning roadmap. [TRIGGER_STUDY_PLAN]";
+                else if(lower.includes('summar')) {
+                    reply = getChatSummaryHTML(currentTopic);
+                }
+                
+                processBotResponse(reply);
+            });
+        }
+
+        function simulateTyping(callback) {
+            if (dom.typingIndicator) dom.typingIndicator.classList.remove('hidden');
+            if (dom.chatHistory) dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight;
+            setTimeout(() => {
+                if (dom.typingIndicator) dom.typingIndicator.classList.add('hidden');
+                callback();
+            }, 1200);
+        }
+
+        function processBotResponse(text) { 
+            appendBotMessage(text.replace(/\[TRIGGER_\w+\]/g, "")); 
+            const optionMatch = text.match(/\[OPTIONS: (.*?)\]/);
+            if (optionMatch) appendChips(optionMatch[1].split(',').map(s => s.trim()));
+            
+            let triggerFound = false;
+            if(text.includes('TRIGGER_LEARNING')) { showArtifact('learning'); triggerFound = true; }
+            if(text.includes('TRIGGER_QUIZ')) { showArtifact('quiz'); triggerFound = true; }
+            if(text.includes('TRIGGER_CAREER')) { showArtifact('career'); triggerFound = true; }
+            if(text.includes('TRIGGER_STUDY_PLAN')) { showArtifact('study'); triggerFound = true; }
+            
+            // Auto-collapse if no artifact is triggered and canvas is currently expanded
+            if (!triggerFound && !isCanvasCollapsed) {
+                toggleCanvas();
+            }
+        }
+
+        function showArtifact(type) { 
+            if (isCanvasCollapsed) toggleCanvas();
+            
+            if (document.getElementById('canvas-empty')) document.getElementById('canvas-empty').classList.add('hidden'); 
+            const data = getContent(); 
+            
+            if (dom.artifactContainer) {
+                if(type === 'learning') { dom.artifactContainer.innerHTML = renderLearning(data); currentFlashcard = 0; renderFlashcard(); } 
+                else if(type === 'quiz') { dom.artifactContainer.innerHTML = renderQuizFrame(data); startQuiz(); } 
+                else if(type === 'career') dom.artifactContainer.innerHTML = renderCareer(data); 
+                else if(type === 'study') dom.artifactContainer.innerHTML = renderStudy(data); 
+                else if(type === 'enroll') {
+                    dom.artifactContainer.innerHTML = `
+                    <div class='p-8 bg-white rounded-2xl shadow-soft border border-green-100 fade-in text-center'>
+                        <div class="inline-block p-4 rounded-full bg-green-50 mb-6">
+                            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-4xl text-white font-extrabold shadow-lg shadow-green-200">${quizState.score}/3</div>
+                        </div>
+                        <h3 class="font-bold text-2xl text-slate-900 mb-2">Assessment Complete</h3>
+                        <p class='text-sm text-slate-500 mb-8 max-w-xs mx-auto'>You've demonstrated foundational competence in ${currentTopic}.</p>
+                        
+                        <button onclick="toggleModal(true, 'quiz_save')" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold mb-6 shadow-xl hover:bg-black transition transform hover:-translate-y-0.5">Save Results to Profile</button>
+                        
+                        <div class="text-left border-t border-slate-100 pt-6">
+                            <h4 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-4">Recommended Next Steps</h4>
+                            ${renderCoursesHTML(data)}
+                        </div>
+                    </div>`; 
+                }
+            }
+            
+            if(window.innerWidth < 768) switchMobileTab('canvas'); 
+        }
+        
+        function renderCoursesHTML(data) {
+            return `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="content-card rounded-xl p-5 border-l-4 border-l-skillup cursor-pointer hover:bg-slate-50 transition group" onclick="toggleModal(true)">
+                    <span class="text-[10px] font-bold text-skillup bg-green-50 px-2 py-0.5 rounded mb-2 inline-block">FREE ACCESS</span>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-brand-blue transition">${data.courses.free.title}</h4>
+                    <p class="text-xs text-slate-500 mt-1 mb-3">${data.courses.free.duration} • Self-Paced</p>
+                    <button class="w-full py-2 border border-slate-200 text-slate-600 text-xs font-bold rounded-lg group-hover:bg-white group-hover:border-slate-300">Start Free</button>
+                </div>
+                <div class="content-card rounded-xl p-5 border-l-4 border-l-brand-blue cursor-pointer hover:bg-slate-50 transition group" onclick="toggleModal(true)">
+                    <span class="text-[10px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded mb-2 inline-block">BOOTCAMP</span>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-brand-blue transition">${data.courses.paid.title}</h4>
+                    <p class="text-xs text-slate-500 mt-1 mb-3">${data.courses.paid.duration} • Live Classes</p>
+                    <button class="w-full py-2 bg-brand-blue text-white text-xs font-bold rounded-lg group-hover:bg-blue-700">View Program</button>
+                </div>
+            </div>`;
+        }
+
+        // --- Chat UI Helpers ---
+        function appendUserMessage(t) { 
+            if (!dom.chatHistory) return;
+            const d = document.createElement('div'); 
+            d.className = "flex gap-3 flex-row-reverse fade-in"; 
+            d.innerHTML = `<div class="bg-gradient-to-br from-brand-blue to-blue-600 text-white p-4 rounded-3xl rounded-tr-none text-sm shadow-md font-medium leading-relaxed max-w-[85%]">${t}</div>`; 
+            dom.chatHistory.appendChild(d); 
+            dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight; 
+        }
+        
+        function appendBotMessage(t) { 
+            if (!dom.chatHistory) return;
+            const d = document.createElement('div'); 
+            d.className = "flex gap-4 fade-in items-start"; 
+            d.innerHTML = `<div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xs font-bold shadow-md flex-shrink-0 mt-1">A</div><div class="bg-white border border-slate-100 p-4 rounded-2xl rounded-tl-none text-sm text-slate-600 shadow-sm leading-relaxed max-w-[90%]">${t}</div>`; 
+            dom.chatHistory.appendChild(d); 
+            dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight; 
+        }
+        
+        function appendChips(c) { 
+            if (!dom.chatHistory) return;
+            const d = document.createElement('div'); 
+            d.className = "flex flex-col items-start gap-2.5 mt-2 ml-12 fade-in w-full max-w-[calc(100%-3rem)]"; 
+            c.forEach(x => { 
+                d.innerHTML += `<button onclick="handleInput('${x}')" class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-brand-blue hover:bg-blue-50 hover:border-blue-200 hover:shadow-sm transition text-left w-fit flex items-center gap-2 group"><i class="fas fa-magic text-brand-accent opacity-50 group-hover:opacity-100 transition"></i> ${x}</button>`; 
+            }); 
+            dom.chatHistory.appendChild(d); 
+            dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight; 
+        }
+        
+        function switchTab(id) { 
+            document.querySelectorAll('#artifact-learning .tab-btn').forEach(b => b.classList.remove('active')); 
+            const tabBtn = document.getElementById('tab-'+id);
+            if (tabBtn) tabBtn.classList.add('active'); 
+            
+            const cf = document.getElementById('content-flash');
+            if (cf) cf.classList.add('hidden'); 
+            
+            const cv = document.getElementById('content-video');
+            if (cv) cv.classList.add('hidden'); 
+            
+            const ci = document.getElementById('content-'+id);
+            if (ci) ci.classList.remove('hidden'); 
+        }
+        
+        function switchMobileTab(t) { 
+            const c = document.getElementById('chat-container'); 
+            const v = document.getElementById('canvas-container'); 
+            
+            if (!c || !v || !dom.mobileTabs.chat || !dom.mobileTabs.canvas) return;
+
+            dom.mobileTabs.chat.classList.remove('active', 'text-brand-blue'); dom.mobileTabs.chat.classList.add('text-slate-400');
+            dom.mobileTabs.canvas.classList.remove('active', 'text-brand-blue'); dom.mobileTabs.canvas.classList.add('text-slate-400');
+            
+            if(t === 'chat') { 
+                c.classList.remove('translate-x-full'); v.classList.add('translate-x-full'); 
+                dom.mobileTabs.chat.classList.add('active', 'text-brand-blue');
+            } else { 
+                c.classList.add('translate-x-full'); v.classList.remove('translate-x-full'); 
+                dom.mobileTabs.canvas.classList.add('active', 'text-brand-blue');
+            } 
+        }
+        
+        function toggleCanvas() {
+            const c = dom.canvasContainer; const i = dom.canvasToggle;
+            if (!c || !i) return;
+
+            if(!isCanvasCollapsed) { 
+                c.classList.remove('md:w-[65%]', 'p-6', 'lg:p-10'); c.classList.add('md:w-20', 'cursor-pointer', 'bg-slate-50'); 
+                if (dom.canvasContent) dom.canvasContent.classList.add('hidden'); 
+                if (dom.canvasCollapsed) dom.canvasCollapsed.classList.remove('hidden');
+                i.className = "fas fa-expand-alt";
+                isCanvasCollapsed = true;
+            } else { 
+                c.classList.add('md:w-[65%]', 'p-6', 'lg:p-10'); c.classList.remove('md:w-20', 'cursor-pointer', 'bg-slate-50'); 
+                if (dom.canvasContent) dom.canvasContent.classList.remove('hidden'); 
+                if (dom.canvasCollapsed) dom.canvasCollapsed.classList.add('hidden');
+                i.className = "fas fa-compress-alt";
+                isCanvasCollapsed = false;
+            }
+        }
+
+        // --- SCROLL LISTENER (Article Floater) ---
+        const articlePage = document.getElementById('page-article');
+        const floater = document.getElementById('arya-floater');
+
+        if(articlePage && floater) {
+            articlePage.addEventListener('scroll', () => {
+                const scrollTop = articlePage.scrollTop;
+                const scrollHeight = articlePage.scrollHeight - articlePage.clientHeight;
+                const scrolled = (scrollTop / scrollHeight) * 100;
+                
+                if (scrolled > 50) {
+                     floater.classList.remove('hidden');
+                     floater.classList.add('flex', 'slide-up');
+                } else {
+                     floater.classList.add('hidden');
+                     floater.classList.remove('flex', 'slide-up');
+                }
+            });
+        }
+
+        // --- DRAGGABLE SCENARIO RUNNER ---
+        const runnerContainer = document.getElementById('scenario-runner-container');
+        if (runnerContainer) {
+            const runnerButton = runnerContainer.querySelector('button');
+            let isDragging = false;
+            let offset = { x: 0, y: 0 };
+
+            runnerButton.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                const rect = runnerContainer.getBoundingClientRect();
+                offset.x = e.clientX - rect.left;
+                offset.y = e.clientY - rect.top;
+                
+                runnerContainer.style.bottom = 'auto';
+                runnerContainer.style.right = 'auto';
+                
+                runnerButton.style.cursor = 'grabbing';
+                e.preventDefault(); 
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                let x = e.clientX - offset.x;
+                let y = e.clientY - offset.y;
+                
+                const maxX = window.innerWidth - runnerContainer.offsetWidth;
+                const maxY = window.innerHeight - runnerContainer.offsetHeight;
+                
+                x = Math.max(0, Math.min(x, maxX));
+                y = Math.max(0, Math.min(y, maxY));
+
+                runnerContainer.style.left = `${x}px`;
+                runnerContainer.style.top = `${y}px`;
+            });
+
+            document.addEventListener('mouseup', () => {
+                if(isDragging) {
+                    isDragging = false;
+                    runnerButton.style.cursor = 'move';
+                }
+            });
+        }
+
+        // Initialization
+        runScenario('direct');
+    </script>
+</body>
+</html>
