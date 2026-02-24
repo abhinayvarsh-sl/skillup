@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arya - AI Learning & Career Concierge | Simplilearn</title>
@@ -154,12 +155,13 @@
             gap: 12px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         @media (min-width: 640px) {
             .article-nudge { flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 20px; }
         }
         .article-nudge::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #0075eb; }
-        .article-nudge:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .article-nudge:hover { background: #f1f5f9; border-color: #cbd5e1; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.2s ease; }
         
         .article-content p { margin-bottom: 1.5rem; line-height: 1.8; color: #51565e; font-size: 1rem; }
         .article-content h2 { font-size: 1.5rem; font-weight: 700; color: #111827; margin-top: 2.5rem; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
@@ -172,6 +174,18 @@
             .hide-on-mobile { display: none !important; }
             .show-on-mobile { display: block !important; }
         }
+
+        /* Chat Markdown Styling */
+        .chat-bubble-content p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .chat-bubble-content p:last-child { margin-bottom: 0; }
+        .chat-bubble-content strong { color: #111827; font-weight: 700; }
+        .chat-bubble-content ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+        .chat-bubble-content li { margin-bottom: 0.375rem; }
+        .chat-bubble-content code { background-color: #f1f5f9; color: #db2777; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.85em; font-family: monospace; border: 1px solid #e2e8f0; }
+        .chat-bubble-content pre { background-color: #f8fafc; padding: 0.75rem; border-radius: 0.375rem; margin-bottom: 0.75rem; overflow-x: auto; border: 1px solid #e2e8f0; }
+        .chat-bubble-content pre code { background-color: transparent; color: #334155; border: none; padding: 0; font-size: 0.8em; }
+        .chat-bubble-content h3 { color: #111827; font-weight: 800; font-size: 1.1rem; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .chat-bubble-content h4 { color: #111827; font-weight: 700; font-size: 1rem; margin-top: 1rem; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body class="flex flex-col h-screen antialiased selection:bg-blue-100 selection:text-blue-900 overflow-hidden relative">
@@ -243,7 +257,6 @@
     </header>
 
     <!-- ARYA INTERFACE (Default View) -->
-    <!-- FIX: Removed h-full to allow absolute positioning top/bottom to govern height without overflowing -->
     <div id="arya-interface" class="flex flex-col w-full absolute top-16 lg:top-[72px] bottom-16 md:bottom-0 inset-x-0 z-10 bg-[#f8fafc] overflow-hidden">
         
         <!-- ARYA INTRO OVERLAY -->
@@ -299,24 +312,24 @@
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest text-center mb-4">Or start with a task</p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-                            <button onclick="startAryaExperience('Summarize a topic for me')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
+                            <button onclick="startAryaExperience('Teach me prompt engineering')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
                                 <img alt="" class="flex-shrink-0 w-5 h-5 opacity-70 group-hover:opacity-100 transition" src="https://chat.simplilearn.com/images/static-star-icon.svg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1828/1828884.png'">
-                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Summarize a complex topic for me</span>
+                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Teach me prompt engineering</span>
                             </button>
                             
-                            <button onclick="startAryaExperience('Help me with a project')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
+                            <button onclick="startAryaExperience('Help me revise supervised learning')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
                                 <img alt="" class="flex-shrink-0 w-5 h-5 opacity-70 group-hover:opacity-100 transition" src="https://chat.simplilearn.com/images/static-star-icon.svg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1828/1828884.png'">
-                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Help me with a hands-on project</span>
+                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Help me revise supervised learning</span>
                             </button>
                             
-                            <button onclick="startAryaExperience('Quiz me on a topic')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
+                            <button onclick="startAryaExperience('Quiz me on SQL Select statements')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
                                 <img alt="" class="flex-shrink-0 w-5 h-5 opacity-70 group-hover:opacity-100 transition" src="https://chat.simplilearn.com/images/static-star-icon.svg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1828/1828884.png'">
-                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Quiz me on my current skills</span>
+                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Quiz me on SQL Select statements</span>
                             </button>
                             
-                            <button onclick="startAryaExperience('Create a study plan for my certification')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
+                            <button onclick="startAryaExperience('Create a study plan to become a data scientist')" class="flex items-center gap-3 p-3 md:p-4 bg-white border border-[#B8D6FF] rounded-2xl hover:bg-gray-50 shadow-[2px_2px_2px_0px_rgba(41,45,50,0.05)] transition-colors group">
                                 <img alt="" class="flex-shrink-0 w-5 h-5 opacity-70 group-hover:opacity-100 transition" src="https://chat.simplilearn.com/images/static-star-icon.svg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1828/1828884.png'">
-                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Create a study plan for certification</span>
+                                <span class="text-sm font-medium text-[#313131] group-hover:text-brand-blue transition">Create a study plan to become a data scientist</span>
                             </button>
                         </div>
                     </div>
@@ -325,7 +338,6 @@
         </div>
 
         <!-- Main Workspace -->
-        <!-- FIX: Added min-h-0 to the flex container so flex children calculate height bounds correctly -->
         <div class="flex-1 flex overflow-hidden relative min-h-0">
             
             <!-- LEFT PANEL: Knowledge Canvas (Collapsible on Mobile) -->
@@ -359,7 +371,6 @@
             </section>
 
             <!-- RIGHT PANEL: Chat Assistant -->
-            <!-- FIX: added min-h-0 so the chat history takes over scrolling cleanly -->
             <section id="chat-container" class="absolute inset-0 z-10 bg-white md:static w-full md:flex-1 min-w-0 min-h-0 flex flex-col chat-sidebar transition-transform duration-300 shadow-2xl md:shadow-none border-l border-slate-100 translate-x-0">
                 <div class="h-14 border-b border-slate-100 flex items-center px-4 md:px-5 bg-white shrink-0 justify-between">
                     <div class="flex items-center gap-3">
@@ -372,18 +383,16 @@
                     </div>
                 </div>
 
-                <!-- FIX: added min-h-0 to explicitly tell flexbox to scroll this region if necessary -->
                 <div id="chat-history" class="flex-1 min-h-0 overflow-y-auto p-4 md:p-5 space-y-6 custom-scroll bg-white pb-4">
                     <!-- Initial State Injected via JS -->
                 </div>
                 
                 <!-- Input Area -->
-                <!-- FIX: added shrink-0 so it doesn't get squashed -->
                 <div class="p-4 bg-white border-t border-slate-100 relative z-50 shrink-0">
                     <div id="typing-indicator" class="hidden px-4 py-2 mb-3 text-xs text-[#51565e] flex gap-2 items-center bg-slate-50 rounded-sl w-fit border border-slate-100">
                         <img src="https://chat.simplilearn.com/images/arya-avatar-profile-lg.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712027.png'" class="w-4 h-4 rounded-full" alt="Arya">
-                        <span class="font-bold text-brand-blue">Arya</span> is analyzing...
-                        <div class="flex gap-1">
+                        <span class="font-bold text-brand-blue">Arya</span> is thinking...
+                        <div class="flex gap-1 ml-1">
                             <div class="w-1.5 h-1.5 bg-brand-blue rounded-full typing-dot"></div>
                             <div class="w-1.5 h-1.5 bg-brand-blue rounded-full typing-dot"></div>
                             <div class="w-1.5 h-1.5 bg-brand-blue rounded-full typing-dot"></div>
@@ -394,7 +403,7 @@
                         <button onclick="handleInput()" class="absolute right-2 bottom-2 top-2 text-brand-blue hover:text-white bg-blue-50 hover:bg-brand-blue w-10 flex items-center justify-center rounded transition"><i class="fas fa-paper-plane text-sm"></i></button>
                     </div>
                     <div class="text-center mt-3 hidden md:block">
-                        <p class="text-[10px] text-slate-400 font-medium">Arya can make mistakes - review information carefully.</p>
+                        <p class="text-[10px] text-slate-400 font-medium">Arya is an AI. Please review generated information carefully.</p>
                     </div>
                 </div>
             </section>
@@ -446,18 +455,18 @@
                         <div class="flex items-center gap-1.5"><i class="fas fa-user-check text-slate-400"></i> <span class="font-bold text-[#111827]">250k+</span> Professionals</div>
                     </div>
                     
-                    <!-- ARYA NUDGE -->
+                    <!-- ARYA NUDGE: LEAD FOCUSED -->
                     <div class="flex flex-col md:flex-row items-center gap-4 bg-[#f8fbff] border border-blue-200 p-3 pr-6 rounded-sl cursor-pointer hover:shadow-sl-card transition group mx-auto md:mx-0 max-w-sm md:max-w-none" onclick="activateArya('category', 'Generative AI', 'match')">
                         <div class="flex items-center gap-4 w-full md:w-auto">
                             <div class="w-10 h-10 bg-brand-blue rounded flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition flex-shrink-0">
-                                <i class="fas fa-sparkles"></i>
+                                <i class="fas fa-compass"></i>
                             </div>
                             <div class="text-left">
-                                <h4 class="font-bold text-sm text-brand-blue">Expert Recommendation Engine</h4>
-                                <p class="text-[11px] text-[#51565e]">Analyze your profile to find the best fit.</p>
+                                <h4 class="font-bold text-sm text-brand-blue">Unlock Personalized Roadmap</h4>
+                                <p class="text-[11px] text-[#51565e]">Let Arya analyze your profile to find your best fit.</p>
                             </div>
                         </div>
-                        <i class="fas fa-arrow-right text-brand-blue ml-auto md:ml-2"></i>
+                        <i class="fas fa-arrow-right text-brand-blue ml-auto md:ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
                 <div class="hidden md:block w-[400px]">
@@ -512,16 +521,16 @@
                 </div>
             </div>
 
-            <!-- ARYA NUDGE: SKILL QUIZ -->
+            <!-- ARYA NUDGE: SKILL QUIZ (LEAD FOCUSED) -->
             <div class="my-12 md:my-16 bg-[#ebf1f8] rounded-sl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 border border-blue-200 shadow-sm relative overflow-hidden">
                 <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/50 to-transparent pointer-events-none"></div>
                 <div class="max-w-lg relative z-10 text-center md:text-left">
                     <div class="inline-block bg-white text-brand-accent text-[11px] border border-orange-100 font-bold px-3 py-1 rounded mb-3 uppercase tracking-wider">Skill Assessment</div>
-                    <h3 class="text-xl md:text-2xl font-bold text-[#111827] mb-2">Validate your expertise</h3>
-                    <p class="text-sm text-[#51565e] leading-relaxed">Take a 2-minute adaptive assessment. Our AI will benchmark your skills against industry standards.</p>
+                    <h3 class="text-xl md:text-2xl font-bold text-[#111827] mb-2">Get Your Verified Skill Score</h3>
+                    <p class="text-sm text-[#51565e] leading-relaxed">Take a quick 2-minute test. Arya will benchmark your current skills and build a custom gap-analysis report.</p>
                 </div>
                 <button onclick="activateArya('category', 'Generative AI', 'quiz')" class="bg-brand-blue text-white px-8 py-3 rounded-sl font-bold text-sm hover:bg-blue-700 transition shadow-sm whitespace-nowrap relative z-10 w-full md:w-auto">
-                    Assess My Skills
+                    Take the Quiz
                 </button>
             </div>
         </div>
@@ -553,15 +562,15 @@
                     </div>
                     
                     <!-- ARYA NUDGE: ELIGIBILITY -->
-                    <div class="mt-6 md:mt-8 flex items-center gap-4 max-w-md bg-[#1f2937] border border-slate-700 p-3 pr-6 rounded-sl cursor-pointer hover:border-brand-blue transition group" onclick="activateArya('program', 'PGP in Data Science', 'eligibility')">
+                    <div class="mt-6 md:mt-8 flex items-center gap-4 max-w-md bg-[#1f2937] border border-slate-700 p-3 pr-6 rounded-sl cursor-pointer hover:border-brand-blue transition group" onclick="activateArya('program', 'Data Science', 'eligibility')">
                          <div class="w-10 h-10 bg-[#272c37] rounded flex items-center justify-center text-brand-blue group-hover:bg-brand-blue group-hover:text-white transition flex-shrink-0">
-                            <i class="fas fa-user-check"></i>
+                            <i class="fas fa-check-double"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm text-white">Check Eligibility with AI</h4>
-                            <p class="text-xs text-slate-400">Verify prerequisites instantly.</p>
+                            <h4 class="font-bold text-sm text-white">Am I Eligible? Ask Arya</h4>
+                            <p class="text-xs text-slate-400">Instantly check prerequisites and setup a plan.</p>
                         </div>
-                        <i class="fas fa-arrow-right text-slate-500 ml-auto group-hover:text-brand-blue transition"></i>
+                        <i class="fas fa-arrow-right text-slate-500 ml-auto group-hover:text-brand-blue transition group-hover:translate-x-1"></i>
                     </div>
                 </div>
             </div>
@@ -573,8 +582,8 @@
                 <div>
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-6 gap-3">
                         <h2 class="text-2xl font-bold text-[#111827]">Program Curriculum</h2>
-                        <button onclick="activateArya('program', 'PGP in Data Science', 'brochure')" class="flex items-center gap-2 text-brand-blue text-sm font-bold hover:underline">
-                            <i class="fas fa-download"></i> Download Syllabus via Arya
+                        <button onclick="activateArya('program', 'Data Science', 'brochure')" class="flex items-center gap-2 text-brand-blue text-sm font-bold hover:underline">
+                            <i class="fas fa-file-pdf"></i> Uncover Full Syllabus via Arya
                         </button>
                     </div>
 
@@ -599,11 +608,11 @@
                 <!-- ROI Nudge -->
                 <div class="bg-green-50 border border-green-200 rounded-sl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
                     <div class="text-center sm:text-left">
-                        <h3 class="font-bold text-lg md:text-xl text-[#111827] mb-1">Analyze Your ROI</h3>
-                        <p class="text-sm text-[#51565e]">See how this program translates to salary hikes.</p>
+                        <h3 class="font-bold text-lg md:text-xl text-[#111827] mb-1">Calculate Your Career ROI</h3>
+                        <p class="text-sm text-[#51565e]">Discover salary hikes and placement stats with AI.</p>
                     </div>
-                    <button onclick="activateArya('program', 'PGP in Data Science', 'roi')" class="bg-white border border-green-600 text-green-700 px-6 py-2.5 rounded-sl font-bold text-sm hover:bg-green-600 hover:text-white transition whitespace-nowrap shadow-sm w-full sm:w-auto">
-                        <i class="fas fa-calculator mr-2"></i> Calculate ROI
+                    <button onclick="activateArya('program', 'Data Science', 'roi')" class="bg-white border border-green-600 text-green-700 px-6 py-2.5 rounded-sl font-bold text-sm hover:bg-green-600 hover:text-white transition whitespace-nowrap shadow-sm w-full sm:w-auto">
+                        <i class="fas fa-chart-bar mr-2"></i> View Career Stats
                     </button>
                 </div>
             </div>
@@ -660,14 +669,14 @@
         <div class="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
             <div class="lg:col-span-2 space-y-8 md:space-y-10">
                 <!-- Eligibility Nudge -->
-                <div class="article-nudge cursor-pointer border-l-4 border-l-brand-blue" onclick="activateArya('course', 'Generative AI for Beginners', 'prereq')">
+                <div class="article-nudge cursor-pointer border-l-4 border-l-brand-blue" onclick="activateArya('course', 'Generative AI', 'prereq')">
                      <div class="flex items-center gap-4 w-full md:w-auto">
                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm border border-blue-50 flex-shrink-0">
-                            <i class="fas fa-user-check"></i>
+                            <i class="fas fa-list-ul"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm text-[#111827]">Is this course right for you?</h4>
-                            <p class="text-[13px] text-[#51565e]">Check prerequisites with Arya.</p>
+                            <h4 class="font-bold text-sm text-[#111827]">Review Prerequisites</h4>
+                            <p class="text-[13px] text-[#51565e]">Ensure you have the right background before starting.</p>
                         </div>
                     </div>
                     <button class="text-xs font-bold bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded shadow-sm hover:text-brand-blue transition w-full md:w-auto">Check Now</button>
@@ -686,14 +695,14 @@
                     </div>
 
                     <!-- Study Plan Nudge -->
-                    <div class="article-nudge cursor-pointer mt-8" onclick="activateArya('course', 'Generative AI for Beginners', 'syllabus')">
+                    <div class="article-nudge cursor-pointer mt-8" onclick="activateArya('course', 'Generative AI', 'syllabus')">
                          <div class="flex items-center gap-4 w-full md:w-auto">
                             <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm border border-blue-50 flex-shrink-0">
-                                <i class="fas fa-calendar-alt"></i>
+                                <i class="fas fa-calendar-check"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-sm text-[#111827]">Need a structured plan?</h4>
-                                <p class="text-[13px] text-[#51565e]">Generate a personalized roadmap.</p>
+                                <h4 class="font-bold text-sm text-[#111827]">Generate Study Roadmap</h4>
+                                <p class="text-[13px] text-[#51565e]">Let Arya schedule this course into your weekly calendar.</p>
                             </div>
                         </div>
                         <button class="bg-brand-blue text-white px-4 py-2 rounded-sl text-xs font-bold hover:bg-blue-700 transition w-full md:w-auto">Create Plan</button>
@@ -738,11 +747,11 @@
                 <div class="article-nudge cursor-pointer" onclick="activateArya('article', 'Future of AI Jobs', 'summary')">
                     <div class="flex items-center gap-4 w-full md:w-auto">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-brand-blue shadow-sm border border-blue-100 flex-shrink-0">
-                            <i class="fas fa-magic"></i>
+                            <i class="fas fa-bolt"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm text-[#111827]">Executive Briefing</h4>
-                            <p class="text-[13px] text-[#51565e]">Generate a 3-bullet expert summary.</p>
+                            <h4 class="font-bold text-sm text-[#111827]">Short on time?</h4>
+                            <p class="text-[13px] text-[#51565e]">Get a 3-bullet expert summary tailored to your role.</p>
                         </div>
                     </div>
                     <button class="bg-brand-blue text-white px-4 py-2 rounded text-xs font-bold hover:bg-blue-700 transition w-full md:w-auto">Summarize</button>
@@ -755,14 +764,14 @@
                 <div class="article-nudge cursor-pointer border-l-4 border-l-green-500" onclick="activateArya('article', 'Future of AI Jobs', 'career')">
                     <div class="flex items-center gap-4 w-full md:w-auto">
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-green-600 shadow-sm border border-green-100 flex-shrink-0">
-                            <i class="fas fa-chart-line"></i>
+                            <i class="fas fa-money-bill-wave"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm text-[#111827]">Market Salary Data</h4>
+                            <h4 class="font-bold text-sm text-[#111827]">Download 2026 Salary Report</h4>
                             <p class="text-[13px] text-[#51565e]">View verified career ladders & pay scales.</p>
                         </div>
                     </div>
-                    <button class="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded text-xs font-bold transition hover:text-green-600 w-full md:w-auto">View Data</button>
+                    <button class="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded text-xs font-bold transition hover:text-green-600 w-full md:w-auto">Access Data</button>
                 </div>
 
                 <!-- CONTEXTUAL NUDGE 3: QUIZ -->
@@ -770,29 +779,29 @@
                     <div class="flex items-center gap-5 relative z-10 w-full md:w-auto">
                         <div class="text-4xl text-brand-accent"><i class="fas fa-brain"></i></div>
                         <div>
-                            <h4 class="font-bold text-lg text-white">Test your understanding</h4>
-                            <p class="text-sm text-slate-400 mt-1">Take a 1-minute quiz on AI trends.</p>
+                            <h4 class="font-bold text-lg text-white">Are your skills future-proof?</h4>
+                            <p class="text-sm text-slate-400 mt-1">Take a 1-minute quiz to benchmark against the market.</p>
                         </div>
                     </div>
-                    <button onclick="activateArya('article', 'Future of AI Jobs', 'quiz')" class="bg-brand-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-sl transition text-sm whitespace-nowrap shadow-lg relative z-10 w-full md:w-auto">Start Quiz</button>
+                    <button onclick="activateArya('article', 'Future of AI Jobs', 'quiz')" class="bg-brand-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-sl transition text-sm whitespace-nowrap shadow-lg relative z-10 w-full md:w-auto">Take the Test</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal (Lead Gen) -->
     <div id="enroll-modal" class="hidden absolute inset-0 bg-[#111827]/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
         <div class="bg-white rounded-sl p-6 md:p-8 max-w-sm w-full text-center scale-in shadow-2xl border border-white/10">
             <div class="w-14 h-14 bg-blue-50 text-brand-blue rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <i class="fas fa-bookmark text-2xl"></i>
+                <i class="fas fa-envelope-open-text text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold text-[#111827] mb-2" id="modal-title">Save Your Progress</h3>
             <p class="text-sm text-[#51565e] mb-8 leading-relaxed" id="modal-desc">Create a free account to save this plan and track your progress.</p>
-            <input type="email" placeholder="Email Address" class="w-full px-4 py-3.5 rounded-sl border border-slate-300 text-sm focus:border-brand-blue outline-none mb-4 bg-slate-50 font-medium">
-            <button onclick="alert('Success! Content saved.'); toggleModal(false);" class="w-full bg-brand-blue hover:bg-blue-700 text-white font-bold py-3.5 rounded-sl transition mb-4 shadow-lg shadow-blue-900/10" id="modal-btn">
-                Create Free Account
+            <input type="email" placeholder="Work Email Address" class="w-full px-4 py-3.5 rounded-sl border border-slate-300 text-sm focus:border-brand-blue outline-none mb-4 bg-slate-50 font-medium">
+            <button onclick="alert('Success! Check your inbox.'); toggleModal(false);" class="w-full bg-brand-blue hover:bg-blue-700 text-white font-bold py-3.5 rounded-sl transition mb-4 shadow-lg shadow-blue-900/10" id="modal-btn">
+                Send to my Email
             </button>
-            <button onclick="toggleModal(false)" class="text-xs text-slate-400 hover:text-[#111827] font-bold transition">No thanks, continue as guest</button>
+            <button onclick="toggleModal(false)" class="text-xs text-slate-400 hover:text-[#111827] font-bold transition">No thanks, I'll just browse</button>
         </div>
     </div>
 
@@ -847,12 +856,17 @@
             "Agile Scrum Master": "Project Management", 
             "PGP in Data Science": "Data Science", 
             "AI Engineer Master": "Generative AI", 
-            "Future of AI Jobs": "Generative AI", 
-            "Top 10 Interview Qs": "Data Science" 
+            "Future of AI Jobs": "Future of AI Jobs", 
+            "Top 10 Interview Qs": "Data Science",
+            "Teach me prompt engineering": "Prompt Engineering",
+            "Help me revise supervised learning": "Supervised Learning",
+            "Quiz me on SQL Select statements": "SQL Select",
+            "Create a study plan to become a data scientist": "Data Scientist Study Plan"
         };
 
         const contentDatabase = {
             "Generative AI": {
+                video: "G2fqAlgmoPo",
                 summary: {
                     title: "Executive Synthesis: Generative AI",
                     highlights: ["Market Valuation: Projected $1.3T by 2032", "Adoption: >60% adoption in Fortune 500", "Core App: Content Gen, Coding Assistants"],
@@ -863,11 +877,148 @@
                 quiz: [{ q: "Define 'Token' in LLMs:", options: ["A crypto asset", "Unit of text processing", "API key"], ans: 1, why: "LLMs process text in chunks called tokens." }, { q: "Effect of High Temp:", options: ["Determinism", "Randomness", "Latency"], ans: 1, why: "High temp increases randomness." }],
                 career: { 
                     role: "AI Prompt Engineer", salaryNon: "$95k", salaryCert: "$130k", 
-                    interview: ["Explain Chain-of-Thought (CoT)", "Mitigate hallucinations?", "GPT-4 vs Claude 3?"],
+                    interview: ["Explain Chain-of-Thought (CoT)", "How do you mitigate hallucinations?", "Compare GPT-4 vs Claude 3 architecture."],
                     ladder: [ { level: "Associate", role: "Jr. AI Engineer", exp: "0-2 Yrs", pay: "$85k" }, { level: "Senior", role: "AI Architect", exp: "3-5 Yrs", pay: "$145k" }, { level: "Principal", role: "Head of AI", exp: "6+ Yrs", pay: "$190k" } ]
                 },
-                syllabus: [{ title: "Week 1: Transformer Architecture", desc: "Attention mechanisms, embeddings." }, { title: "Week 2: Advanced Prompting", desc: "Zero-shot, Few-shot, CoT." }, { title: "Week 3: API Integration", desc: "Building scalable apps." }],
+                syllabus: [{ title: "Week 1: Transformer Architecture", desc: "Attention mechanisms, embeddings." }, { title: "Week 2: Advanced Prompting", desc: "Zero-shot, Few-shot, CoT." }, { title: "Week 3: API Integration", desc: "Building scalable apps." }, { title: "Week 4: AI Ethics", desc: "Bias mitigation and governance." }],
                 courses: { free: { title: "GenAI Fundamentals", duration: "2 Hrs" }, paid: { title: "PGP in Generative AI", duration: "4 Mo" } }
+            },
+            "Data Science": {
+                video: "X3paOmcrTjQ",
+                summary: {
+                    title: "Executive Synthesis: Data Science",
+                    highlights: ["Core Pillars: Statistics, Programming, Business Domain", "Key Tools: Python, R, SQL, Tableau", "Primary Output: Predictive modeling and actionable insights"],
+                    trends: ["Automated Machine Learning (AutoML)", "Integration with GenAI", "Real-time edge analytics"],
+                    takeaway: "Data Science remains the backbone of enterprise decision-making, increasingly accelerated by AI-assisted coding."
+                },
+                flashcards: [{ title: "EDA", icon: "fas fa-search", text: "Exploratory Data Analysis: initial investigations to discover patterns." }, { title: "P-Value", icon: "fas fa-percentage", text: "Probability of obtaining test results at least as extreme as the observed results." }, { title: "Overfitting", icon: "fas fa-compress-arrows-alt", text: "Model learns noise in training data, failing to generalize to new data." }],
+                quiz: [{ q: "Which library is standard for data manipulation in Python?", options: ["TensorFlow", "Pandas", "Flask"], ans: 1, why: "Pandas provides data structures like DataFrames essential for data manipulation." }, { q: "What is a primary goal of PCA?", options: ["Dimensionality reduction", "Increasing features", "Data labeling"], ans: 0, why: "Principal Component Analysis reduces the number of variables while preserving information." }],
+                career: { 
+                    role: "Data Scientist", salaryNon: "$105k", salaryCert: "$140k", 
+                    interview: ["Explain the bias-variance tradeoff.", "How do you handle missing values?", "What is regularisation?"],
+                    ladder: [ { level: "Associate", role: "Data Analyst", exp: "0-2 Yrs", pay: "$75k" }, { level: "Senior", role: "Data Scientist", exp: "3-5 Yrs", pay: "$125k" }, { level: "Principal", role: "Lead Data Scientist", exp: "6+ Yrs", pay: "$175k" } ]
+                },
+                syllabus: [{ title: "Week 1: Python & SQL", desc: "Data extraction and foundational syntax." }, { title: "Week 2: Math & Stats", desc: "Probability, distributions, hypothesis testing." }, { title: "Week 3: ML Algorithms", desc: "Regressions, trees, clustering." }, { title: "Week 4: Deployment", desc: "Flask APIs and cloud basics." }],
+                courses: { free: { title: "Data Science Kickstart", duration: "4 Hrs" }, paid: { title: "PGP in Data Science", duration: "11 Mo" } }
+            },
+            "Future of AI Jobs": {
+                video: "5p248yoa3oE",
+                summary: {
+                    title: "Report: Future AI Jobs (2026)",
+                    highlights: ["344% growth in AI Engineer roles", "Shift from 'AI Researchers' to 'AI Integrators'", "Hybrid roles (e.g., AI-Product Manager) are booming"],
+                    trends: ["Agentic workflows requiring supervision", "Decline in junior coding roles", "Rise of AI Governance Officers"],
+                    takeaway: "The highest paying roles combine deep technical knowledge of LLMs with specific domain expertise."
+                },
+                flashcards: [{ title: "AI Integrator", icon: "fas fa-plug", text: "Role focused on connecting AI APIs to existing enterprise software." }, { title: "AI Governance", icon: "fas fa-balance-scale", text: "Ensuring AI deployments meet legal, ethical, and safety standards." }, { title: "Prompt Ops", icon: "fas fa-cogs", text: "The operationalization and version control of LLM prompts." }],
+                quiz: [{ q: "Which role is seeing the highest percentage growth?", options: ["Data Entry", "AI Engineer", "Web Developer"], ans: 1, why: "AI engineering demand is skyrocketing to implement GenAI." }, { q: "What is a key skill for future hybrid roles?", options: ["Manual QA", "Domain + AI Integration", "Basic HTML"], ans: 1, why: "Combining domain knowledge with AI tool usage is the new baseline." }],
+                career: { 
+                    role: "AI Integration Specialist", salaryNon: "$110k", salaryCert: "$150k", 
+                    interview: ["How do you evaluate an LLM for enterprise use?", "Discuss a time you integrated an API securely.", "What are the risks of shadow AI?"],
+                    ladder: [ { level: "Entry", role: "AI Analyst", exp: "0-2 Yrs", pay: "$90k" }, { level: "Mid", role: "AI Integrator", exp: "3-5 Yrs", pay: "$140k" }, { level: "Senior", role: "VP of AI Strategy", exp: "6+ Yrs", pay: "$210k" } ]
+                },
+                syllabus: [{ title: "Module 1: AI Landscape", desc: "Current models and capabilities." }, { title: "Module 2: Practical Implementation", desc: "API usage and workflow automation." }, { title: "Module 3: AI Security", desc: "Governance and compliance." }],
+                courses: { free: { title: "Future Skills Workshop", duration: "1 Hr" }, paid: { title: "Executive AI Leadership", duration: "3 Mo" } }
+            },
+            "Prompt Engineering": {
+                video: "jC4v5AS4ART",
+                summary: {
+                    title: "Prompt Engineering Essentials",
+                    highlights: ["Clarity and Specificity", "Context is King", "Role Prompting"],
+                    trends: ["Chain of Thought (CoT)", "Few-Shot Prompting", "System Prompts"],
+                    takeaway: "Prompt engineering is the art of communicating effectively with AI models to get the desired output."
+                },
+                flashcards: [{ title: "Zero-Shot", icon: "fas fa-dot-circle", text: "Prompting without providing any examples." }, { title: "Few-Shot", icon: "fas fa-list-ol", text: "Providing examples to guide model output." }, { title: "CoT", icon: "fas fa-link", text: "Chain of Thought: Asking the model to explain its reasoning step-by-step." }],
+                quiz: [{ q: "What does 'Few-Shot' mean?", options: ["Low battery", "Giving 2-3 examples in the prompt", "A quick response"], ans: 1, why: "Few-shot gives the model a pattern to follow." }, { q: "Why use Chain of Thought?", options: ["To confuse the AI", "To improve logic on complex tasks", "To save tokens"], ans: 1, why: "Forcing step-by-step reasoning improves mathematical and logical accuracy." }],
+                career: { 
+                    role: "Prompt Engineer", salaryNon: "$80k", salaryCert: "$120k", 
+                    interview: ["Write a prompt to summarize a legal document.", "How do you stop an LLM from hallucinating?", "Explain temperature settings."],
+                    ladder: [ { level: "Associate", role: "AI Copywriter", exp: "0-1 Yrs", pay: "$70k" }, { level: "Senior", role: "Prompt Engineer", exp: "2-4 Yrs", pay: "$115k" }, { level: "Principal", role: "Head of LLM Ops", exp: "5+ Yrs", pay: "$160k" } ]
+                },
+                syllabus: [{ title: "Week 1: Fundamentals", desc: "Syntax and basic structures." }, { title: "Week 2: Advanced Techniques", desc: "CoT, ReAct prompting." }, { title: "Week 3: Domain Specifics", desc: "Coding, creative writing, data extraction." }],
+                courses: { free: { title: "Intro to Prompting", duration: "1 Hr" }, paid: { title: "Advanced Prompt Engineering Cert", duration: "2 Mo" } }
+            },
+            "Supervised Learning": {
+                video: "JcI5Vnw0b2c",
+                summary: {
+                    title: "Core Concept: Supervised Learning",
+                    highlights: ["Requires labeled datasets", "Used for Classification & Regression", "Goal is mapping inputs to outputs"],
+                    trends: ["Transfer Learning", "Automated Hyperparameter Tuning", "Explainable AI (XAI)"],
+                    takeaway: "The foundation of most commercial ML, highly dependent on data quality and feature engineering."
+                },
+                flashcards: [
+                    {title: "Supervised Learning", icon: "fas fa-chalkboard-teacher", text: "Learning from labeled data to predict outcomes for unseen data."},
+                    {title: "Features", icon: "fas fa-columns", text: "The input variables or attributes used for prediction."},
+                    {title: "Labels", icon: "fas fa-tag", text: "The target variable or output we are trying to predict."},
+                    {title: "Classification", icon: "fas fa-sort-amount-up", text: "Predicting discrete categorical labels (e.g., Spam or Not Spam)."},
+                    {title: "Regression", icon: "fas fa-chart-line", text: "Predicting continuous numerical values (e.g., House Prices)."},
+                    {title: "Overfitting", icon: "fas fa-compress-arrows-alt", text: "Model learns training data too well, including noise, failing to generalize."},
+                    {title: "Underfitting", icon: "fas fa-expand-arrows-alt", text: "Model is too simple to capture the underlying patterns in data."},
+                    {title: "Train/Test Split", icon: "fas fa-cut", text: "Dividing data into training and testing sets to evaluate performance."},
+                    {title: "Cross-Validation", icon: "fas fa-sync-alt", text: "Splitting data into multiple folds to ensure robust model evaluation."},
+                    {title: "Loss Function", icon: "fas fa-chart-area", text: "A measure of how far the model's predictions are from the true labels."}
+                ],
+                quiz: [{ q: "Which task is Supervised Learning?", options: ["Customer Segmentation", "Predicting Stock Prices", "Anomaly Detection"], ans: 1, why: "Predicting prices uses historical labeled data (Regression)." }, { q: "What is overfitting?", options: ["Model is too simple", "Model memorizes training noise", "Model runs too fast"], ans: 1, why: "Overfitting means high accuracy on training data but poor generalization." }],
+                career: { 
+                    role: "Machine Learning Engineer", salaryNon: "$110k", salaryCert: "$145k", 
+                    interview: ["Explain Random Forests.", "What is gradient descent?", "How to handle imbalanced datasets?"],
+                    ladder: [ { level: "Junior", role: "Data Analyst", exp: "0-2 Yrs", pay: "$80k" }, { level: "Mid", role: "ML Engineer", exp: "3-5 Yrs", pay: "$130k" }, { level: "Senior", role: "Principal ML Engineer", exp: "6+ Yrs", pay: "$180k" } ]
+                },
+                syllabus: [{ title: "Part 1: Regression", desc: "Linear and polynomial regression." }, { title: "Part 2: Classification", desc: "Logistic regression, SVMs." }, { title: "Part 3: Ensembles", desc: "Random forests, gradient boosting." }],
+                courses: { free: { title: "ML Basics", duration: "3 Hrs" }, paid: { title: "Supervised Learning Deep Dive", duration: "3 Mo" } }
+            },
+            "SQL Select": {
+                video: "HXV3zeJZ1EQ",
+                summary: {
+                    title: "SQL Query Fundamentals",
+                    highlights: ["SELECT retrieves data", "WHERE filters conditions", "JOIN combines tables"],
+                    trends: ["Cloud Data Warehouses", "Vector search in SQL", "Automated Query Optimization"],
+                    takeaway: "SQL remains the universal language for data extraction and manipulation across all data roles."
+                },
+                flashcards: [{ title: "SELECT", icon: "fas fa-table", text: "Specifies the columns to return." }, { title: "WHERE", icon: "fas fa-filter", text: "Filters rows based on a condition." }, { title: "GROUP BY", icon: "fas fa-object-group", text: "Groups rows sharing a property so aggregate functions can be applied." }],
+                quiz: [
+                    { q: "Which clause is used to filter records?", options: ["WHERE", "FILTER", "HAVING"], ans: 0, why: "WHERE filters rows before grouping." },
+                    { q: "Which keyword sorts the result set?", options: ["ORDER BY", "SORT BY", "GROUP BY"], ans: 0, why: "ORDER BY is the standard SQL clause for sorting." },
+                    { q: "How do you select all columns from a table?", options: ["SELECT all", "SELECT *", "SELECT columns"], ans: 1, why: "The asterisk (*) represents all columns." },
+                    { q: "Which keyword returns only distinct values?", options: ["UNIQUE", "DIFFERENT", "DISTINCT"], ans: 2, why: "DISTINCT removes duplicate rows from the result." },
+                    { q: "How to find rows where a column is empty?", options: ["IS NULL", "= NULL", "IS EMPTY"], ans: 0, why: "IS NULL is the correct syntax to check for null values." },
+                    { q: "Which operator is used to search for a specified pattern?", options: ["LIKE", "MATCH", "PATTERN"], ans: 0, why: "LIKE is used with wildcards like % and _." },
+                    { q: "What does the IN operator do?", options: ["Checks if value is in a subquery", "Allows specifying multiple values in a WHERE clause", "Both A and B"], ans: 2, why: "IN checks against a list of values or a subquery result." },
+                    { q: "Which clause groups rows that have the same values?", options: ["GROUP BY", "AGGREGATE", "COMBINE"], ans: 0, why: "GROUP BY groups rows, often used with aggregate functions." },
+                    { q: "What is the order of execution in SQL?", options: ["SELECT, FROM, WHERE", "FROM, WHERE, SELECT", "WHERE, FROM, SELECT"], ans: 1, why: "SQL processes FROM first, then filters with WHERE, and finally SELECTs the columns." },
+                    { q: "Which function returns the number of rows?", options: ["SUM()", "COUNT()", "TOTAL()"], ans: 1, why: "COUNT() tallies the number of records returned." }
+                ],
+                career: { 
+                    role: "Database Administrator", salaryNon: "$85k", salaryCert: "$115k", 
+                    interview: ["Differences between INNER and LEFT JOIN?", "How do you optimize a slow query?", "Explain indexing."],
+                    ladder: [ { level: "Entry", role: "Data Entry/Analyst", exp: "0-2 Yrs", pay: "$65k" }, { level: "Mid", role: "Database Admin", exp: "3-5 Yrs", pay: "$105k" }, { level: "Senior", role: "Data Architect", exp: "6+ Yrs", pay: "$150k" } ]
+                },
+                syllabus: [{ title: "Week 1: Basic Queries", desc: "SELECT, WHERE, ORDER BY." }, { title: "Week 2: Aggregations", desc: "GROUP BY, HAVING, COUNT." }, { title: "Week 3: Joins", desc: "Inner, Left, Right, Full joins." }],
+                courses: { free: { title: "SQL for Beginners", duration: "2 Hrs" }, paid: { title: "Advanced SQL Database Admin", duration: "2 Mo" } }
+            },
+            "Data Scientist Study Plan": {
+                video: "X3paOmcrTjQ",
+                summary: {
+                    title: "Roadmap to Data Scientist",
+                    highlights: ["Phase 1: Math & Coding basics", "Phase 2: Core ML models", "Phase 3: Portfolio & Deployment"],
+                    trends: ["Integrating LLM APIs", "MLOps proficiency", "Business storytelling"],
+                    takeaway: "A structured, 6-month intensive plan is optimal for breaking into Data Science."
+                },
+                flashcards: [{ title: "Python/R", icon: "fas fa-code", text: "The primary languages for Data Science." }, { title: "Scikit-Learn", icon: "fas fa-cogs", text: "Standard ML library in Python." }, { title: "Portfolio", icon: "fas fa-briefcase", text: "Crucial for showcasing skills to employers." }],
+                quiz: [{ q: "Which is not typically a phase in the DS lifecycle?", options: ["Data Cleaning", "Hardware Assembly", "Model Deployment"], ans: 1, why: "Data Science focuses on software, data, and math, not hardware assembly." }, { q: "Why is Git useful for Data Scientists?", options: ["Version control code and models", "Creating databases", "Cleaning data"], ans: 0, why: "Git helps manage code changes and collaboration." }],
+                career: { 
+                    role: "Data Scientist", salaryNon: "$105k", salaryCert: "$140k", 
+                    interview: ["Walk me through a project in your portfolio.", "How do you translate a business problem into ML?", "Explain A/B testing."],
+                    ladder: [ { level: "Associate", role: "Data Analyst", exp: "0-2 Yrs", pay: "$75k" }, { level: "Senior", role: "Data Scientist", exp: "3-5 Yrs", pay: "$125k" }, { level: "Principal", role: "Lead Data Scientist", exp: "6+ Yrs", pay: "$175k" } ]
+                },
+                syllabus: [
+                    { title: "Month 1: Programming & Math Foundations", desc: "Python (Pandas, NumPy), SQL basics, Linear Algebra, and Inferential Statistics." },
+                    { title: "Month 2: Data Wrangling & Visualization", desc: "Advanced data cleaning, EDA, Matplotlib, Seaborn, and creating Dashboards (Tableau)." },
+                    { title: "Month 3: Machine Learning Core", desc: "Scikit-Learn, Regression techniques, Classification models (Logistic, SVM), and basic Clustering." },
+                    { title: "Month 4: Advanced ML & Deep Learning", desc: "Ensemble methods (Random Forests, XGBoost), Intro to Neural Networks using PyTorch/TensorFlow." },
+                    { title: "Month 5: Deployment & MLOps", desc: "Model serving via Flask/FastAPI, containerization with Docker, and cloud basics (AWS/GCP)." },
+                    { title: "Month 6: Capstone Portfolio Project", desc: "End-to-end project: defining a business problem, building a model, and deploying it live." }
+                ],
+                courses: { free: { title: "Data Science Kickstart", duration: "10 Hrs" }, paid: { title: "PGP in Data Science", duration: "11 Mo" } }
             }
         };
 
@@ -883,6 +1034,48 @@
             "program": { prompts: ["Placement Analytics", "Salary ROI Data", "Download Brochure"] }, 
             "article": { prompts: ["Executive Summary", "Key Takeaways", "Quiz on Trends"] } 
         };
+
+        // --- Simplified Markdown Parser for Chat ---
+        function parseSimpleMD(text) {
+            let codeBlocks = [];
+            text = text.replace(/```([\s\S]*?)```/g, (match, code) => {
+                codeBlocks.push(code);
+                return `___CODEBLOCK_${codeBlocks.length - 1}___`;
+            });
+
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            text = text.replace(/^### (.*$)/gim, '<h4>$1</h4>');
+            text = text.replace(/^## (.*$)/gim, '<h3>$1</h3>');
+
+            let lines = text.split('\n');
+            let html = '';
+            let inList = false;
+
+            for (let line of lines) {
+                line = line.trim();
+                if (line.startsWith('- ') || line.startsWith('* ')) {
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += `<li>${line.substring(2)}</li>`;
+                } else {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    if (line.startsWith('___CODEBLOCK_')) {
+                         html += line; 
+                    } else if (line.startsWith('<h')) {
+                         html += line;
+                    } else if (line.length > 0) {
+                        html += `<p>${line}</p>`;
+                    }
+                }
+            }
+            if (inList) html += '</ul>';
+
+            text = html.replace(/___CODEBLOCK_(\d+)___/g, (match, index) => {
+                return `<pre><code>${codeBlocks[index]}</code></pre>`;
+            });
+
+            return text;
+        }
 
         function hideAllPages() {
             Object.values(dom.pages).forEach(p => {
@@ -919,11 +1112,11 @@
                     dom.introOverlay.classList.add('hidden');
                     dom.introOverlay.classList.remove('flex');
                     dom.introOverlay.style.opacity = '1'; 
-                    resetArya("cold"); 
+                    resetArya(initialQuery ? "silent" : "cold"); 
                     if (initialQuery) handleInput(initialQuery);
                 }, 400);
             } else {
-                resetArya("cold");
+                resetArya(initialQuery ? "silent" : "cold");
                 if (initialQuery) handleInput(initialQuery);
             }
         }
@@ -931,6 +1124,10 @@
         function simulatePage(pageType) { 
             if (dom.arya) dom.arya.classList.add('hidden'); 
             hideAllPages(); 
+            if(dom.introOverlay) {
+                dom.introOverlay.classList.add('hidden');
+                dom.introOverlay.classList.remove('flex');
+            }
             if (dom.pages[pageType]) dom.pages[pageType].style.display = 'block'; 
         }
 
@@ -943,18 +1140,24 @@
         }
         
         function manualContextChange(value) { if(!value) return; const parts = value.split(':'); resetArya(parts[0], parts[1]); }
-
-        function getChatSummaryHTML(topic) {
-            const data = contentDatabase[topic] || defaultContent;
-            const s = data.summary;
-            return `<div class="flex flex-col gap-3 text-sm">
-                        <strong class="text-[#111827] text-base block border-b border-slate-100 pb-2 mb-1">${s.title}</strong>
-                        <p class="text-[#51565e] mb-2 leading-relaxed">${s.takeaway}</p>
-                        <strong class="text-[#272c37] text-xs uppercase tracking-wider font-bold mt-1 text-brand-blue">Key Highlights</strong>
-                        <ul class="list-disc pl-4 space-y-1.5 text-[#51565e] mb-3">${s.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
-                        <strong class="text-[#272c37] text-xs uppercase tracking-wider font-bold mt-1 text-brand-accent">Emerging Trends</strong>
-                        <ul class="list-disc pl-4 space-y-1.5 text-[#51565e]">${s.trends.map(t => `<li>${t}</li>`).join('')}</ul>
-                    </div>`;
+        
+        function updateContextUI(topic) {
+            if (!dom.sourceSelect || !topic) return;
+            let exists = false;
+            for(let i=0; i<dom.sourceSelect.options.length; i++) {
+                if(dom.sourceSelect.options[i].text.includes(topic) || dom.sourceSelect.options[i].value.includes(topic)) {
+                    dom.sourceSelect.selectedIndex = i;
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists) {
+                const opt = document.createElement('option');
+                opt.value = `custom:${topic}`;
+                opt.text = `Context: ${topic}`;
+                dom.sourceSelect.appendChild(opt);
+                dom.sourceSelect.value = opt.value;
+            }
         }
 
         function resetArya(mode, topic = "", intent = null) {
@@ -963,7 +1166,9 @@
             if (document.getElementById('canvas-empty')) document.getElementById('canvas-empty').classList.remove('hidden');
             if(topic) currentTopic = topicMapping[topic] || topic;
             
-            const artifactsIntents = ['quiz', 'career', 'prereq', 'syllabus', 'eligibility', 'roi', 'brochure', 'match'];
+            updateContextUI(currentTopic);
+            
+            const artifactsIntents = ['quiz', 'career', 'prereq', 'syllabus', 'eligibility', 'roi', 'brochure', 'match', 'summary'];
             const shouldBeExpanded = intent && artifactsIntents.includes(intent);
 
             if (shouldBeExpanded) {
@@ -975,42 +1180,48 @@
             let msg = ""; let chips = [];
             
             if (intent === 'quiz') {
-                msg = `I've initialized the **Competency Assessment** module. Please proceed to the Canvas.`;
+                msg = `I've initialized the **Competency Assessment** module for ${currentTopic}. \n\nThis will evaluate your current baseline and help me recommend the perfect path. Please proceed to the Canvas to begin.`;
                 setTimeout(() => showArtifact('quiz'), 600);
             } else if (intent === 'summary') {
-                 msg = getChatSummaryHTML(currentTopic);
+                 msg = `I have generated a detailed executive summary for **${currentTopic}**. I've placed the full briefing on the canvas for your review.`;
+                 chips = ["Take a Quiz", "View Salary Data"];
+                 setTimeout(() => showArtifact('summary'), 600);
             } else if (intent === 'career') {
-                msg = `Retrieving verified market data for **${topic}**. I've populated the canvas with career ladders.`;
+                msg = `Retrieving verified market data for **${topic}**. \n\nI've populated the canvas with standard career ladders, salary expectations, and top interview questions.`;
                 setTimeout(() => showArtifact('career'), 600);
             } else if (intent === 'prereq') { 
-                msg = `Evaluating profile against **${topic}** prerequisites. Checklist loaded.`;
+                msg = `Evaluating profile against **${topic}** prerequisites. \n\nI have loaded a diagnostic checklist onto the canvas. Let's verify your background.`;
                 setTimeout(() => showArtifact('quiz'), 600); 
             } else if (intent === 'syllabus') { 
-                msg = `Architected a 4-week structured path. Review modules in Canvas.`;
+                msg = `I have architected a structured learning path for **${topic}**. \n\nYou can review the month-by-month modules and milestones on the Canvas.`;
                 setTimeout(() => showArtifact('study'), 600);
             } else if (intent === 'eligibility') { 
-                msg = `Initiating eligibility verification. Please answer the preliminary questions.`;
+                msg = `Initiating eligibility verification. Please answer the preliminary questions on the canvas so I can benchmark your profile.`;
                 setTimeout(() => showArtifact('quiz'), 600);
             } else if (intent === 'roi') { 
-                msg = `Based on 2025 data, certification yields ~55% salary increment. Breakdown on canvas.`;
+                msg = `Based on current market data, professionals certified in **${topic}** yield significant salary increments. \n\nI've broken down the ROI and career trajectory on the canvas.`;
                 setTimeout(() => showArtifact('career'), 600);
             } else if (intent === 'brochure') { 
-                msg = `Extracted comprehensive curriculum. Review the module breakdown.`;
+                msg = `I have extracted the comprehensive curriculum for **${topic}**. \n\nPlease review the module breakdown on the canvas. You can download the full PDF from there.`;
                 setTimeout(() => showArtifact('study'), 600);
             } else if (intent === 'match') { 
-                msg = `Analyzing profile... Let's define your current role to find the best match.`;
+                msg = `I am analyzing your profile to find the best program match. \n\nLet's start by defining your current understanding of the key concepts on the canvas.`;
                 setTimeout(() => showArtifact('learning'), 600);
             } else {
-                if (mode === "cold") { msg = "Greetings. I am Arya. **How can I accelerate your career today?**"; chips = ["Generative AI", "Data Science"]; } 
-                else if (mode === "category") { msg = `Exploring **${topic}**. I can provide career mapping or curriculum analysis.`; } 
-                else if (mode === "program") { msg = `Reviewing details. Want deep dive into placement stats or eligibility?`; } 
-                else if (mode === "course") { msg = `This course is highly rated. Analyze prerequisites?`; } 
-                else if (mode === "article") { msg = `Analyzing content. I can extract a summary or benchmark skills.`; }
+                if (mode === "silent") {
+                    return; // Skip greeting when a direct command is given
+                }
+                else if (mode === "cold") { msg = "Greetings. I am Arya, your AI Learning Concierge. **How can I accelerate your career today?**\n\nI can analyze your skills, recommend programs, or teach you complex concepts."; chips = ["Teach me Prompt Engineering", "Data Science Roadmap"]; } 
+                else if (mode === "category") { msg = `We are exploring **${topic}**. \n\nI can provide career mapping, curriculum analysis, or test your current knowledge level.`; } 
+                else if (mode === "program") { msg = `Reviewing program details for **${topic}**. \n\nWould you like a deep dive into placement stats, or should we check your eligibility?`; } 
+                else if (mode === "course") { msg = `This is a highly-rated starting point for **${topic}**. \n\nShould we analyze the prerequisites or generate a study schedule?`; } 
+                else if (mode === "article") { msg = `Analyzing the content regarding **${topic}**. \n\nI can extract an executive summary or benchmark your skills against industry trends.`; }
             }
             
-            if (mode !== "cold" && !intent) { const context = sourceContexts[mode] || sourceContexts["category"]; chips = context.prompts.map(p => p.replace("{topic}", topic)); }
+            if (mode !== "cold" && !intent && mode !== "silent") { const context = sourceContexts[mode] || sourceContexts["category"]; chips = context.prompts.map(p => p.replace("{topic}", topic)); }
             
-            appendBotMessage(msg); if(chips.length) appendChips(chips);
+            if (msg) appendBotMessage(msg); 
+            if(chips.length) appendChips(chips);
         }
 
         function getContent() { return contentDatabase[currentTopic] || defaultContent; }
@@ -1024,17 +1235,57 @@
                 if (title && desc && btn) {
                     if (context === 'flashcards') { title.innerText = "Expert Deck Access"; desc.innerText = "Enter your email to secure this deck."; btn.innerText = "Download Resources"; } 
                     else if (context === 'interview') { title.innerText = "Get Interview Guide"; desc.innerText = `Unlock top interview questions.`; btn.innerText = "Get the Guide"; } 
-                    else if (context === 'syllabus') { title.innerText = "Full Curriculum Access"; desc.innerText = "Get the detailed learning plan."; btn.innerText = "Download Plan"; } 
-                    else if (context === 'quiz_save') { title.innerText = "Save Performance Data"; desc.innerText = `Save your score of ${quizState.score}/2.`; btn.innerText = "Save Score"; }
-                    else { title.innerText = "Save Your Progress"; desc.innerText = "Create a free account to save this roadmap."; btn.innerText = "Create Free Account"; }
+                    else if (context === 'syllabus') { title.innerText = "Full Curriculum Access"; desc.innerText = "Get the detailed learning plan sent to your inbox."; btn.innerText = "Download Plan"; } 
+                    else if (context === 'quiz_save') { 
+                        const quizLen = getContent().quiz ? getContent().quiz.length : 2;
+                        title.innerText = "Save Performance Data"; 
+                        desc.innerText = `Secure your score of ${quizState.score}/${quizLen} to unlock personalized recommendations.`; 
+                        btn.innerText = "Save Score"; 
+                    }
+                    else { title.innerText = "Save Your Progress"; desc.innerText = "Create a free account to save this roadmap and track progress."; btn.innerText = "Create Free Account"; }
                 }
                 
                 if (dom.modal) dom.modal.classList.remove('hidden');
             } else { if (dom.modal) dom.modal.classList.add('hidden'); }
         }
 
+        function renderSummary(data) {
+            const s = data.summary || defaultContent.summary;
+            return `
+            <div class="space-y-6 fade-in">
+                <div class="content-card p-6 md:p-8 border-t-4 border-t-brand-blue bg-white">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center text-xl"><i class="fas fa-file-alt"></i></div>
+                        <div>
+                            <h3 class="font-bold text-xl text-[#111827]">${s.title}</h3>
+                            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">AI Executive Briefing</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-sl border border-slate-100 mb-6">
+                        <p class="text-[#334155] leading-relaxed font-medium">"${s.takeaway}"</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-blue mb-3 flex items-center gap-2"><i class="fas fa-star text-yellow-400"></i> Key Highlights</h4>
+                            <ul class="space-y-3">
+                                ${s.highlights.map(h => `<li class="flex items-start gap-2 text-sm text-[#51565e]"><i class="fas fa-check-circle text-green-500 mt-0.5"></i> <span>${h}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-accent mb-3 flex items-center gap-2"><i class="fas fa-chart-line text-brand-accent"></i> Emerging Trends</h4>
+                            <ul class="space-y-3">
+                                ${s.trends.map(t => `<li class="flex items-start gap-2 text-sm text-[#51565e]"><i class="fas fa-arrow-right text-brand-accent mt-0.5"></i> <span>${t}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="font-bold text-lg mt-8 mb-2 text-[#111827]">Recommended Next Steps</h3>
+                ${renderCoursesHTML(data)}
+            </div>`;
+        }
+
         function renderCareer(data) {
-            const c = data.career;
+            const c = data.career || defaultContent.career;
             return `
             <div class="space-y-6 fade-in">
                 <div class="content-card p-6 md:p-8 border-t-4 border-t-brand-blue bg-white">
@@ -1072,38 +1323,60 @@
                 </div>
                 <div class="px-4 md:px-6 pt-2 bg-slate-50 border-b border-slate-200 flex gap-4 text-sm font-medium overflow-x-auto"><button onclick="switchTab('flash')" id="tab-flash" class="tab-btn active">Key Concepts</button><button onclick="switchTab('video')" id="tab-video" class="tab-btn">Video Overview</button></div>
                 <div id="content-flash" class="p-6 md:p-8"><div id="flashcard-display" class="min-h-[14rem] flex flex-col items-center justify-center text-center p-6 md:p-8 bg-white rounded-sl border border-slate-100 shadow-sl-soft transition-shadow duration-300"></div><div class="flex justify-center items-center gap-6 mt-8"><button onclick="prevFlashcard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue transition flex items-center justify-center shadow-sm"><i class="fas fa-chevron-left"></i></button><span class="text-xs font-bold text-slate-400 uppercase tracking-widest" id="flashcard-counter">1/4</span><button onclick="nextFlashcard()" class="w-10 h-10 rounded-full bg-white border border-slate-200 hover:border-brand-blue hover:text-brand-blue transition flex items-center justify-center shadow-sm"><i class="fas fa-chevron-right"></i></button></div></div>
-                <div id="content-video" class="hidden p-6 md:p-8"><div class="aspect-video bg-[#111827] rounded-sl flex items-center justify-center text-white relative group cursor-pointer shadow-2xl overflow-hidden"><div class="absolute inset-0 bg-brand-blue/20 group-hover:bg-brand-blue/10 transition"></div><div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:scale-110 transition border border-white/30"><i class="fas fa-play text-2xl pl-1"></i></div><p class="absolute bottom-6 text-sm font-bold tracking-wide">Expert Module: Intro to ${currentTopic}</p></div></div>
+                <div id="content-video" class="hidden p-6 md:p-8">
+                    <iframe class="w-full aspect-video rounded-sl shadow-xl border border-slate-100" src="https://www.youtube.com/embed/${data.video || 'G2fqAlgmoPo'}?rel=0" referrerpolicy="strict-origin-when-cross-origin" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>`;
         }
         
         function renderStudy(data) {
+            const syllabus = data.syllabus || defaultContent.syllabus;
             return `
             <div class="content-card p-6 md:p-10 rounded-sl bg-white fade-in text-center border-t-4 border-t-brand-blue">
                 <div class="w-16 h-16 bg-blue-50 text-brand-blue rounded-sl flex items-center justify-center mx-auto mb-6 shadow-inner"><i class="fas fa-graduation-cap text-3xl"></i></div>
-                <h2 class="text-xl md:text-2xl font-bold text-[#111827] mb-6 md:mb-8">4-Week Expert Roadmap</h2>
+                <h2 class="text-xl md:text-2xl font-bold text-[#111827] mb-6 md:mb-8">Expert Roadmap: ${currentTopic}</h2>
                 <div class="text-left space-y-0 pl-6 border-l-2 border-slate-100 ml-4 md:ml-6 mb-8 md:mb-10">
-                    ${data.syllabus.map((w,i) => `<div class="${i<3?'pb-8':''} relative group"><span class="absolute -left-[29px] md:-left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-300 group-hover:border-brand-blue transition"></span><h4 class="text-base font-bold text-slate-800 group-hover:text-brand-blue transition">${w.title}</h4><p class="text-xs text-[#51565e] mt-2 leading-relaxed">${w.desc}</p></div>`).join('')}
+                    ${syllabus.map((w,i) => `<div class="${i<syllabus.length-1?'pb-8':''} relative group"><span class="absolute -left-[29px] md:-left-[31px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-300 group-hover:border-brand-blue transition"></span><h4 class="text-base font-bold text-slate-800 group-hover:text-brand-blue transition">${w.title}</h4><p class="text-xs text-[#51565e] mt-2 leading-relaxed">${w.desc}</p></div>`).join('')}
                 </div>
-                <button onclick="toggleModal(true, 'syllabus')" class="bg-[#111827] text-white px-8 py-3 rounded-sl text-xs font-bold w-full hover:bg-black transition shadow-lg">Download Full Syllabus</button>
+                <button onclick="toggleModal(true, 'syllabus')" class="bg-[#111827] text-white px-8 py-3 rounded-sl text-xs font-bold w-full hover:bg-black transition shadow-lg">Download Full Syllabus PDF</button>
             </div>
             <h3 class="font-bold text-lg mt-8 mb-4 text-[#111827]">Recommended Programs</h3>
             <div class="mt-2">${renderCoursesHTML(data)}</div>`;
         }
 
         function renderFlashcard() { 
-            const d = getContent(); const c = d.flashcards[currentFlashcard]; 
+            const d = getContent(); 
+            if (!d.flashcards) {
+                const el = document.getElementById('flashcard-display');
+                if(el) el.innerHTML = `<p class="text-sm text-slate-500">Flashcards are currently being generated for this topic.</p>`;
+                return;
+            }
+            const c = d.flashcards[currentFlashcard]; 
             const el = document.getElementById('flashcard-display');
             const cnt = document.getElementById('flashcard-counter');
             if (el) el.innerHTML = `<div class="w-14 h-14 bg-blue-50 rounded-sl flex items-center justify-center text-brand-blue text-2xl mb-6 shadow-sm"><i class="${c.icon}"></i></div><h3 class="font-bold text-xl text-[#111827] mb-3">${c.title}</h3><p class="text-sm text-[#51565e] leading-relaxed max-w-sm">${c.text}</p>`; 
             if (cnt) cnt.innerText = `${currentFlashcard + 1} / ${d.flashcards.length}`; 
         }
-        function nextFlashcard() { const d = getContent(); currentFlashcard = (currentFlashcard + 1) % d.flashcards.length; renderFlashcard(); }
-        function prevFlashcard() { const d = getContent(); currentFlashcard = (currentFlashcard - 1 + d.flashcards.length) % d.flashcards.length; renderFlashcard(); }
+        function nextFlashcard() { const d = getContent(); if(!d.flashcards) return; currentFlashcard = (currentFlashcard + 1) % d.flashcards.length; renderFlashcard(); }
+        function prevFlashcard() { const d = getContent(); if(!d.flashcards) return; currentFlashcard = (currentFlashcard - 1 + d.flashcards.length) % d.flashcards.length; renderFlashcard(); }
         
-        function renderQuizFrame(data) { return `<div class="content-card rounded-sl bg-white p-6 md:p-8 fade-in"><div class="flex justify-between items-center mb-6 md:mb-8 pb-6 border-b border-slate-100"><div><span class="text-[10px] font-bold text-brand-accent bg-orange-50 px-3 py-1 rounded-full uppercase tracking-widest">Skill Check</span><h2 class="text-xl font-bold text-[#111827] mt-2">Question <span id="quiz-current">1</span> <span class="text-slate-400 font-normal">/ 2</span></h2></div></div><div id="quiz-container"><p id="quiz-question" class="text-lg font-bold text-slate-800 mb-8 leading-snug"></p><div id="quiz-options" class="space-y-3"></div><div id="quiz-feedback" class="hidden mt-6 p-5 bg-slate-50 border border-slate-200 rounded-sl"><p id="feedback-title" class="font-bold text-sm mb-2"></p><p id="feedback-text" class="text-xs text-[#51565e] leading-relaxed"></p></div></div><div class="flex justify-end mt-8 pt-6 border-t border-slate-100"><button onclick="nextQuestion()" id="btn-next" class="px-6 py-2.5 rounded-sl bg-[#111827] text-white text-xs font-bold opacity-50 cursor-not-allowed transition hover:shadow-lg" disabled>Next Question <i class="fas fa-arrow-right ml-2"></i></button></div></div>`; }
-        function startQuiz() { quizState = { current: 0, score: 0 }; renderQuestion(); }
+        function renderQuizFrame(data) { 
+            const quizLen = data.quiz ? data.quiz.length : 0;
+            if(quizLen === 0) {
+                 return `<div class="content-card rounded-sl bg-white p-6 md:p-8 fade-in"><p class="text-slate-500">Generating assessment for ${currentTopic}...</p></div>`;
+            }
+            return `<div class="content-card rounded-sl bg-white p-6 md:p-8 fade-in"><div class="flex justify-between items-center mb-6 md:mb-8 pb-6 border-b border-slate-100"><div><span class="text-[10px] font-bold text-brand-accent bg-orange-50 px-3 py-1 rounded-full uppercase tracking-widest">Skill Check</span><h2 class="text-xl font-bold text-[#111827] mt-2">Question <span id="quiz-current">1</span> <span class="text-slate-400 font-normal">/ ${quizLen}</span></h2></div></div><div id="quiz-container"><p id="quiz-question" class="text-lg font-bold text-slate-800 mb-8 leading-snug"></p><div id="quiz-options" class="space-y-3"></div><div id="quiz-feedback" class="hidden mt-6 p-5 bg-slate-50 border border-slate-200 rounded-sl"><p id="feedback-title" class="font-bold text-sm mb-2"></p><p id="feedback-text" class="text-xs text-[#51565e] leading-relaxed"></p></div></div><div class="flex justify-end mt-8 pt-6 border-t border-slate-100"><button onclick="nextQuestion()" id="btn-next" class="px-6 py-2.5 rounded-sl bg-[#111827] text-white text-xs font-bold opacity-50 cursor-not-allowed transition hover:shadow-lg" disabled>Next Question <i class="fas fa-arrow-right ml-2"></i></button></div></div>`; 
+        }
+        function startQuiz() { 
+            const d = getContent();
+            if(!d.quiz || d.quiz.length === 0) return;
+            quizState = { current: 0, score: 0 }; 
+            renderQuestion(); 
+        }
         function renderQuestion() { 
-            const d = getContent(); const q = d.quiz[quizState.current]; 
+            const d = getContent(); 
+            if (!d.quiz) return;
+            const q = d.quiz[quizState.current]; 
             const qCur = document.getElementById('quiz-current');
             const qTxt = document.getElementById('quiz-question');
             const qFb = document.getElementById('quiz-feedback');
@@ -1156,10 +1429,16 @@
             if (n) {
                 n.disabled = false; 
                 n.classList.remove('opacity-50', 'cursor-not-allowed'); 
-                if(quizState.current === 1) n.innerText = "View Analysis"; 
+                const quizLen = getContent().quiz.length;
+                if(quizState.current === quizLen - 1) n.innerText = "View Full Analysis"; 
             }
         }
-        function nextQuestion() { quizState.current++; if(quizState.current < 2) renderQuestion(); else showArtifact('enroll'); }
+        function nextQuestion() { 
+            quizState.current++; 
+            const quizLen = getContent().quiz.length;
+            if(quizState.current < quizLen) renderQuestion(); 
+            else showArtifact('enroll'); 
+        }
         
         function handleInput(textOverride) { 
             if (!dom.userInput) return;
@@ -1172,31 +1451,69 @@
             simulateTyping(() => {
                 const lower = val.toLowerCase(); 
                 
-                const domains = ["Generative AI", "Data Science", "Project Management"];
+                const domains = ["Generative AI", "Data Science", "Project Management", "Future of AI Jobs", "Prompt Engineering", "Supervised Learning", "SQL Select", "Data Scientist Study Plan"];
                 const domainMatch = domains.find(d => d.toLowerCase() === lower);
                 
+                let matchedTopic = null;
                 if (domainMatch) {
-                    currentTopic = domainMatch;
-                    if (dom.sourceSelect) dom.sourceSelect.value = `category:${domainMatch}`; 
-                    
-                    const contextData = sourceContexts["category"];
-                    const chips = contextData.prompts.map(p => p.replace("{topic}", domainMatch));
-                    
-                    const reply = `Context switched to **${domainMatch}**. I am ready to provide expert insights. [OPTIONS: ${chips.join(', ')}]`;
-                    processBotResponse(reply);
-                    return;
+                    matchedTopic = domainMatch;
+                } else if (topicMapping[val]) {
+                    matchedTopic = topicMapping[val];
+                } else {
+                    // Fuzzy match
+                    for (let key in topicMapping) {
+                        if (lower.includes(key.toLowerCase())) {
+                            matchedTopic = topicMapping[key];
+                            break;
+                        }
+                    }
                 }
 
-                let reply = `I've analyzed your request regarding ${currentTopic}. [TRIGGER_LEARNING]`; 
+                if (matchedTopic) {
+                    currentTopic = matchedTopic;
+                    updateContextUI(currentTopic);
+                    
+                    if (domainMatch && !textOverride) {
+                        const contextData = sourceContexts["category"];
+                        const chips = contextData.prompts.map(p => p.replace("{topic}", domainMatch));
+                        const reply = `Context switched to **${domainMatch}**. I am ready to provide expert insights. [OPTIONS: ${chips.join(', ')}]`;
+                        processBotResponse(reply);
+                        return;
+                    }
+                }
+
+                let reply = `I've analyzed your request regarding **${currentTopic}**. [TRIGGER_LEARNING]`; 
                 
-                if(lower.includes('quiz') || lower.includes('test')) reply = "Initiating competency benchmark protocol. [TRIGGER_QUIZ]"; 
-                else if(lower.includes('career') || lower.includes('salary') || lower.includes('job')) reply = `Retrieving 2026 market data for ${currentTopic}. [TRIGGER_CAREER]`; 
-                else if(lower.includes('study') || lower.includes('syllabus') || lower.includes('roadmap') || lower.includes('plan')) reply = "Architecting your personalized learning roadmap. [TRIGGER_STUDY_PLAN]";
-                else if(lower.includes('explain') || lower.includes('teach')) reply = `Here is a breakdown of the key concepts in ${currentTopic}. [TRIGGER_LEARNING]`;
-                else if(lower.includes('project') || lower.includes('hands-on')) reply = `Here are some recommended hands-on projects for ${currentTopic}. [TRIGGER_STUDY_PLAN]`; 
-                else if(lower.includes('interview') || lower.includes('mock')) reply = `Here are top technical interview areas for ${currentTopic}. [TRIGGER_CAREER]`;
+                // Advanced LLM-style logic matching
+                if(lower.includes('teach me prompt engineering') || (lower.includes('teach') && lower.includes('prompt'))) {
+                    reply = `Absolutely. **Prompt Engineering** is the critical skill of communicating effectively with AI models like GPT-4 or Claude to elicit accurate, relevant, and high-quality responses.\n\nThink of it as programming in natural language. Instead of writing code, you write context and instructions.\n\n### Core Frameworks\n\n- **Zero-Shot Prompting:** Asking the AI to perform a task without giving any examples. Best for simple tasks. E.g., \`Translate this text to French.\`\n- **Few-Shot Prompting:** Providing 2-3 examples of the input-output mapping you want. This radically improves consistency.\n- **Chain-of-Thought (CoT):** Adding the phrase \`Let's think step-by-step\`. This forces the LLM to break down complex reasoning, significantly reducing logic errors in math or coding.\n\n### The 'CREATE' Structure\nTo write production-grade prompts, use this structure:\n- **C**ontext: Who are the AI? (e.g., 'Act as a Senior Data Scientist...')\n- **R**equest: What exactly do you need?\n- **E**xamples: (Optional but recommended)\n- **A**djustments: Constraints (e.g., 'Keep it under 200 words')\n- **T**one: Professional, casual, academic?\n- **E**xtras: Desired format (JSON, markdown table, etc.)\n\nWould you like me to test your understanding of these frameworks with a quick quiz? [OPTIONS: Take the Quiz, Show Career Path]`;
+                }
+                else if(lower.includes('revise') || lower.includes('flashcard') || lower.includes('supervised learning')) {
+                    reply = `I can certainly help you revise **${currentTopic}**. It's the bedrock of modern predictive modeling.\n\nAt a high level, Supervised Learning involves training an algorithm on a **labeled dataset**—meaning the data comes with the "correct answers". The goal is for the model to learn the mapping function from inputs (features) to outputs (labels) so it can accurately predict outcomes for new, unseen data.\n\nTo help you lock in the core terminology, I have generated a deck of expert flashcards covering concepts like Regression, Classification, Overfitting, and Cross-Validation.\n\nYou can review them on the canvas now. [TRIGGER_LEARNING]`;
+                }
+                else if(lower.includes('quiz me on sql') || (lower.includes('quiz') && lower.includes('sql'))) {
+                    reply = `SQL \`SELECT\` statements are the most fundamental commands for querying databases. They allow you to specify exactly which columns of data you want to retrieve, filter rows, sort the results, and even perform aggregations.\n\nTo ensure you're ready for technical interviews or practical application, I've prepared a comprehensive assessment covering everything from basic syntax to logical order of execution (\`FROM\` -> \`WHERE\` -> \`GROUP BY\` -> \`HAVING\` -> \`SELECT\` -> \`ORDER BY\`).\n\nLet's put your SQL skills to the test. Head over to the canvas to begin. [TRIGGER_QUIZ]`; 
+                }
+                else if(lower.includes('study plan') || lower.includes('data scientist') || lower.includes('roadmap') || lower.includes('plan')) {
+                    reply = `Transitioning into **Data Science** requires a structured, multi-disciplinary approach covering Mathematics, Programming, and Business acumen.\n\nBased on the requirements of top tech companies in 2026, I have formulated an intensive, 6-month learning roadmap. This plan transitions you from foundational Python and Statistics all the way to deploying Machine Learning models using MLOps practices.\n\nI have loaded the detailed week-by-week curriculum onto your Knowledge Canvas. [TRIGGER_STUDY_PLAN]`;
+                }
+                else if(lower.includes('quiz') || lower.includes('test') || lower.includes('assess')) {
+                    reply = `Initiating a competency benchmark protocol for **${currentTopic}**. This assessment will evaluate your current proficiency and identify areas for growth.\n\nGood luck! [TRIGGER_QUIZ]`; 
+                }
+                else if(lower.includes('career') || lower.includes('salary') || lower.includes('job') || lower.includes('roi')) {
+                    reply = `I am retrieving the latest 2026 verified market data for **${currentTopic}**.\n\nUnderstanding the compensation landscape and required skills is vital. I've populated the canvas with standard career ladders, salary expectations across experience levels, and top technical interview questions. [TRIGGER_CAREER]`; 
+                }
+                else if(lower.includes('explain') || lower.includes('teach')) {
+                    reply = `Here is a detailed breakdown of the key concepts in **${currentTopic}**. I have organized the core tenets into accessible learning modules on the canvas. [TRIGGER_LEARNING]`;
+                }
+                else if(lower.includes('project') || lower.includes('hands-on')) {
+                    reply = `Practical application is the best way to master **${currentTopic}**. Here are some recommended hands-on projects mapped to the industry standards. [TRIGGER_STUDY_PLAN]`; 
+                }
+                else if(lower.includes('interview') || lower.includes('mock')) {
+                    reply = `Technical interviews for **${currentTopic}** can be rigorous. I've compiled the top areas of focus and standard questions asked by hiring managers. [TRIGGER_CAREER]`;
+                }
                 else if(lower.includes('summar')) {
-                    reply = getChatSummaryHTML(currentTopic);
+                    reply = `I have generated a highly stylized executive summary for **${currentTopic}**. Please review the detailed briefing and key metrics on the canvas. [TRIGGER_SUMMARY]`;
                 }
                 
                 processBotResponse(reply);
@@ -1209,11 +1526,13 @@
             setTimeout(() => {
                 if (dom.typingIndicator) dom.typingIndicator.classList.add('hidden');
                 callback();
-            }, 1000);
+            }, 1200); // Slightly longer typing delay for realism
         }
 
         function processBotResponse(text) { 
-            appendBotMessage(text.replace(/\[TRIGGER_\w+\]/g, "")); 
+            const parsedText = parseSimpleMD(text.replace(/\[TRIGGER_\w+\]/g, "").replace(/\[OPTIONS: (.*?)\]/g, ""));
+            appendBotMessage(parsedText); 
+            
             const optionMatch = text.match(/\[OPTIONS: (.*?)\]/);
             if (optionMatch) appendChips(optionMatch[1].split(',').map(s => s.trim()));
             
@@ -1222,10 +1541,22 @@
             if(text.includes('TRIGGER_QUIZ')) { showArtifact('quiz'); triggerFound = true; }
             if(text.includes('TRIGGER_CAREER')) { showArtifact('career'); triggerFound = true; }
             if(text.includes('TRIGGER_STUDY_PLAN')) { showArtifact('study'); triggerFound = true; }
+            if(text.includes('TRIGGER_SUMMARY')) { showArtifact('summary'); triggerFound = true; }
             
+            // Post-action nudges to keep user engaged if no explicit options were provided
+            if(triggerFound && !optionMatch) {
+                setTimeout(() => {
+                    let followup = [];
+                    if(text.includes('TRIGGER_LEARNING') || text.includes('TRIGGER_SUMMARY')) followup = ["Test My Knowledge", "View Salary Data"];
+                    if(text.includes('TRIGGER_CAREER')) followup = ["Download Interview Guide", "View Learning Roadmap"];
+                    if(text.includes('TRIGGER_STUDY_PLAN')) followup = ["Check Prerequisites", "Start Learning Basics"];
+                    
+                    if(followup.length > 0) appendChips(followup);
+                }, 1500);
+            }
+
             if (!triggerFound && !isCanvasCollapsed) {
                 if(window.innerWidth < 768) {
-                    // On mobile, if no artifact, show chat
                     switchMobileTab('chat');
                 } else {
                     toggleCanvas();
@@ -1244,14 +1575,40 @@
                 else if(type === 'quiz') { dom.artifactContainer.innerHTML = renderQuizFrame(data); startQuiz(); } 
                 else if(type === 'career') dom.artifactContainer.innerHTML = renderCareer(data); 
                 else if(type === 'study') dom.artifactContainer.innerHTML = renderStudy(data); 
+                else if(type === 'summary') dom.artifactContainer.innerHTML = renderSummary(data); 
                 else if(type === 'enroll') {
+                    const quizLen = data.quiz ? data.quiz.length : 2;
+                    const pct = quizState.score / quizLen;
+                    
+                    let styleClasses = "border-orange-100";
+                    let circleClasses = "bg-[#ff9010] shadow-orange-200";
+                    let bgLight = "bg-orange-50";
+                    let titleText = 'Keep Learning!';
+                    let descText = `This is a great starting point. Reviewing the core concepts of ${currentTopic} will help you master this material.`;
+
+                    if (pct >= 0.8) {
+                        styleClasses = "border-green-100";
+                        circleClasses = "bg-green-500 shadow-green-200";
+                        bgLight = "bg-green-50";
+                        titleText = 'Outstanding Performance!';
+                        descText = `Excellent work! You have a strong mastery of ${currentTopic}. You are ready for advanced concepts.`;
+                    } else if (pct >= 0.5) {
+                        styleClasses = "border-blue-100";
+                        circleClasses = "bg-brand-blue shadow-blue-200";
+                        bgLight = "bg-blue-50";
+                        titleText = 'Solid Foundation';
+                        descText = `Good job! You've demonstrated foundational competence in ${currentTopic}. Let's bridge the remaining gaps.`;
+                    }
+
                     dom.artifactContainer.innerHTML = `
-                    <div class='p-8 bg-white rounded-sl shadow-sl-card border border-green-100 fade-in text-center'>
-                        <div class="inline-block p-4 rounded-full bg-green-50 mb-6">
-                            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center text-4xl text-white font-black shadow-lg shadow-green-200">${quizState.score}/2</div>
+                    <div class='p-8 bg-white rounded-sl shadow-sl-card border ${styleClasses} fade-in text-center'>
+                        <div class="inline-block p-4 rounded-full ${bgLight} mb-6">
+                            <div class="w-20 h-20 ${circleClasses} rounded-full flex items-center justify-center text-3xl text-white font-black shadow-lg">
+                                ${quizState.score}/${quizLen}
+                            </div>
                         </div>
-                        <h3 class="font-bold text-2xl text-[#111827] mb-2">Assessment Complete</h3>
-                        <p class='text-sm text-[#51565e] mb-8 max-w-xs mx-auto'>You've demonstrated foundational competence in ${currentTopic}.</p>
+                        <h3 class="font-bold text-2xl text-[#111827] mb-2">${titleText}</h3>
+                        <p class='text-sm text-[#51565e] mb-8 max-w-sm mx-auto'>${descText}</p>
                         
                         <button onclick="toggleModal(true, 'quiz_save')" class="w-full bg-[#111827] text-white py-3.5 rounded-sl font-bold mb-6 shadow-xl hover:bg-black transition transform hover:-translate-y-0.5">Save Results to Profile</button>
                         
@@ -1269,18 +1626,19 @@
         }
         
         function renderCoursesHTML(data) {
+            const courses = data.courses || defaultContent.courses;
             return `
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="content-card rounded-sl p-5 border-l-4 border-l-green-500 cursor-pointer hover:bg-slate-50 transition group" onclick="toggleModal(true)">
                     <span class="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded mb-2 inline-block">FREE ACCESS</span>
-                    <h4 class="font-bold text-[#111827] text-sm group-hover:text-brand-blue transition">${data.courses.free.title}</h4>
-                    <p class="text-xs text-[#51565e] mt-1 mb-3">${data.courses.free.duration} • Self-Paced</p>
+                    <h4 class="font-bold text-[#111827] text-sm group-hover:text-brand-blue transition">${courses.free.title}</h4>
+                    <p class="text-xs text-[#51565e] mt-1 mb-3">${courses.free.duration} • Self-Paced</p>
                     <button class="w-full py-2 border border-slate-200 text-slate-600 text-xs font-bold rounded-sl group-hover:bg-white group-hover:border-slate-300">Start Free</button>
                 </div>
                 <div class="content-card rounded-sl p-5 border-l-4 border-l-brand-blue cursor-pointer hover:bg-slate-50 transition group" onclick="toggleModal(true)">
                     <span class="text-[10px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded mb-2 inline-block">BOOTCAMP</span>
-                    <h4 class="font-bold text-[#111827] text-sm group-hover:text-brand-blue transition">${data.courses.paid.title}</h4>
-                    <p class="text-xs text-[#51565e] mt-1 mb-3">${data.courses.paid.duration} • Live Classes</p>
+                    <h4 class="font-bold text-[#111827] text-sm group-hover:text-brand-blue transition">${courses.paid.title}</h4>
+                    <p class="text-xs text-[#51565e] mt-1 mb-3">${courses.paid.duration} • Live Classes</p>
                     <button class="w-full py-2 bg-brand-blue text-white text-xs font-bold rounded-sl group-hover:bg-brand-blueHover">View Program</button>
                 </div>
             </div>`;
@@ -1299,7 +1657,8 @@
             if (!dom.chatHistory) return;
             const d = document.createElement('div'); 
             d.className = "flex gap-3 fade-in items-start"; 
-            d.innerHTML = `<img src="https://chat.simplilearn.com/images/arya-avatar-profile-lg.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712027.png'" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm shrink-0 mt-0.5" alt="Arya"><div class="bg-white border border-[#cbd5e1] p-3 rounded-sl text-sm text-[#51565e] shadow-sm leading-relaxed max-w-[85%]">${t}</div>`; 
+            // Added chat-bubble-content class to enable advanced markdown styling
+            d.innerHTML = `<img src="https://chat.simplilearn.com/images/arya-avatar-profile-lg.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712027.png'" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm shrink-0 mt-0.5" alt="Arya"><div class="bg-white border border-[#cbd5e1] p-4 rounded-sl text-sm text-[#51565e] shadow-sm max-w-[85%] chat-bubble-content">${t}</div>`; 
             dom.chatHistory.appendChild(d); 
             dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight; 
         }
@@ -1397,15 +1756,13 @@
             let isDragging = false;
             let offset = { x: 0, y: 0 };
 
-            // Touch support for dragging on mobile
             runnerButton.addEventListener('touchstart', (e) => {
                 isDragging = true;
                 const touch = e.touches[0];
                 const rect = runnerContainer.getBoundingClientRect();
                 offset.x = touch.clientX - rect.left;
                 offset.y = touch.clientY - rect.top;
-                e.preventDefault();
-            }, {passive: false});
+            }, {passive: true});
 
             runnerButton.addEventListener('mousedown', (e) => {
                 isDragging = true;
@@ -1417,7 +1774,6 @@
                 runnerContainer.style.right = 'auto';
                 
                 runnerButton.style.cursor = 'grabbing';
-                e.preventDefault(); 
             });
 
             const moveHandler = (clientX, clientY) => {
@@ -1440,7 +1796,7 @@
                 if (!isDragging) return;
                 const touch = e.touches[0];
                 moveHandler(touch.clientX, touch.clientY);
-                e.preventDefault(); // Prevent scrolling while dragging
+                e.preventDefault(); 
             }, {passive: false});
 
             document.addEventListener('mousemove', (e) => {
